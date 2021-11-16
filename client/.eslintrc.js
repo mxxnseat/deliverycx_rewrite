@@ -21,14 +21,16 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "only-arrow-functions": false,
-        "no-console": false,
-        "no-bitwise": false,
-        "jsx-boolean-value": ["never"],
-        "no-var-requires": false,
-        "max-classes-per-file": false,
-        "member-access": [true, "no-public"],
-        "interface-name": false,
-        "object-literal-sort-keys": [true, "ignore-case"],
+        "only-arrow-functions": 0,
+        "react/react-in-jsx-scope": 0,
+        "no-console": 0,
+        "no-bitwise": 0,
+        "jsx-boolean-value": 0,
+        "no-var-requires": 0,
+        "max-classes-per-file": 0,
+        "member-access": 0,
+        "interface-name": 0,
+        "object-literal-sort-keys": 0,
+        
     }
 };
