@@ -8,3 +8,13 @@ export class CategoryEntity{
         public image: string
     ){}
 }
+
+
+export interface ICategoryEntity{
+    id: UniqueId,
+    name: string,
+    description: string,
+    code: string,
+    order: number,
+    image: string
+}

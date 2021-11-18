@@ -1,13 +1,14 @@
 import { injectable } from "inversify";
+import { ICategoryEntity } from "../domains/entity/category.entity";
 import { ICategoryRepository } from "../interfaces/category.repository-abs";
 
 @injectable()
-export class CategoryRepository implements ICategoryRepository{
-    async getAll<T extends object>(): Promise<Array<T>>{
-        return [] as T[];
+export class CategoryRepository implements ICategoryRepository<ICategoryEntity>{
+    async getAll(){
+        return [];
     }
 
-    async getOne<T extends object>(): Promise<T>{
-        return {a: 2} as T;
+    async getOne(){
+        return {} as ICategoryEntity;
     }
 }   

@@ -1,4 +1,4 @@
-export interface ICategoryRepository{
-    getOne<T extends object>(productId: UniqueId): Promise<T>,
-    getAll<T extends object>(): Promise<Array<T>>
+export interface ICategoryRepository<T>{
+    getOne(productId: UniqueId): Promise<T>,
+    getAll(): Promise<Array<T>>
 }

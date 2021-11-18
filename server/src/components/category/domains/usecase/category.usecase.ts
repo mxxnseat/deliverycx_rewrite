@@ -1,12 +1,12 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../../../ioc/types.ioc";
 import { ICategoryRepository } from "../../interfaces/category.repository-abs";
-import { CategoryEntity } from "../entity/category.entity";
+import { CategoryEntity, ICategoryEntity } from "../entity/category.entity";
 
 @injectable()
 export class CategoryUsecase{
     constructor(
-        @inject(TYPES.CategoryRepository) private repository: ICategoryRepository
+        @inject(TYPES.CategoryRepository) private repository: ICategoryRepository<ICategoryEntity>
     ){}
 
     async getOne(productId: UniqueId): Promise<CategoryEntity>{
