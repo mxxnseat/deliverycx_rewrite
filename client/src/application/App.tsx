@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import Foo from "./Decor";
 import NestedRoute from "./routes/NestedRoute";
 
 const App = (): JSX.Element => {
   const isAuth = true
-  
+  const fo = new Foo('vasa')
+  console.log('clas',fo.size());
 	return (
     <>
       
