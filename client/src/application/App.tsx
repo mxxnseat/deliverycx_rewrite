@@ -1,9 +1,23 @@
 import { Link } from "react-router-dom";
 import Foo from "./Decor";
 import NestedRoute from "./routes/NestedRoute";
+import AxiosApi from 'servises/repository/Axios/AxiosApi';
+import { useEffect } from "react";
 
 const App = (): JSX.Element => {
   const isAuth = true
+  
+  const q = async () => {
+    try {
+      const data = await AxiosApi.getCategories()
+    console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    q()
+  }, [])
 	return (
     <>
       

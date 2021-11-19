@@ -1,17 +1,18 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosError, AxiosRequestConfig } from "axios";
-import {config} from "config";
+import {config,mock} from "servises/repository/config";
 
 
 class Api {
   static _instanse: null | Api = null
-  private URL: string = config.REACT_APP_API_URL
+  private URL: string = mock.REACT_APP_API_URL
   api: AxiosInstance
 
   private constructor() {
       this.api = axios.create({
-          withCredentials: true,
+          withCredentials: false,
           baseURL: this.URL,
       })
+      /*
       this.api.interceptors.response.use((response: AxiosResponse)=>{
           return response;
       }, (err)=>{
@@ -27,6 +28,7 @@ class Api {
 
           return config;
       });
+      */
   }
   static get getInstance() {
       if (!Api._instanse) {
