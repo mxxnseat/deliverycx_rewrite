@@ -4,8 +4,6 @@ import NestedRoute from "./routes/NestedRoute";
 
 const App = (): JSX.Element => {
   const isAuth = true
-  const fo = new Foo('vasa')
-  console.log('clas',fo.size());
 	return (
     <>
       
