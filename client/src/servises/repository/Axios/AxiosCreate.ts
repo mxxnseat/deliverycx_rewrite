@@ -2,8 +2,8 @@ import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosError, AxiosReq
 import {config,mock} from "servises/repository/config";
 
 
-class Api {
-  static _instanse: null | Api = null
+class AxiosCreate {
+  static _instanse: null | AxiosCreate = null
   private URL: string = mock.REACT_APP_API_URL
   api: AxiosInstance
 
@@ -31,11 +31,11 @@ class Api {
       */
   }
   static get getInstance() {
-      if (!Api._instanse) {
-          Api._instanse = new Api()
+      if (!AxiosCreate._instanse) {
+        AxiosCreate._instanse = new AxiosCreate()
       }
-      return Api._instanse
+      return AxiosCreate._instanse
   }
 }
 
-export default Api;
+export default AxiosCreate;
