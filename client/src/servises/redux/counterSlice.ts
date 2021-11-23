@@ -1,4 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { sitiAPI } from 'servises/repository/RTK/Rtk'
+import { store } from './createStore'
 
 
 export const initState = {
@@ -6,28 +8,34 @@ export const initState = {
   arr:[]
 }
 
+const coutnAdapt = createEntityAdapter({
+  selectId: (adress:any) => adress.id,
+})
+export const coutselect = coutnAdapt.getSelectors((state: any) => {
+  
+  return state.counter
+})
 
 
 export const counterSlice = createSlice({
   name: 'counter',
-  initialState: initState,
+  initialState: coutnAdapt.getInitialState(),
   reducers: {
-    increment: state => {
-      console.log('inc')
-      state.value += 1
-    },
-    decrement: state => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
-    }
+    increment: coutnAdapt.addMany,
+    add:coutnAdapt.addOne,
+    set: coutnAdapt.setOne,
+    seteale:coutnAdapt.upsertOne
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(sitiAPI.endpoints.getSiti.matchFulfilled, coutnAdapt.addMany)
+      
   },
   
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { increment,add,set,seteale} = counterSlice.actions
 
 
 

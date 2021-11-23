@@ -1,33 +1,23 @@
-import { Link } from "react-router-dom";
-import Foo from "./Decor";
+import { useState } from "react";
+import { sitiAPI, useGeteQuery, useGetSitiMutation } from "servises/repository/RTK/Rtk";
 import NestedRoute from "./routes/NestedRoute";
-
-import { useEffect } from "react";
-import { RequestCategories } from "servises/repository/Axios/Request";
 
 const App = (): JSX.Element => {
   const isAuth = true
+  const [state, setstate] = useState('')
+  const {data} = useGeteQuery('')
+  const [act, { isLoading, isSuccess }] = useGetSitiMutation()
   
-  const q = async () => {
-
-    
-    const data = await RequestCategories.getCat({name:"vasa"},1)
-    console.log(data);
-  }
-  useEffect(() => {
-    q()
-  })
-  
+ 
+  console.log(data);
   
 	return (
     <>
       
-      <Link to="/">main</Link><br/>
-      <Link to="/shop">ho</Link><br/>
-      <Link to="/home/wal">wale</Link>
       
       <NestedRoute isAuth={isAuth} />
-
+      <button onClick={() => act({id:"5",name:"vasa"})}>qqqqq</button>
+      <button onClick={()=> setstate('wwww')}>www</button>
 
     </>
 	)

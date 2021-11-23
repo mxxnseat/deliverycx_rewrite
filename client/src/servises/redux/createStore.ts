@@ -8,13 +8,15 @@ import logger from 'redux-logger'
 import counterSlice from './counterSlice';
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
+import { sitiAPI } from 'servises/repository/RTK/Rtk';
 
 const history = createBrowserHistory()
 const persistConfig = {
   key: "delivery",
   storage,
   blacklist: [
-    
+    'counter',
+    'sitiApi'
   ],
   transforms: [
     createTransform(
@@ -35,7 +37,8 @@ const persistConfig = {
 
 const createRootReducer = combineReducers({
   router: connectRouter(history),
-  counter:counterSlice
+  counter: counterSlice,
+  [sitiAPI.reducerPath]:sitiAPI.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
