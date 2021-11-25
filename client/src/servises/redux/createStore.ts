@@ -9,6 +9,8 @@ import counterSlice from './counterSlice';
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import { sitiAPI } from 'servises/repository/RTK/Rtk';
+import { authApi, AUTH_API_REDUCER_KEY } from 'servises/repository/RTK/RTKAuth';
+import profileSlice from './slice/Profile/profileSlice';
 
 const history = createBrowserHistory()
 const persistConfig = {
@@ -16,7 +18,9 @@ const persistConfig = {
   storage,
   blacklist: [
     'counter',
-    'sitiApi'
+    'sitiApi',
+    AUTH_API_REDUCER_KEY,
+    profileSlice.name
   ],
   transforms: [
     createTransform(
@@ -37,13 +41,16 @@ const persistConfig = {
 
 const createRootReducer = combineReducers({
   router: connectRouter(history),
-  counter: counterSlice,
-  [sitiAPI.reducerPath]:sitiAPI.reducer
+  [profileSlice.name]:profileSlice.reducer,
+  [sitiAPI.reducerPath]: sitiAPI.reducer,
+  [authApi.reducerPath]:authApi.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
 
-const customMiddleware:Middleware<Record<string,unknown>, RootState> = store => next => action  => {
+const customMiddleware: Middleware<Record<string, unknown>, RootState> = store => next => action => {
+  
+  
   const res = next(action);
   return res;
 };

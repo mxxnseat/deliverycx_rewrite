@@ -10,13 +10,13 @@ import App2 from 'application/ape2';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
-
+ const history = createBrowserHistory()
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <App />
-    </BrowserRouter>
+      </ConnectedRouter>
     </PersistGate>
     
     

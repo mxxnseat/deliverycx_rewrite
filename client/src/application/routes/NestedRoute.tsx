@@ -12,6 +12,7 @@ const NestedRoute:FC<INestedRoute> = ({isAuth}) => {
   
   return (
     <Suspense fallback={"load"}>
+      <BrowserRouter>
       <Switch>
       
         {protectedRoutes.map((route, index) => <Route key={index} path={route.path} render={(data) => {
@@ -21,7 +22,7 @@ const NestedRoute:FC<INestedRoute> = ({isAuth}) => {
         {publicRoutes.map((route, index) => <Route key={index} {...route} />)}
         
       </Switch>
-        
+      </BrowserRouter>  
     </Suspense>
   )
 }
