@@ -12,7 +12,6 @@ export interface IProfileEntities{
  * @method init полиморф, может не принимать аргументов или любой аргумент и изменяет entities
  */
 class ProfileEntities extends Entities<IProfileEntities>{
-  static _instanse: null | ProfileEntities = null
   protected isAuth = false
   protected isVerify = false
   protected username = null
@@ -31,12 +30,7 @@ class ProfileEntities extends Entities<IProfileEntities>{
   init() { 
    this.entities.name = "Peta"
   }
-  static get getInstance() {
-    if (!ProfileEntities._instanse) {
-      ProfileEntities._instanse = new ProfileEntities()
-    }
-    return ProfileEntities._instanse
-  }
+  
 
 }
-export default ProfileEntities.getInstance
+export default ProfileEntities.getInstance(ProfileEntities)

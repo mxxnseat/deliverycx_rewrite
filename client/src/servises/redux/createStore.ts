@@ -5,22 +5,22 @@ import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createBrowserHistory } from 'history';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger'
-import counterSlice from './counterSlice';
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
-import { sitiAPI } from 'servises/repository/RTK/Rtk';
 import { authApi, AUTH_API_REDUCER_KEY } from 'servises/repository/RTK/RTKAuth';
-import profileSlice from './slice/Profile/profileSlice';
+import profileSlice from './slice/profileSlice';
+import locationSlice from './slice/locationSlice';
+import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/RTKLocation';
 
 const history = createBrowserHistory()
 const persistConfig = {
   key: "delivery",
   storage,
   blacklist: [
-    'counter',
-    'sitiApi',
     AUTH_API_REDUCER_KEY,
-    profileSlice.name
+    LOCATION_API_REDUCER_KEY,
+    profileSlice.name,
+    locationSlice.name
   ],
   transforms: [
     createTransform(
@@ -40,10 +40,11 @@ const persistConfig = {
 };
 
 const createRootReducer = combineReducers({
-  router: connectRouter(history),
+  //router: connectRouter(history),
   [profileSlice.name]:profileSlice.reducer,
-  [sitiAPI.reducerPath]: sitiAPI.reducer,
-  [authApi.reducerPath]:authApi.reducer
+  [authApi.reducerPath]: authApi.reducer,
+  [locationSlice.name]: locationSlice.reducer,
+  [RTKLocation.reducerPath]:RTKLocation.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);

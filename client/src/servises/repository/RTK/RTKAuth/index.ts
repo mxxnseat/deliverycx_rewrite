@@ -1,6 +1,6 @@
 import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { push } from 'connected-react-router';
-import { AuthFailAction } from 'servises/redux/slice/Profile/profileSlice';
+import { AuthFailAction } from 'servises/redux/slice/profileSlice';
 import { config } from 'servises/repository/config';
 
 export interface IAuthResponse{

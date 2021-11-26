@@ -1,13 +1,15 @@
 import { IRoute } from "@types";
-import App1 from "application/ape1";
+import CityList from "application/components/core/CityList/CityList";
 import { ROUTE_APP } from "application/contstans/route.const";
-import App2 from 'application/ape2';
+import CitiListLayout from "presentation/layout/Location/CitiListLayout";
+import { lazy } from "react";
 
 const publicRoutes: IRoute[] = [
   {
       exact: true,
       path: ROUTE_APP.MAIN,
-      component: App1
+      component: lazy(() => import('application/components/core/CityList/CityList')),
+      layout:CitiListLayout,
   },
   
   

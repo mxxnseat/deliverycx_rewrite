@@ -1,6 +1,6 @@
 export const ROUTE_APP = {
   MAIN: "/",
-  SITILIST: "/cities",
+  CITILIST: "/cities",
   POINT: "/point",
   SHOP: "/shop",
   CART: {
