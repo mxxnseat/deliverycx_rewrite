@@ -20,7 +20,6 @@ const persistConfig = {
     AUTH_API_REDUCER_KEY,
     LOCATION_API_REDUCER_KEY,
     profileSlice.name,
-    locationSlice.name
   ],
   transforms: [
     createTransform(
@@ -32,7 +31,7 @@ const persistConfig = {
       },
       {
         whitelist: [
-          
+          locationSlice.name
         ]
       }
     )

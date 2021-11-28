@@ -1,5 +1,5 @@
 import { IRoute } from "@types";
-import CityList from "application/components/core/CityList/CityList";
+import CityList from "application/components/core/Location/CityList/CityList";
 import { ROUTE_APP } from "application/contstans/route.const";
 
 const protectedRoutes: IRoute[] = [

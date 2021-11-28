@@ -1,4 +1,5 @@
 import { ICity } from "@types";
+import { ROUTE_APP } from "application/contstans/route.const";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -15,7 +16,7 @@ export function useCitiList(){
     
   const selectCiti = (city: ICity)=>{
     dispatch(setCiti(city));
-    history.push("/address");
+    history.push(ROUTE_APP.POINT);
   }
     
   return {

@@ -7,7 +7,7 @@ const CityList = () => {
     
     
     const useCaseCitiList = useCitiList()
-    const { cities,activeCity } = useCaseCitiList.data
+    const { cities } = useCaseCitiList.data
     const { selectCiti, setSerchCiti } = useCaseCitiList.handlers
     const { isLoading } = useCaseCitiList.status 
     
