@@ -6,6 +6,14 @@ export interface IProfileEntitiesMetod{
  */
 export class ProfileEntitiesMetod{
   public static AuthFailAction(state:any) {
-    state.isAuth = true
+    state.isAuth = false
+  }
+  public static setProfileAction(state:any,action:any) {
+    return state = {
+      isAuth: true,
+      ...action.payload
+    }
+      
+    
   }
 }

@@ -16,7 +16,6 @@ export enum ReducerActionTypePoints {
 
 
 export function PointsReducer(state: typeinitialState, action: ReducerAction<ReducerActionTypePoints>) {
-  console.log(action)
   switch (action.type) {
     case ReducerActionTypePoints.placemarkClick:
       return {
@@ -32,7 +31,12 @@ export function PointsReducer(state: typeinitialState, action: ReducerAction<Red
         isOpen: true,
         selectedPoint:action.payload
       };
+    case ReducerActionTypePoints.slidePoint:
+      return {
+        ...state,
+        slideIndex:action.payload
+      }
     default:
-      throw new Error();
+      return state
   }
 }

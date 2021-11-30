@@ -9,5 +9,5 @@ const profileSlice = createSlice({
   initialState:ProfileEntities.getEntities,
   reducers: profileuseCase.getReduserAction,
 })
-export const { AuthFailAction} = profileSlice.actions
+export const { AuthFailAction,setProfileAction} = profileSlice.actions
 export default profileSlice

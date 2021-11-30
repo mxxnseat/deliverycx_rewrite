@@ -9,8 +9,11 @@ const locationSlice = createSlice({
   reducers: {
     setCiti(state:ILocationEntities,action){
       state.city = action.payload
+    },
+    setPoint(state:ILocationEntities,action){
+      state.point = action.payload
     }
   }
 })
-export const {setCiti} = locationSlice.actions
+export const {setCiti,setPoint} = locationSlice.actions
 export default locationSlice
