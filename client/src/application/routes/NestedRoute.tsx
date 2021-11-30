@@ -32,7 +32,7 @@ const NestedRoute:FC<INestedRoute> = ({isAuth}) => {
       
         {protectedRoutes.map((route, index) => <Route key={index} path={route.path} render={(data) => {
           return isAuth
-            ? renderRoute(route)
+            ? renderRoute(route)(data)
             : <Redirect to={{ pathname: "/", state: { from: data.location.pathname } }} />
           
         }} />)}

@@ -14,6 +14,7 @@ import { getGeoLocation } from "application/helpers/yandexapi";
 import RequestProfile from "servises/repository/Axios/Request/Request.Profile";
 import { setPoint } from "servises/redux/slice/locationSlice";
 import { setProfileAction } from "servises/redux/slice/profileSlice";
+import { ROUTE_APP } from "application/contstans/route.const";
 
 export function usePoints() {
   const history = useHistory();
@@ -94,10 +95,10 @@ export function usePoints() {
         organization: address._id,
       })
       dispatch(setProfileAction(data.user))
-     
+      history.push(ROUTE_APP.SHOP)
       
     } catch (error) {
-      console.log(error)
+      history.goBack()
     }
   }
   

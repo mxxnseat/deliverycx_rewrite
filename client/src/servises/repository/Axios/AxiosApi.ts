@@ -25,7 +25,7 @@ type Iparams = {
  */
 export abstract class ApiSuper{
   protected readonly api: AxiosInstance = Api.getInstance.api
-  protected params:AxiosRequestConfig<Iparams> = {}
+  protected params = {}
   protected request<T>(url: string):AxiosPromise<T> {
     return this.api({
       ...this.params,

@@ -1,12 +1,12 @@
 import { IRoute } from "@types";
-import CityList from "application/components/core/Location/CityList/CityList";
 import { ROUTE_APP } from "application/contstans/route.const";
+import { lazy } from "react";
 
 const protectedRoutes: IRoute[] = [
   {
       exact: true,
       path: ROUTE_APP.SHOP,
-      component: CityList
+      component: lazy(() => import('presentation/layout/Shop/ShopLayout'))
   },
   
 ]
