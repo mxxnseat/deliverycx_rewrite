@@ -1,6 +1,8 @@
-import AdressInfo from "presentation/viewModel/viewShop/AdressInfo";
+import AdressInfo from "presentation/viewModel/viewHead/AdressInfo";
+import HeaderShop from "presentation/viewModel/viewShop/HeaderShop";
 import { animated, useTransition } from "react-spring"
-import ShopSearch from "../../../application/components/core/Shop/ShopSearch";
+import ShopSearch from "application/components/core/Shop/ShopSearch";
+import Categories from "application/components/core/Сategories/Сategories";
 
 const Shop = () => {
   const isSearch = false
@@ -15,10 +17,11 @@ const Shop = () => {
             {!item ?
                 <animated.div className="shop__box" style={style}>
                   <div className="container">
-                        <AdressInfo />
-                        
-                    </div>
-            
+                    <AdressInfo />
+                    <HeaderShop />
+                    
+                  </div>
+                  <Categories />  
        
                 </animated.div>
                 :

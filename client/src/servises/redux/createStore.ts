@@ -11,6 +11,7 @@ import { authApi, AUTH_API_REDUCER_KEY } from 'servises/repository/RTK/RTKAuth';
 import profileSlice from './slice/profileSlice';
 import locationSlice from './slice/locationSlice';
 import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/RTKLocation';
+import { SHOP_API_REDUCER_KEY, RTKShop } from 'servises/repository/RTK/RTKShop';
 
 const history = createBrowserHistory()
 const persistConfig = {
@@ -19,6 +20,7 @@ const persistConfig = {
   blacklist: [
     AUTH_API_REDUCER_KEY,
     LOCATION_API_REDUCER_KEY,
+    SHOP_API_REDUCER_KEY,
     profileSlice.name,
   ],
   transforms: [
@@ -43,7 +45,8 @@ const createRootReducer = combineReducers({
   [profileSlice.name]:profileSlice.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [locationSlice.name]: locationSlice.reducer,
-  [RTKLocation.reducerPath]:RTKLocation.reducer
+  [RTKLocation.reducerPath]: RTKLocation.reducer,
+  [RTKShop.reducerPath]: RTKShop.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
