@@ -12,6 +12,7 @@ import profileSlice from './slice/profileSlice';
 import locationSlice from './slice/locationSlice';
 import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/RTKLocation';
 import { SHOP_API_REDUCER_KEY, RTKShop } from 'servises/repository/RTK/RTKShop';
+import ShopSlice from './slice/shopSlice';
 
 const history = createBrowserHistory()
 const persistConfig = {
@@ -22,6 +23,7 @@ const persistConfig = {
     LOCATION_API_REDUCER_KEY,
     SHOP_API_REDUCER_KEY,
     profileSlice.name,
+    ShopSlice.name
   ],
   transforms: [
     createTransform(
@@ -45,6 +47,7 @@ const createRootReducer = combineReducers({
   [profileSlice.name]:profileSlice.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [locationSlice.name]: locationSlice.reducer,
+  [ShopSlice.name]: ShopSlice.reducer,
   [RTKLocation.reducerPath]: RTKLocation.reducer,
   [RTKShop.reducerPath]: RTKShop.reducer
 })

@@ -3,9 +3,11 @@ import HeaderShop from "presentation/viewModel/viewShop/HeaderShop";
 import { animated, useTransition } from "react-spring"
 import ShopSearch from "application/components/core/Shop/ShopSearch";
 import Categories from "application/components/core/Сategories/Сategories";
+import Stocks from "application/components/common/Stocks/Stocks";
+import ShopProduct from "application/components/core/Shop/ShopProduct";
 
 const Shop = () => {
-  const isSearch = false
+  const isSearch = ''
     const transitions = useTransition(isSearch, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
@@ -22,7 +24,10 @@ const Shop = () => {
                     
                   </div>
                   <Categories />  
-       
+                  <Stocks />
+                  <div className="shop__box-items container">
+                      {<ShopProduct searchQuery={isSearch} />}
+                  </div>
                 </animated.div>
                 :
                 <animated.div style={style}>
