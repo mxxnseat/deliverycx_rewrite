@@ -1,5 +1,5 @@
 import { CityEntity } from "../entities/city.entity";
 
-export interface ICityRepository {
-    getAll: () => Promise<Array<CityEntity>>;
+export abstract class ICityRepository {
+    abstract getAll(): Promise<Array<CityEntity>>;
 }

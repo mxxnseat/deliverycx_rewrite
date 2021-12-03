@@ -1,6 +1,17 @@
-import { Body, Controller, Get, Param, Query, Req } from "@nestjs/common";
-import { Request } from "express";
-import { IGetAllDto } from "../interfaces/getAll.dto";
+import {
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    Query,
+    Req,
+    Res
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { Types } from "mongoose";
+
 import { ProductUsecase } from "../usecases/product.usecase";
 
 @Controller("product")
@@ -27,9 +38,20 @@ export class ProductController {
     }
 
     @Get(":id")
-    async getOne(@Param("id") productId: UniqueId) {
+    async getOne(
+        @Param("id") productId: UniqueId,
+        @Res() response: Response,
+        @Req() request: Request
+    ) {
+        if (!Types.ObjectId.isValid(productId)) {
+            return response.status(HttpStatus.NOT_FOUND).json({
+                path: request.path,
+                message: `Продукт под ID ${productId} не найден`
+            });
+        }
+
         const product = await this.productUsecase.getOne(productId);
 
-        return product;
+        response.status(200).json(product);
     }
 }
