@@ -9,6 +9,8 @@ import {
     Req,
     Res
 } from "@nestjs/common";
+import { JoiPipe } from "nestjs-joi";
+import * as Joi from "joi";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
@@ -19,22 +21,44 @@ export class ProductController {
     constructor(private readonly productUsecase: ProductUsecase) {}
 
     @Get("all")
-    async getAll(@Query("categoryId") categoryId: string) {
+    async getAll(
+        @Query("categoryId")
+        categoryId: string,
+        @Req() request: Request,
+        @Res() response: Response
+    ) {
+        if (!Types.ObjectId.isValid(categoryId)) {
+            return response.status(HttpStatus.NOT_FOUND).json({
+                path: request.path,
+                message: `Товары по категории ${categoryId} не найдены`
+            });
+        }
+
         const products = await this.productUsecase.getAll(categoryId);
-        return products;
+
+        response.status(HttpStatus.OK).json(products);
     }
 
     @Get("search")
     async getBySearch(
-        @Query("searchString") searchString: string,
-        @Query("organizationId") organizationId: UniqueId
+        @Query("organizationId") organizationId: UniqueId,
+        @Query("searchString") searchString: string = "",
+        @Req() request: Request,
+        @Res() response: Response
     ) {
+        if (!Types.ObjectId.isValid(organizationId)) {
+            return response.status(HttpStatus.NOT_FOUND).json({
+                path: request.path,
+                message: `Организация с ID ${organizationId} не найдена`
+            });
+        }
+
         const products = await this.productUsecase.search(
             searchString,
             organizationId
         );
 
-        return products;
+        response.status(HttpStatus.OK).json(products);
     }
 
     @Get(":id")

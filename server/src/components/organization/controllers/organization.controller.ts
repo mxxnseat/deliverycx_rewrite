@@ -1,14 +1,27 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Query, Req, Res } from "@nestjs/common";
 import { OrganizationUsecase } from "../usecases/organization.usecase";
+import { Types } from "mongoose";
+import { Request, Response } from "express";
 
 @Controller("organization")
 export class OrganizationController {
     constructor(private readonly organizationUsecase: OrganizationUsecase) {}
 
     @Get("all")
-    async getAll(@Query("cityId") cityId: UniqueId) {
+    async getAll(
+        @Query("cityId") cityId: UniqueId,
+        @Res() response: Response,
+        @Req() request: Request
+    ) {
+        if (!Types.ObjectId.isValid(cityId)) {
+            return response.status(HttpStatus.NOT_FOUND).json({
+                path: request.path,
+                message: `Не найден город по ID ${cityId}`
+            });
+        }
+
         const result = await this.organizationUsecase.getAll(cityId);
-        throw new Error();
-        return result;
+
+        response.status(HttpStatus.OK).json(result);
     }
 }
