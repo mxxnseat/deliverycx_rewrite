@@ -1,11 +1,9 @@
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../ioc/types.ioc";
+import { Injectable } from "@nestjs/common";
 import { IOrganizationRepository } from "../repositories/interface.repository";
 
-@injectable()
+@Injectable()
 export class OrganizationUsecase {
     constructor(
-        @inject(TYPES.OrganizationRepository)
         private readonly organizationRepository: IOrganizationRepository
     ) {}
 

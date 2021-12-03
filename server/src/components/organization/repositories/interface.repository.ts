@@ -1,5 +1,5 @@
 import { OrganizationEntity } from "../entities/organization.entity";
 
-export interface IOrganizationRepository {
-    getAll: (cityId: UniqueId) => Promise<Array<OrganizationEntity>>;
+export abstract class IOrganizationRepository {
+    abstract getAll(cityId: UniqueId): Promise<Array<OrganizationEntity>>;
 }

@@ -1,4 +1,5 @@
 import {
+    buildSchema,
     getModelForClass,
     ModelOptions,
     mongoose,
@@ -22,4 +23,5 @@ export class CityClass {
     public organizations!: Ref<OrganizationClass>[];
 }
 
+export const CitySchema = buildSchema(CityClass);
 export const CityModel = getModelForClass(CityClass);
