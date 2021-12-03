@@ -12,10 +12,11 @@ export class InternalException implements ExceptionFilter {
         const context = host.switchToHttp();
         const request = context.getRequest<Request>();
         const response = context.getResponse<Response>();
+        const status = exception.getStatus();
 
-        response.status(500).json({
+        response.status(status).json({
             path: request.path,
-            message: "Уууупс что-то пошло не так. Попробуйте позже"
+            message: exception.message
         });
     }
 }

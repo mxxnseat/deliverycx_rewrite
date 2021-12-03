@@ -1,40 +1,48 @@
 import {
     Controller,
     Get,
-    HttpCode,
     HttpStatus,
-    NotFoundException,
     Param,
     Query,
     Req,
-    Res
+    Res,
+    UsePipes
 } from "@nestjs/common";
 import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { ValidationObjectId } from "src/pipes/validationObjectId.pipe";
 
 import { ProductUsecase } from "../usecases/product.usecase";
 
 @Controller("product")
+@UsePipes(new ValidationObjectId())
 export class ProductController {
     constructor(private readonly productUsecase: ProductUsecase) {}
 
     @Get("all")
-    async getAll(@Query("categoryId") categoryId: string) {
+    async getAll(
+        @Query("categoryId")
+        categoryId: string,
+        @Req() request: Request,
+        @Res() response: Response
+    ) {
         const products = await this.productUsecase.getAll(categoryId);
-        return products;
+
+        response.status(HttpStatus.OK).json(products);
     }
 
     @Get("search")
     async getBySearch(
-        @Query("searchString") searchString: string,
-        @Query("organizationId") organizationId: UniqueId
+        @Query("organizationId") organizationId: UniqueId,
+        @Query("searchString") searchString: string = "",
+        @Req() request: Request,
+        @Res() response: Response
     ) {
         const products = await this.productUsecase.search(
             searchString,
             organizationId
         );
 
-        return products;
+        response.status(HttpStatus.OK).json(products);
     }
 
     @Get(":id")
@@ -43,15 +51,14 @@ export class ProductController {
         @Res() response: Response,
         @Req() request: Request
     ) {
-        if (!Types.ObjectId.isValid(productId)) {
-            return response.status(HttpStatus.NOT_FOUND).json({
-                path: request.path,
-                message: `Продукт под ID ${productId} не найден`
+        const product = await this.productUsecase.getOne(productId);
+
+        if (product instanceof Error) {
+            return response.status(product.code).json({
+                message: product.message
             });
         }
 
-        const product = await this.productUsecase.getOne(productId);
-
-        response.status(200).json(product);
+        response.status(HttpStatus.OK).json(product);
     }
 }
