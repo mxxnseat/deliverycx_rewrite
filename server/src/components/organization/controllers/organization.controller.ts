@@ -13,13 +13,6 @@ export class OrganizationController {
         @Res() response: Response,
         @Req() request: Request
     ) {
-        if (!Types.ObjectId.isValid(cityId)) {
-            return response.status(HttpStatus.NOT_FOUND).json({
-                path: request.path,
-                message: `Не найден город по ID ${cityId}`
-            });
-        }
-
         const result = await this.organizationUsecase.getAll(cityId);
 
         response.status(HttpStatus.OK).json(result);

@@ -1,22 +1,20 @@
 import {
     Controller,
     Get,
-    HttpCode,
     HttpStatus,
-    NotFoundException,
     Param,
     Query,
     Req,
-    Res
+    Res,
+    UsePipes
 } from "@nestjs/common";
-import { JoiPipe } from "nestjs-joi";
-import * as Joi from "joi";
 import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { ValidationObjectId } from "src/pipes/validationObjectId.pipe";
 
 import { ProductUsecase } from "../usecases/product.usecase";
 
 @Controller("product")
+@UsePipes(new ValidationObjectId())
 export class ProductController {
     constructor(private readonly productUsecase: ProductUsecase) {}
 
@@ -27,13 +25,6 @@ export class ProductController {
         @Req() request: Request,
         @Res() response: Response
     ) {
-        if (!Types.ObjectId.isValid(categoryId)) {
-            return response.status(HttpStatus.NOT_FOUND).json({
-                path: request.path,
-                message: `Товары по категории ${categoryId} не найдены`
-            });
-        }
-
         const products = await this.productUsecase.getAll(categoryId);
 
         response.status(HttpStatus.OK).json(products);
@@ -46,13 +37,6 @@ export class ProductController {
         @Req() request: Request,
         @Res() response: Response
     ) {
-        if (!Types.ObjectId.isValid(organizationId)) {
-            return response.status(HttpStatus.NOT_FOUND).json({
-                path: request.path,
-                message: `Организация с ID ${organizationId} не найдена`
-            });
-        }
-
         const products = await this.productUsecase.search(
             searchString,
             organizationId
@@ -67,15 +51,14 @@ export class ProductController {
         @Res() response: Response,
         @Req() request: Request
     ) {
-        if (!Types.ObjectId.isValid(productId)) {
-            return response.status(HttpStatus.NOT_FOUND).json({
-                path: request.path,
-                message: `Продукт под ID ${productId} не найден`
+        const product = await this.productUsecase.getOne(productId);
+
+        if (product instanceof Error) {
+            return response.status(product.code).json({
+                message: product.message
             });
         }
 
-        const product = await this.productUsecase.getOne(productId);
-
-        response.status(200).json(product);
+        response.status(HttpStatus.OK).json(product);
     }
 }
