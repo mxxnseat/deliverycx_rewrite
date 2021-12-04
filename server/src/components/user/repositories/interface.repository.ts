@@ -1,5 +1,9 @@
 import { UserEntity } from "../entities/user.entity";
 
-export interface IUserRepository {
-    create: (item: UserEntity) => Promise<UserEntity>;
+export abstract class IUserRepository {
+    abstract create(
+        username: string,
+        name: string,
+        phone: string
+    ): Promise<UserEntity>;
 }

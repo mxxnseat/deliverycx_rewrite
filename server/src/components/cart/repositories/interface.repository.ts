@@ -1,13 +1,17 @@
-import { CartEntity } from '../entities/cart.entity';
+import { CartEntity } from "../entities/cart.entity";
 
-export interface ICartRepository {
-  getAll: (userId: UniqueId) => Promise<Array<CartEntity>>;
-  removeAll: (userId: UniqueId) => Promise<any[]>;
-  add: (userId: UniqueId, productId: UniqueId) => Promise<CartEntity>;
-  removeOne: (userId: UniqueId, cartId: UniqueId) => Promise<UniqueId>;
-  changeAmount: (
-    userId: UniqueId,
-    cartId: UniqueId,
-    value: number,
-  ) => Promise<number>;
+export abstract class ICartRepository {
+    abstract getAll(userId: UniqueId): Promise<Array<CartEntity>>;
+
+    abstract removeAll(userId: UniqueId): Promise<[]>;
+
+    abstract add(userId: UniqueId, productId: UniqueId): Promise<CartEntity>;
+
+    abstract removeOne(userId: UniqueId, cartId: UniqueId): Promise<UniqueId>;
+
+    abstract changeAmount(
+        userId: UniqueId,
+        cartId: UniqueId,
+        value: number
+    ): Promise<number>;
 }

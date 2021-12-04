@@ -1,4 +1,5 @@
 import {
+    buildSchema,
     getModelForClass,
     ModelOptions,
     prop,
@@ -30,4 +31,5 @@ export class OrganizationClass {
     public phone!: string;
 }
 
+export const OrganizationSchema = buildSchema(OrganizationClass);
 export const OrganizationModel = getModelForClass(OrganizationClass);

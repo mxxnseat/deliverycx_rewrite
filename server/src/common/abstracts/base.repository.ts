@@ -1,4 +1,3 @@
-import { injectable, unmanaged } from "inversify";
 import { Model } from "mongoose";
 import { Mapper } from "./mapper.interface";
 

@@ -1,36 +1,34 @@
-import { NotFoundError } from '../../../common/errors/notFound.error';
-import { inject, injectable } from 'inversify';
-import { TYPES } from '../../../ioc/types.ioc';
-import { IProductRepository } from '../repositories/interface.repository';
-import { Injectable } from '@nestjs/common';
+import { NotFoundError } from "../../../common/errors/notFound.error";
+import { IProductRepository } from "../repositories/interface.repository";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class ProductUsecase {
-  constructor(private readonly productRepository: IProductRepository) {}
+    constructor(private readonly productRepository: IProductRepository) {}
 
-  async getOne(productId: UniqueId) {
-    const result = await this.productRepository.getOne(productId);
+    async getOne(productId: UniqueId) {
+        const result = await this.productRepository.getOne(productId);
 
-    if (!result.getId) {
-      return new NotFoundError(`Товар с ID ${productId} не найден`);
+        if (!result.getId) {
+            return new NotFoundError(`Товар с ID ${productId} не найден`);
+        }
+
+        return result;
     }
 
-    return result;
-  }
+    async getAll(categoryId: UniqueId) {
+        console.log(categoryId);
+        const result = await this.productRepository.getAll(categoryId);
 
-  async getAll(categoryId: UniqueId) {
-    console.log(categoryId);
-    const result = await this.productRepository.getAll(categoryId);
+        return result;
+    }
 
-    return result;
-  }
+    async search(searchString: string, organizationId: UniqueId) {
+        const result = await this.productRepository.getBySearch(
+            searchString,
+            organizationId
+        );
 
-  async search(searchString: string, organizationId: UniqueId) {
-    const result = await this.productRepository.getBySearch(
-      searchString,
-      organizationId,
-    );
-
-    return result;
-  }
+        return result;
+    }
 }
