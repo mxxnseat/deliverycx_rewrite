@@ -11,7 +11,12 @@ export class UserEntity {
     public get getUsername() {
         return this.username;
     }
+    public get getId() {
+        return this.id;
+    }
+
     constructor(
+        private readonly id: UniqueId,
         private readonly username: string,
         private readonly name?: string,
         private readonly phone?: string,

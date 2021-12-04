@@ -1,6 +1,4 @@
 import { NotFoundError } from "../../../common/errors/notFound.error";
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../ioc/types.ioc";
 import { IProductRepository } from "../repositories/interface.repository";
 import { Injectable } from "@nestjs/common";
 

@@ -1,14 +1,10 @@
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../../ioc/types.ioc";
+import { Injectable } from "@nestjs/common";
 import { UserEntity } from "../entities/user.entity";
 import { IUserRepository } from "../repositories/interface.repository";
 
-@injectable()
+@Injectable()
 export class UserUsecase {
-    constructor(
-        @inject(TYPES.UserRepository)
-        private readonly userRepository: IUserRepository
-    ) {}
+    constructor(private readonly userRepository: IUserRepository) {}
 
     async create(
         username: string,
@@ -16,11 +12,6 @@ export class UserUsecase {
         phone?: string,
         address?: string
     ) {
-        if (!username) {
-            return "Введите имя пользователя";
-        }
-        const entity = new UserEntity(username, name, phone, address);
-
-        return await this.userRepository.create(entity);
+        return await this.userRepository.create(username, name, phone);
     }
 }
