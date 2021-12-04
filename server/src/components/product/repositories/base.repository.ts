@@ -2,7 +2,6 @@ import {
     ProductClass,
     ProductModel
 } from "../../../database/models/product.model";
-import { injectable } from "inversify";
 import { IProductRepository } from "./interface.repository";
 import { ProductEntity } from "../entities/product.entity";
 import { CategoryClass } from "../../../database/models/category.model";
@@ -10,7 +9,6 @@ import { BaseRepository } from "../../../common/abstracts/base.repository";
 import { productMapper } from "../entities/product.mapper";
 import { Inject, Injectable } from "@nestjs/common";
 import { Model } from "mongoose";
-import { ProductModule } from "src/ioc/product.module";
 
 @Injectable()
 export class ProductRepository

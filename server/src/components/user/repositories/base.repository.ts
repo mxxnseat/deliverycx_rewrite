@@ -1,16 +1,30 @@
 import { UserEntity } from "../entities/user.entity";
-
-import { injectable } from "inversify";
-import { UserModel } from "../../../database/models/user.model";
+import { Model } from "mongoose";
+import { UserClass } from "../../../database/models/user.model";
 import { IUserRepository } from "./interface.repository";
+import { Inject, Injectable } from "@nestjs/common";
 
-@injectable()
+@Injectable()
 export class UserRepository implements IUserRepository {
-    constructor() {}
+    constructor(
+        @Inject("USER_MODEL")
+        private readonly userModel: Model<UserClass>
+    ) {}
 
-    async create(item: UserEntity) {
-        await UserModel.create(item);
+    async create(username: string, name: string, phone: string) {
+        const user = await this.userModel.create({
+            username,
+            name,
+            phone
+        });
 
-        return item;
+        const result = new UserEntity(
+            user._id,
+            user.username,
+            user.name,
+            user.phone
+        );
+
+        return result;
     }
 }

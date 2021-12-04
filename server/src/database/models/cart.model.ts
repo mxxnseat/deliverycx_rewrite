@@ -1,4 +1,5 @@
 import {
+    buildSchema,
     getModelForClass,
     ModelOptions,
     mongoose,
@@ -34,4 +35,5 @@ export class CartClass {
     public amount: number = 1;
 }
 
+export const CartSchema = buildSchema(CartClass);
 export const CartModel = getModelForClass(CartClass);

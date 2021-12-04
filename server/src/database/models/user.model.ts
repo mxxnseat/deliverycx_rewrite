@@ -1,4 +1,5 @@
 import {
+    buildSchema,
     getModelForClass,
     ModelOptions,
     prop,
@@ -24,7 +25,7 @@ export class UserClass {
     @prop()
     public name!: string;
 
-    @prop()
+    @prop({ unique: true })
     public username!: string;
 
     @prop()
@@ -37,4 +38,5 @@ export class UserClass {
     public cart!: Ref<CartClass>;
 }
 
+export const UserSchema = buildSchema(UserClass);
 export const UserModel = getModelForClass(UserClass);
