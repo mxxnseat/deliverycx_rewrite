@@ -95,7 +95,7 @@ export function usePoints() {
         organization: address._id,
       })
       dispatch(setProfileAction(data.user))
-      history.push(ROUTE_APP.SHOP)
+      history.push(ROUTE_APP.SHOP.SHOP_MAIN)
       
     } catch (error) {
       history.goBack()

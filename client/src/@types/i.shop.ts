@@ -25,3 +25,8 @@ export interface IProduct<C = ICategory> {
 export interface IFavorites {
   list: string[]
 }
+export interface IResponseProductCard{
+  sauces: IProduct[],
+  product: IProduct,
+  group: ICategory
+}

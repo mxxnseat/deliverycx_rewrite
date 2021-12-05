@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { ICategory, IProduct } from '@types';
+import { ICategory, IProduct, IResponseProductCard } from '@types';
 import encodeQueryData from 'application/helpers/encodeQuery';
 import { staticCategories } from 'domain/use-case/useCaseCategories';
 import { baseQueryWithReauth } from '..';
@@ -30,7 +30,16 @@ export const RTKShop = createApi({
       },
      
     }),
+    getProductCart:builder.query<IResponseProductCard,any>({
+      query: ({productId,organization}) => {
+        return ({
+          method: "get",
+          url: `api/getProduct/${productId}?organization=${organization}`
+        })
+      },
+     
+    }),
   }),
 });
-export const {useGetCategoriesQuery,useGetProductsQuery} = RTKShop
+export const {useGetCategoriesQuery,useGetProductsQuery,useGetProductCartQuery} = RTKShop
 

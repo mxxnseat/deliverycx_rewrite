@@ -6,7 +6,7 @@ import AddToCart from "./AddToCart";
 import AddToFavorites from "./AddToFavorites";
 
 const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, group, measureUnit, weight, description, image, isFav }) => {
-  const history = useHistory();
+    const history = useHistory();
     const cardRef = useRef<HTMLDivElement>(null);
     
     const clickHandler = (e: any) => {

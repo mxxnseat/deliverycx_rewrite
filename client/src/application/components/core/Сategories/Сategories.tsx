@@ -26,15 +26,18 @@ const Categories = () => {
   
   
   useEffect(() => {
-    if (category && categories) {
-        const catIndex = categories.findIndex((cat) => cat.order === category.order)
-        dispatch(setCategories(categories[catIndex]))
-        setCurrentSlide(catIndex);
-        
+    /*
+    if (Object.keys(category).length && categories) {
+      const catIndex = categories.findIndex((cat) => cat.order === category.order)
+      dispatch(setCategories(categories[catIndex]))
     } else {
+      
       categories && dispatch(setCategories(categories[0]))
     }
-  },[])ESW
+    */
+    
+  },[categories])
+  
   
   
   const handleSliderClick = useCallback((index: number) => {
