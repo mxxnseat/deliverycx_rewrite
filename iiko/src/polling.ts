@@ -2,6 +2,7 @@ import { config } from "dotenv";
 config({
     path: __dirname + "/../.env"
 });
+process.chdir(`${__dirname}/../..`);
 
 import axios from "axios";
 import { Types, Document } from "mongoose";
@@ -14,12 +15,14 @@ import { CityModel } from "./database/models/city.model";
 import { connection } from "./database/connection";
 import { CategoryModel } from "./database/models/category.model";
 import { ProductModel } from "./database/models/product.model";
+import { DownloadImage } from "./lib/download";
 
 const _axios = axios.create({
     baseURL: process.env.SERVICE_URL
 });
 
 const geoCoder = new GeoCoder(process.env.YANDEX_APIKEY);
+const downloader = new DownloadImage();
 
 class IikoService {
     public token: string;
@@ -176,18 +179,19 @@ class IikoService {
                                 const categoryId = await CategoryModel.findOne({
                                     id: product.parentGroup
                                 });
+
+                                const image = product.images[
+                                    product.images.length - 1
+                                ]
+                                    ? product.images[product.images.length - 1]
+                                          .imageUrl
+                                    : "";
                                 await ProductModel.updateOne(
                                     {
                                         id: product.id
                                     },
                                     {
-                                        image: product.images[
-                                            product.images.length - 1
-                                        ]
-                                            ? product.images[
-                                                  product.images.length - 1
-                                              ].imageUrl
-                                            : "",
+                                        image: await downloader.download(image),
                                         organization: _id,
                                         name: product.name,
                                         description: product.description,

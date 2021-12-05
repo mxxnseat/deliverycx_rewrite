@@ -1,8 +1,6 @@
 import { IsMongoIdObject } from "../../../common/decorators/mongoIdValidate.decorator";
 
 export class GetAllDTO {
-    @IsMongoIdObject({
-        message: "Неверный параметр запроса"
-    })
+    @IsMongoIdObject()
     public categoryId: UniqueId;
 }

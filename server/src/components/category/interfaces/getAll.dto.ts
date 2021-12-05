@@ -1,6 +1,6 @@
 import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 
-export class cartDTO {
+export class GetAllDTO {
     @IsMongoIdObject()
-    public productId: UniqueId;
+    organizationId: UniqueId;
 }

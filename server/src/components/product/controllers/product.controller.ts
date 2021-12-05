@@ -12,7 +12,6 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 import { ValidationException } from "src/filters/validation.filter";
-import { ValidationObjectId } from "src/pipes/validationObjectId.pipe";
 import { GetAllDTO } from "../dto/getAll.dto";
 import { GetByIdDTO } from "../dto/getById.dto";
 import { SearchQueryDTO } from "../dto/searchQuery.dto";
