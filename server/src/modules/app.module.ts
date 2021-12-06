@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { APP_FILTER } from "@nestjs/core";
+import { ConfigModule } from "@nestjs/config";
 import { InternalException } from "src/filters/internal.filter";
 import { CartModule } from "src/ioc/cart.module";
 import { CityModule } from "src/ioc/city.module";
@@ -11,6 +12,9 @@ import { ProductModule } from "../ioc/product.module";
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: __dirname + "/../../.env"
+        }),
         ProductModule,
         CategoryModule,
         CityModule,

@@ -1,4 +1,41 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class UserEntity {
+    @ApiProperty()
+    private readonly id: UniqueId;
+
+    @ApiProperty()
+    private readonly username: string;
+
+    @ApiProperty({
+        required: false
+    })
+    private readonly name?: string;
+
+    @ApiProperty({
+        required: false
+    })
+    private readonly phone?: string;
+
+    @ApiProperty({
+        required: false
+    })
+    private readonly address?: string;
+
+    constructor(
+        id: UniqueId,
+        username: string,
+        name?: string,
+        phone?: string,
+        address?: string
+    ) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+    }
+
     public get getAddress() {
         return this.address;
     }
@@ -14,12 +51,4 @@ export class UserEntity {
     public get getId() {
         return this.id;
     }
-
-    constructor(
-        private readonly id: UniqueId,
-        private readonly username: string,
-        private readonly name?: string,
-        private readonly phone?: string,
-        private readonly address?: string
-    ) {}
 }
