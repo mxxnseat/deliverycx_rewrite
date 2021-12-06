@@ -15,9 +15,11 @@ import { ValidationException } from "src/filters/validation.filter";
 import { GetAllDTO } from "../dto/getAll.dto";
 import { GetByIdDTO } from "../dto/getById.dto";
 import { SearchQueryDTO } from "../dto/searchQuery.dto";
-
+import { ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import { ProductUsecase } from "../usecases/product.usecase";
+import { ProductEntity } from "../entities/product.entity";
 
+@ApiTags("Product endpoints")
 @Controller("product")
 @UseFilters(new ValidationException())
 @UsePipes(
@@ -28,6 +30,10 @@ import { ProductUsecase } from "../usecases/product.usecase";
 export class ProductController {
     constructor(private readonly productUsecase: ProductUsecase) {}
 
+    @ApiResponse({
+        status: 200,
+        type: [ProductEntity]
+    })
     @Get("all")
     async getAll(
         @Query()
@@ -40,6 +46,10 @@ export class ProductController {
         response.status(HttpStatus.OK).json(products);
     }
 
+    @ApiResponse({
+        status: 200,
+        type: [ProductEntity]
+    })
     @Get("search")
     async getBySearch(
         @Query() query: SearchQueryDTO,
@@ -53,6 +63,14 @@ export class ProductController {
         response.status(HttpStatus.OK).json(products);
     }
 
+    @ApiResponse({
+        status: 200,
+        type: ProductEntity
+    })
+    @ApiParam({
+        name: "id",
+        type: "string"
+    })
     @Get(":id")
     async getOne(
         @Param() param: GetByIdDTO,

@@ -1,5 +1,16 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class CityEntity {
-    constructor(private readonly id: UniqueId, private readonly name: string) {}
+    @ApiProperty()
+    private readonly id: UniqueId;
+
+    @ApiProperty()
+    private readonly name: string;
+
+    constructor(id: UniqueId, name: string) {
+        this.id = id;
+        this.name = name;
+    }
 
     public get getId() {
         return this.id;

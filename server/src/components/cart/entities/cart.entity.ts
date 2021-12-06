@@ -1,11 +1,36 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class CartEntity {
+    @ApiProperty()
+    private readonly id: UniqueId;
+
+    @ApiProperty()
+    private readonly productName: string;
+
+    @ApiProperty()
+    private readonly productImage: ImagePath;
+
+    @ApiProperty({
+        minimum: 1
+    })
+    private readonly amount: number;
+
+    @ApiProperty()
+    private readonly price: number;
+
     constructor(
-        private readonly id: UniqueId,
-        private readonly productName: string,
-        private readonly productImage: ImagePath,
-        private readonly amount: number,
-        private readonly price: number
-    ) {}
+        id: UniqueId,
+        productName: string,
+        productImage: ImagePath,
+        amount: number,
+        price: number
+    ) {
+        this.id = id;
+        this.productName = productName;
+        this.productImage = productImage;
+        this.amount = amount;
+        this.price = price;
+    }
 
     public get getId() {
         return this.id;

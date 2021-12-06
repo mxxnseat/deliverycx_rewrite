@@ -60,7 +60,6 @@ class IikoService {
                             const splitAddress = organization.address.match(
                                 /^(?<city>.*?),(?<address>.+)/
                             ).groups;
-                            console.log(splitAddress);
                             const organization_id = new Types.ObjectId();
 
                             const { street, home } = splitAddress.address
