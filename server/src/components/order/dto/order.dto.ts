@@ -1,7 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsPhoneNumber, IsObject } from "class-validator";
 
-export class CustomerDTO {
+export class OrderDTO {
+    @ApiProperty()
+    organization: UniqueId;
+
     @ApiProperty()
     name: string;
 

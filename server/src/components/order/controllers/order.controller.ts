@@ -12,8 +12,9 @@ import { ICartRepository } from "src/components/cart/repositories/interface.repo
 import { AuthGuard } from "src/guards/authorize.guard";
 import { ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { OrderUsecase } from "../usecases/order.usecase";
-import { CustomerDTO } from "../dto/customer.dto";
+import { OrderDTO } from "../dto/order.dto";
 import { BaseErrorDTO } from "src/common/dto/base.dto";
+import { OrderError } from "src/common/errors/order.error";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -43,7 +44,7 @@ export class OrderController {
     })
     @Post("create")
     async create(
-        @Body() body: CustomerDTO,
+        @Body() body: OrderDTO,
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
@@ -57,6 +58,10 @@ export class OrderController {
         }
 
         const result = await this.OrderUsecase.create(session.user, cart, body);
+
+        if (result instanceof OrderError) {
+            return response.status(result.code).json(result.message);
+        }
 
         response.status(200).json(result);
     }
