@@ -8,7 +8,8 @@ async function bootstrap() {
     app.use(
         session({
             secret: process.env.SESSION_SECRET,
-            resave: true
+            resave: true,
+            saveUninitialized: true
         })
     );
 
