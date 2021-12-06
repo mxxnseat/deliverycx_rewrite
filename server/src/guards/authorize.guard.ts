@@ -1,9 +1,14 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import {
+    CanActivate,
+    ExecutionContext,
+    Injectable,
+    UnauthorizedException
+} from "@nestjs/common";
 import { Request } from "express";
 
 function authValidate(req: Request) {
     if (!req.session.user) {
-        return false;
+        throw new UnauthorizedException("Нужна авторизация");
     }
 
     return true;
