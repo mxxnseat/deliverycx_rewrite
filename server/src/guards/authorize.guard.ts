@@ -8,7 +8,7 @@ import { Request } from "express";
 
 function authValidate(req: Request) {
     if (!req.session.user) {
-        throw new UnauthorizedException("Нужна авторизация");
+        throw new UnauthorizedException();
     }
 
     return true;

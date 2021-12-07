@@ -4,6 +4,7 @@ import {
     Put,
     Res,
     Session,
+    UseFilters,
     UseGuards,
     UsePipes,
     ValidationPipe
@@ -14,16 +15,16 @@ import { AddRemoveDTO } from "../dto/addRemove.dto";
 import { ApiResponse } from "@nestjs/swagger";
 import { FavoriteUsecase } from "../usecases/favorite.usecase";
 import { FavoriteEntity } from "../entities/favorite.entity";
-import { ForbiddenDTO } from "src/common/dto/forbidden.dto";
+import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 
 @Controller("favorite")
-@UseGuards(AuthGuard)
 @ApiResponse({
-    status: 403,
-    description: "Forbidden. в случае если пользователь без сессионных кук",
-    type: ForbiddenDTO
+    status: 401,
+    description: "в случае если пользователь без сессионных кук"
 })
+@UseFilters(new UnauthorizedFilter())
 @UsePipes(new ValidationPipe({ transform: true }))
+@UseGuards(AuthGuard)
 export class FavoriteController {
     constructor(private readonly favoriteUsecase: FavoriteUsecase) {}
 

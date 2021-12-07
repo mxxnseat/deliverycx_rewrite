@@ -5,6 +5,7 @@ import {
     Get,
     Post,
     Session,
+    UseFilters,
     UseGuards
 } from "@nestjs/common";
 import { AuthGuard } from "src/guards/authorize.guard";
@@ -13,18 +14,17 @@ import { ChangeAmountDTO } from "../dto/changeAmount.dto";
 import { RemoveOneDTO } from "../dto/removeOne.dto";
 import { CartUsecase } from "../usecases/cart.usecase";
 import { ApiBody, ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
-import { ICartRepository } from "../repositories/interface.repository";
 import { CartEntity } from "../entities/cart.entity";
-import { ForbiddenDTO } from "src/common/dto/forbidden.dto";
+import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
-    status: 403,
-    description: "Forbidden. в случае если пользователь без сессионных кук",
-    type: ForbiddenDTO
+    status: 401,
+    description: "в случае если пользователь без сессионных кук"
 })
 @ApiCookieAuth()
 @Controller("cart")
+@UseFilters(new UnauthorizedFilter())
 @UseGuards(AuthGuard)
 export class CartController {
     constructor(private readonly cartUsecase: CartUsecase) {}

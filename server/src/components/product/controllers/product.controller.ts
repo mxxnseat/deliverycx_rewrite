@@ -19,6 +19,7 @@ import { SearchQueryDTO } from "../dto/searchQuery.dto";
 import { ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import { ProductUsecase } from "../usecases/product.usecase";
 import { ProductEntity } from "../entities/product.entity";
+import { BaseError } from "src/common/errors/base.error";
 
 @ApiTags("Product endpoints")
 @Controller("product")
@@ -73,6 +74,10 @@ export class ProductController {
     @ApiResponse({
         status: 200,
         type: ProductEntity
+    })
+    @ApiResponse({
+        status: 404,
+        type: BaseError
     })
     @ApiParam({
         name: "id",
