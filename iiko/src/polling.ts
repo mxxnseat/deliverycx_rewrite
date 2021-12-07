@@ -106,7 +106,9 @@ class IikoService {
                                             longitude: position[0],
                                             latitude: position[1]
                                         },
-                                        phone: organization.contact.phone
+                                        phone: organization.contact.phone,
+                                        workTime:
+                                            organization.workTime.split(";")[0]
                                     },
                                     { new: true, upsert: true }
                                 );
@@ -196,6 +198,7 @@ class IikoService {
                                         description: product.description,
                                         additionalInfo: product.additionalInfo,
                                         price: product.price,
+                                        tags: product.tags,
                                         weight: product.price,
                                         measureUnit: product.measureUnit,
                                         category: categoryId,

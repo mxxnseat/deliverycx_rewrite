@@ -31,6 +31,9 @@ export class OrganizationClass {
 
     @prop({ type: () => Number })
     public revision!: number;
+
+    @prop()
+    public workTime!: string;
 }
 
 export const OrganizationModel = getModelForClass(OrganizationClass);

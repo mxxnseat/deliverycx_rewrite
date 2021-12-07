@@ -15,7 +15,7 @@ import { DatabaseModule } from "src/modules/database.module";
             provide: ICartRepository,
             useClass: CartRepository
         },
-        cartProviders
+        ...cartProviders
     ]
 })
 export class CartModule {}

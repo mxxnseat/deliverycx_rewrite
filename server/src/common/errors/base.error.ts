@@ -1,16 +1,11 @@
-export abstract class CustomError extends Error {
-    constructor(
-        private readonly _message: string,
-        private readonly _code: number
-    ) {
-        super();
+export class BaseError {
+    constructor(private readonly error: any, private readonly status: number) {}
+
+    public get getError() {
+        return this.error;
     }
 
-    public get message() {
-        return this._message;
-    }
-
-    public get code() {
-        return this._code;
+    public get getStatus() {
+        return this.status;
     }
 }

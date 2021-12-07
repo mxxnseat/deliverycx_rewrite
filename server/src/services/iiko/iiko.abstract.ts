@@ -5,5 +5,5 @@ export abstract class IIiko {
     abstract create: (
         cart: Array<CartEntity>,
         customerInfo: OrderDTO
-    ) => Promise<Error | string>;
+    ) => Promise<string>;
 }
