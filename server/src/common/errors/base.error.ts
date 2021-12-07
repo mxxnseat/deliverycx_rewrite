@@ -1,5 +1,16 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class BaseError {
-    constructor(private readonly error: any, private readonly status: number) {}
+    @ApiProperty()
+    private readonly error: any;
+
+    @ApiProperty()
+    private readonly status: number;
+
+    constructor(error, status) {
+        this.error = error;
+        this.status = status;
+    }
 
     public get getError() {
         return this.error;
