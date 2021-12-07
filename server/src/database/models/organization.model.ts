@@ -29,6 +29,12 @@ export class OrganizationClass {
 
     @prop()
     public phone!: string;
+
+    @prop({ type: () => Number })
+    public revision!: number;
+
+    @prop()
+    public workTime!: string;
 }
 
 export const OrganizationSchema = buildSchema(OrganizationClass);

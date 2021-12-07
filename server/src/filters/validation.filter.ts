@@ -22,7 +22,7 @@ export class ValidationException implements ExceptionFilter {
 
         response.status(status).json({
             path: request.path,
-            message: message
+            errors: message
         });
     }
 }

@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../../common/errors/notFound.error";
 import { IProductRepository } from "../repositories/interface.repository";
 import { Injectable } from "@nestjs/common";
+import { NotFoundError } from "../errors/product.error";
 
 @Injectable()
 export class ProductUsecase {

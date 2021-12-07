@@ -1,6 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Model } from "mongoose";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
+import { CartClass } from "src/database/models/cart.model";
 import { OrderClass } from "src/database/models/order.model";
 import { IOrderRepository } from "./interface.repository";
 
@@ -8,7 +9,10 @@ import { IOrderRepository } from "./interface.repository";
 export class OrderRepository implements IOrderRepository {
     constructor(
         @Inject("ORDER_MODEL")
-        private readonly orderModel: Model<OrderClass>
+        private readonly orderModel: Model<OrderClass>,
+
+        @Inject("CART_MODEL")
+        private readonly cartModel: Model<CartClass>
     ) {}
 
     async create(userId: UniqueId, cartPrice: number) {
@@ -26,5 +30,7 @@ export class OrderRepository implements IOrderRepository {
             },
             { upsert: true }
         );
+
+        await this.cartModel.deleteMany({ user: userId });
     }
 }

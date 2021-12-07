@@ -12,6 +12,7 @@ export const cartMapper: Mapper<CartClass, Array<CartEntity>> = (p) => {
             cart._id,
             product.name,
             product.image,
+            product.tags,
             product.id,
             cart.amount,
             product.price

@@ -11,6 +11,9 @@ export class CartEntity {
     private readonly productImage: ImagePath;
 
     @ApiProperty()
+    private readonly productTags: Array<string>;
+
+    @ApiProperty()
     private readonly productId: UniqueId;
 
     @ApiProperty({
@@ -25,6 +28,7 @@ export class CartEntity {
         id: UniqueId,
         productName: string,
         productImage: ImagePath,
+        productTags,
         productId: UniqueId,
         amount: number,
         price: number
@@ -35,6 +39,7 @@ export class CartEntity {
         this.productId = productId;
         this.amount = amount;
         this.price = price;
+        this.productTags = productTags;
     }
 
     public get getId() {
@@ -53,11 +58,21 @@ export class CartEntity {
         return this.productId;
     }
 
+    public get getProductTags() {
+        return this.productTags;
+    }
+
     public get getAmount() {
         return this.amount;
     }
 
     public get getPrice() {
         return this.price;
+    }
+
+    public static calc(cart: Array<CartEntity>) {
+        return cart.reduce((acc, cartEl) => {
+            return acc + cartEl.getPrice * cartEl.getAmount;
+        }, 0);
     }
 }
