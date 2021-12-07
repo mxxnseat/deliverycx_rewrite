@@ -12,6 +12,10 @@ async function bootstrap() {
             saveUninitialized: true
         })
     );
+    app.enableCors({
+        origin: "*",
+        credentials: true
+    });
 
     doc(app);
 
