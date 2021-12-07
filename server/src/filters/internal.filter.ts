@@ -16,7 +16,7 @@ export class InternalException implements ExceptionFilter {
 
         response.status(status).json({
             path: request.path,
-            message: exception.message || "Уууупс что-то пошло не так"
+            message: exception?.message || "Уууупс что-то пошло не так"
         });
     }
 }

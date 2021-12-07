@@ -10,33 +10,32 @@ import {
     ValidationPipe
 } from "@nestjs/common";
 import { Response } from "express";
-import { ForbiddenDTO } from "src/common/dto/forbidden.dto";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { AuthGuard } from "src/guards/authorize.guard";
 import { ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { OrderUsecase } from "../usecases/order.usecase";
 import { OrderDTO } from "../dto/order.dto";
-import { BaseErrorDTO } from "src/common/dto/base.dto";
 import { ValidationException } from "src/filters/validation.filter";
 import { OrderEntity } from "../entities/order.entity";
-import { BaseErrorsFilter } from "src/filters/order.filter";
+import { BaseErrorsFilter } from "src/filters/base.filter";
 import { EmptyCartError } from "../errors/order.error";
+import { BaseError } from "src/common/errors/base.error";
+import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
-    status: 403,
-    description: "Forbidden. в случае если пользователь без сессионных кук",
-    type: ForbiddenDTO
+    status: 401,
+    description: "в случае если пользователь без сессионных кук"
 })
 @ApiCookieAuth()
 @Controller("order")
 @UseFilters(new ValidationException())
-@UseFilters(new BaseErrorsFilter())
 @UsePipes(
     new ValidationPipe({
         transform: true
     })
 )
+@UseFilters(new UnauthorizedFilter())
 @UseGuards(AuthGuard)
 export class OrderController {
     constructor(
@@ -51,7 +50,7 @@ export class OrderController {
     })
     @ApiResponse({
         status: 400,
-        type: BaseErrorDTO,
+        type: BaseError,
         description:
             "В случае, если пользователь пытается сделать заказ с пустой корзиной"
     })

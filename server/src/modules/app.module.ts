@@ -11,6 +11,7 @@ import { CategoryModule } from "../ioc/category.module";
 import { ProductModule } from "../ioc/product.module";
 import { OrderModule } from "src/ioc/order.module";
 import { FavoriteModule } from "src/ioc/favorite.module";
+import { BaseErrorsFilter } from "src/filters/base.filter";
 
 @Module({
     imports: [
@@ -30,6 +31,10 @@ import { FavoriteModule } from "src/ioc/favorite.module";
         {
             provide: APP_FILTER,
             useClass: InternalException
+        },
+        {
+            provide: APP_FILTER,
+            useClass: BaseErrorsFilter
         }
     ]
 })
