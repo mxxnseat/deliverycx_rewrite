@@ -19,6 +19,8 @@ import { OrderDTO } from "../dto/order.dto";
 import { BaseErrorDTO } from "src/common/dto/base.dto";
 import { ValidationException } from "src/filters/validation.filter";
 import { OrderEntity } from "../entities/order.entity";
+import { BaseErrorsFilter } from "src/filters/order.filter";
+import { EmptyCartError } from "../errors/order.error";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -29,6 +31,7 @@ import { OrderEntity } from "../entities/order.entity";
 @ApiCookieAuth()
 @Controller("order")
 @UseFilters(new ValidationException())
+@UseFilters(new BaseErrorsFilter())
 @UsePipes(
     new ValidationPipe({
         transform: true
@@ -61,10 +64,7 @@ export class OrderController {
         const cart = await this.CartRepository.getAll(session.user);
 
         if (!cart.length) {
-            return response.status(400).json({
-                message:
-                    "Вы не можете создать заказ, так как ваша корзина пуста"
-            });
+            throw new EmptyCartError();
         }
 
         const result = await this.OrderUsecase.create(session.user, cart, body);

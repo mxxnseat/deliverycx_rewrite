@@ -36,6 +36,7 @@ export class CartRepository
             result._id,
             product.name,
             product.image,
+            product.tags,
             product.id,
             result.amount,
             product.price

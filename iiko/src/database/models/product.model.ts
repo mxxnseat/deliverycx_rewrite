@@ -30,6 +30,9 @@ export class ProductClass {
     public description!: string;
 
     @prop()
+    public tags: string[];
+
+    @prop()
     public additionalInfo!: string;
 
     @prop()

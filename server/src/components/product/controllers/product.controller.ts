@@ -90,11 +90,6 @@ export class ProductController {
             session.user
         );
 
-        if (product instanceof Error) {
-            return response.status(product.code).json({
-                message: product.message
-            });
-        }
-        response.status(HttpStatus.OK).json(product);
+        response.status(200).json(product);
     }
 }

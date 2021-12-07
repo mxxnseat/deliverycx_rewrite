@@ -37,6 +37,9 @@ export class ProductClass {
     public price!: number;
 
     @prop()
+    public tags: string[];
+
+    @prop()
     public weight!: number;
 
     @prop({ ref: "Category" })

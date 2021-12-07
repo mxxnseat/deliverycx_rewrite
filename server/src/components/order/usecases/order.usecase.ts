@@ -4,12 +4,14 @@ import { IIiko } from "src/services/iiko/iiko.abstract";
 import { OrderDTO } from "../dto/order.dto";
 import { OrderEntity } from "../entities/order.entity";
 import { IOrderRepository } from "../repositores/interface.repository";
+import { ValidationCount } from "../services/validationCount/validationCount.service";
 
 @Injectable()
 export class OrderUsecase {
     constructor(
         private readonly orderRepository: IOrderRepository,
-        private readonly orderService: IIiko
+        private readonly orderService: IIiko,
+        private readonly validationCountService: ValidationCount
     ) {}
 
     async create(
@@ -17,15 +19,11 @@ export class OrderUsecase {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
     ) {
+        this.validationCountService.validate(cart);
+
         const orderResult = await this.orderService.create(cart, orderInfo);
 
-        const cartPrice = cart.reduce((acc, cartEl) => {
-            return acc + cartEl.getPrice * cartEl.getAmount;
-        }, 0);
-
-        await this.orderRepository.create(userId, cartPrice);
-
-        if (orderResult instanceof Error) return orderResult;
+        await this.orderRepository.create(userId, CartEntity.calc(cart));
 
         return new OrderEntity(orderResult);
     }

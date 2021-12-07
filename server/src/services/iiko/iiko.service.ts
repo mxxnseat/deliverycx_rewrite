@@ -24,7 +24,7 @@ export class IikoService implements IIiko {
     async create(
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
-    ): Promise<Error | string> {
+    ): Promise<string> {
         console.log("SEND REQUEST TO IIKO");
         const token = await this.getToken();
 

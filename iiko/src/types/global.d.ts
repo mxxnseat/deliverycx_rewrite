@@ -43,5 +43,5 @@ interface IOrganization {
     fullName: string;
     id: UniqueId;
     isActive: true;
-    workTime: string;
+    workTime: string | null;
 }

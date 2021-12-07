@@ -22,18 +22,23 @@ export class OrganizationEntity {
     @ApiProperty()
     private readonly phone?: string;
 
+    @ApiProperty()
+    private readonly workTime?: string;
+
     constructor(
         id: UniqueId,
         address?: string,
         city?: string,
         cords?: [number, number],
-        phone?: string
+        phone?: string,
+        workTime?: string
     ) {
         this.id = id;
         this.address = address;
         this.city = city;
         this.cords = cords;
         this.phone = phone;
+        this.workTime = workTime;
     }
 
     public get getId() {
@@ -54,5 +59,9 @@ export class OrganizationEntity {
 
     public get getPhone() {
         return this.phone;
+    }
+
+    public get getWorkTime() {
+        return this.workTime;
     }
 }
