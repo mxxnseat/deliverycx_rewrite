@@ -6,8 +6,8 @@ import { Injectable } from "@nestjs/common";
 export class ProductUsecase {
     constructor(private readonly productRepository: IProductRepository) {}
 
-    async getOne(productId: UniqueId) {
-        const result = await this.productRepository.getOne(productId);
+    async getOne(productId: UniqueId, userId: UniqueId) {
+        const result = await this.productRepository.getOne(productId, userId);
 
         if (!result.getId) {
             return new NotFoundError(`Товар с ID ${productId} не найден`);
@@ -16,17 +16,22 @@ export class ProductUsecase {
         return result;
     }
 
-    async getAll(categoryId: UniqueId) {
+    async getAll(categoryId: UniqueId, userId: UniqueId) {
         console.log(categoryId);
-        const result = await this.productRepository.getAll(categoryId);
+        const result = await this.productRepository.getAll(categoryId, userId);
 
         return result;
     }
 
-    async search(searchString: string, organizationId: UniqueId) {
+    async search(
+        searchString: string,
+        organizationId: UniqueId,
+        userId: UniqueId
+    ) {
         const result = await this.productRepository.getBySearch(
             searchString,
-            organizationId
+            organizationId,
+            userId
         );
 
         return result;
