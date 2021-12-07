@@ -1,7 +1,7 @@
 import { ICategory, ICity, IFavorites, IPoint } from "@types"
 import Entities from "../Entities"
 
-export interface IShopEntitiesEntities{
+export interface IShopEntities{
   isSearch: boolean
   category: ICategory
   favorites:IFavorites
@@ -10,7 +10,7 @@ export interface IShopEntitiesEntities{
  * @description синглтон
  * @method init полиморф, может не принимать аргументов или любой аргумент и изменяет entities
  */
-class ShopEntities extends Entities<IShopEntitiesEntities>{
+class ShopEntities extends Entities<IShopEntities>{
   protected isSearch = false
   protected category = {}
   protected favorites = {}

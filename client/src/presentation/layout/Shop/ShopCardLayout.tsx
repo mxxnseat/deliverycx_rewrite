@@ -1,4 +1,5 @@
 import { ICategory } from "@types";
+import ShopLinkToCart from "application/components/core/Shop/ShopLinkToCart";
 import ShopProductCard from "application/components/core/Shop/ShopProductCard"
 import HeaderBack from "presentation/viewModel/viewHead/HeaderBack"
 import { FC, useState } from "react"
@@ -23,6 +24,7 @@ const ShopCardLayout:FC<RouteProps> = ({ match }) => {
                 </div>
             </HeaderBack>    
             <ShopProductCard productId={productId} setgrop={setGroup} />
+            <ShopLinkToCart />
     </div>
   )
 }

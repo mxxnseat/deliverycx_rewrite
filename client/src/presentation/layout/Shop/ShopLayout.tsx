@@ -5,6 +5,7 @@ import ShopSearch from "application/components/core/Shop/ShopSearch";
 import Categories from "application/components/core/Сategories/Сategories";
 import Stocks from "application/components/common/Stocks/Stocks";
 import ShopProduct from "application/components/core/Shop/ShopProduct";
+import ShopLinkToCart from "application/components/core/Shop/ShopLinkToCart";
 
 const Shop = () => {
   const isSearch = ''
@@ -28,6 +29,7 @@ const Shop = () => {
                   <div className="shop__box-items container">
                       {<ShopProduct searchQuery={isSearch} />}
                   </div>
+                  <ShopLinkToCart />
                 </animated.div>
                 :
                 <animated.div style={style}>

@@ -25,6 +25,7 @@ const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
   
   return (
     (!isLoading && data) ? 
+      <>
       <div className="product-card__image-wrap">
         <div className="container">
 
@@ -45,7 +46,9 @@ const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
                 <AddToCart id={productId} groupImage={data.group.image} _class={"product-card__add"} />
             </div>
           </div>
-          {
+          
+        </div>
+        {
               data.product.code && data.product.code.match(/^HI-\d+$/) ?
                 <div className="product-card__henkali-info">
                   <div className="product-card__order-from">Заказ от 3 шт.</div>
@@ -91,8 +94,7 @@ const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
                 } */}
 
             </div>
-      </div>
-      
+      </>
      : <LoaderProduct />
     
   )

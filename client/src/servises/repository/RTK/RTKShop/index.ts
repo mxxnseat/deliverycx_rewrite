@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { ICategory, IProduct, IResponseProductCard } from '@types';
+import { ICart, ICategory, IProduct, IResponseProductCard } from '@types';
 import encodeQueryData from 'application/helpers/encodeQuery';
 import { staticCategories } from 'domain/use-case/useCaseCategories';
 import { baseQueryWithReauth } from '..';
@@ -39,7 +39,24 @@ export const RTKShop = createApi({
       },
      
     }),
+    addToCart:builder.mutation<ICart,string>({
+      query: (product) => {
+        return ({
+          method: "POST",
+          url: `shop/addToCart`,
+          body: {
+            product
+          }
+        })
+      },
+     
+    }),
   }),
 });
-export const {useGetCategoriesQuery,useGetProductsQuery,useGetProductCartQuery} = RTKShop
+export const {
+  useGetCategoriesQuery,
+  useGetProductsQuery,
+  useGetProductCartQuery,
+  useAddToCartMutation
+} = RTKShop
 

@@ -3,8 +3,10 @@ import { FC, memo, useMemo, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import debounce from 'lodash.debounce';
 import { useSpring, animated, config } from 'react-spring'
+import { useAddToCartMutation } from "servises/repository/RTK/RTKShop";
+import { RequestCart } from "servises/repository/Axios/Request";
 
-interface IProps {
+interface IProps { 
     id: string,
     _class:string,
     groupImage?: string
@@ -12,6 +14,8 @@ interface IProps {
 
 const AddToCart: FC<IProps> = ({ id,_class, groupImage }) => {
     const dispatch = useDispatch();
+    const [addCart,{data,isLoading}] = useAddToCartMutation()
+    
     const springRef = useRef<any>();
     let queryCartRef = useRef<any>();
     const [style, animate] = useSpring(() => ({
@@ -44,10 +48,11 @@ const AddToCart: FC<IProps> = ({ id,_class, groupImage }) => {
             console.log(e)
         }
         
-        
+        //RequestCart.addToCart(id)
+        addCart(id)
     }
     const debouncedChangeHandler = debounce(AnimateHandle, 400)
-
+    
     useEffect(()=>{
         queryCartRef.current = document.querySelector('.link-to-cart') as HTMLElement;
     }, [])
