@@ -1,3 +1,4 @@
+import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsPhoneNumber, IsObject } from "class-validator";
 
@@ -10,6 +11,7 @@ export class OrderDTO {
 
     @ApiProperty({
         properties: {
+            city: { type: "string" },
             street: { type: "string" },
             home: { type: "number", minimum: 1 },
             flat: { type: "number" },
@@ -20,6 +22,7 @@ export class OrderDTO {
     })
     @IsObject()
     address: {
+        city: string;
         street: string;
         home: number;
         flat: number;
@@ -29,7 +32,11 @@ export class OrderDTO {
     };
 
     @ApiProperty()
-    @IsPhoneNumber()
+    @IsPhoneNumber("RU", {
+        message: () => {
+            throw new BadRequestException("Не верный формат телефона");
+        }
+    })
     phone: string;
 
     @ApiProperty()

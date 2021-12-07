@@ -18,7 +18,7 @@ interface OrderInfoIiko {
     status: string;
     number: string;
     durationInMinutes: number;
-    problem: {
+    problem?: {
         hasProblem: boolean;
         problem: string;
     };

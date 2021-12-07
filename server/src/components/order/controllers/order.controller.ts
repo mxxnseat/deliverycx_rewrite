@@ -4,7 +4,10 @@ import {
     Post,
     Res,
     Session,
-    UseGuards
+    UseFilters,
+    UseGuards,
+    UsePipes,
+    ValidationPipe
 } from "@nestjs/common";
 import { Response } from "express";
 import { ForbiddenDTO } from "src/common/dto/forbidden.dto";
@@ -14,7 +17,8 @@ import { ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { OrderUsecase } from "../usecases/order.usecase";
 import { OrderDTO } from "../dto/order.dto";
 import { BaseErrorDTO } from "src/common/dto/base.dto";
-import { OrderError } from "src/common/errors/order.error";
+import { ValidationException } from "src/filters/validation.filter";
+import { OrderEntity } from "../entities/order.entity";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -24,6 +28,12 @@ import { OrderError } from "src/common/errors/order.error";
 })
 @ApiCookieAuth()
 @Controller("order")
+@UseFilters(new ValidationException())
+@UsePipes(
+    new ValidationPipe({
+        transform: true
+    })
+)
 @UseGuards(AuthGuard)
 export class OrderController {
     constructor(
@@ -33,7 +43,7 @@ export class OrderController {
 
     @ApiResponse({
         status: 200,
-        type: Number,
+        type: OrderEntity,
         description: "Возращает номер заказа"
     })
     @ApiResponse({
@@ -58,10 +68,6 @@ export class OrderController {
         }
 
         const result = await this.OrderUsecase.create(session.user, cart, body);
-
-        if (result instanceof OrderError) {
-            return response.status(result.code).json(result.message);
-        }
 
         response.status(200).json(result);
     }
