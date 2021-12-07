@@ -4,7 +4,10 @@ import {
     Post,
     Res,
     Session,
-    UseGuards
+    UseFilters,
+    UseGuards,
+    UsePipes,
+    ValidationPipe
 } from "@nestjs/common";
 import { Response } from "express";
 import { ForbiddenDTO } from "src/common/dto/forbidden.dto";
@@ -12,8 +15,10 @@ import { ICartRepository } from "src/components/cart/repositories/interface.repo
 import { AuthGuard } from "src/guards/authorize.guard";
 import { ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { OrderUsecase } from "../usecases/order.usecase";
-import { CustomerDTO } from "../dto/customer.dto";
+import { OrderDTO } from "../dto/order.dto";
 import { BaseErrorDTO } from "src/common/dto/base.dto";
+import { ValidationException } from "src/filters/validation.filter";
+import { OrderEntity } from "../entities/order.entity";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -23,6 +28,12 @@ import { BaseErrorDTO } from "src/common/dto/base.dto";
 })
 @ApiCookieAuth()
 @Controller("order")
+@UseFilters(new ValidationException())
+@UsePipes(
+    new ValidationPipe({
+        transform: true
+    })
+)
 @UseGuards(AuthGuard)
 export class OrderController {
     constructor(
@@ -32,7 +43,7 @@ export class OrderController {
 
     @ApiResponse({
         status: 200,
-        type: Number,
+        type: OrderEntity,
         description: "Возращает номер заказа"
     })
     @ApiResponse({
@@ -43,7 +54,7 @@ export class OrderController {
     })
     @Post("create")
     async create(
-        @Body() body: CustomerDTO,
+        @Body() body: OrderDTO,
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {

@@ -10,6 +10,9 @@ export class CartEntity {
     @ApiProperty()
     private readonly productImage: ImagePath;
 
+    @ApiProperty()
+    private readonly productId: UniqueId;
+
     @ApiProperty({
         minimum: 1
     })
@@ -22,12 +25,14 @@ export class CartEntity {
         id: UniqueId,
         productName: string,
         productImage: ImagePath,
+        productId: UniqueId,
         amount: number,
         price: number
     ) {
         this.id = id;
         this.productName = productName;
         this.productImage = productImage;
+        this.productId = productId;
         this.amount = amount;
         this.price = price;
     }
@@ -42,6 +47,10 @@ export class CartEntity {
 
     public get getProductImage() {
         return this.productImage;
+    }
+
+    public get getProductId() {
+        return this.productId;
     }
 
     public get getAmount() {
