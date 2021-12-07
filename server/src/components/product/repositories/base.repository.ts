@@ -8,58 +8,181 @@ import { CategoryClass } from "../../../database/models/category.model";
 import { BaseRepository } from "../../../common/abstracts/base.repository";
 import { productMapper } from "../entities/product.mapper";
 import { Inject, Injectable } from "@nestjs/common";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 @Injectable()
-export class ProductRepository
-    extends BaseRepository<ProductClass, ProductEntity>
-    implements IProductRepository
-{
+export class ProductRepository implements IProductRepository {
     constructor(
         @Inject("PRODUCT_MODEL")
         private readonly productModel: Model<ProductClass>
-    ) {
-        super(ProductModel, productMapper, "category", "category");
+    ) {}
+
+    async getAll(categoryId: UniqueId, userId: UniqueId): Promise<any> {
+        const result = await this.productModel.aggregate([
+            {
+                $match: {
+                    category: new Types.ObjectId(categoryId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "favorites",
+                    as: "favorites",
+                    let: { productId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                user: new Types.ObjectId(userId),
+                                $expr: { $in: ["$$productId", "$products"] }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    isFav: {
+                        $cond: [
+                            { $eq: [{ $size: "$favorites" }, 1] },
+
+                            true,
+                            false
+                        ]
+                    }
+                }
+            },
+            {
+                $unset: "favorites"
+            }
+        ]);
+
+        const productsPopulate = await Promise.all(
+            result.map(async (product) => {
+                return await new this.productModel(product).populate(
+                    "category"
+                );
+            })
+        );
+
+        return productMapper(productsPopulate);
     }
 
-    async getOne(productId: UniqueId) {
-        const entity = await this.productModel
-            .findOne({ _id: productId })
-            .populate("category");
+    async getOne(productId: UniqueId, userId: UniqueId) {
+        console.log(productId);
+        const result = await this.productModel.aggregate([
+            {
+                $match: {
+                    _id: new Types.ObjectId(productId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "favorites",
+                    as: "favorites",
+                    let: { productId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                user: new Types.ObjectId(userId),
+                                $expr: { $in: ["$$productId", "$products"] }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    isFav: {
+                        $cond: [
+                            { $eq: [{ $size: "$favorites" }, 1] },
+
+                            true,
+                            false
+                        ]
+                    }
+                }
+            },
+            {
+                $unset: "favorites"
+            }
+        ]);
+
+        const productPopulate = (
+            await Promise.all(
+                result.map(async (product) => {
+                    return await new this.productModel(product).populate(
+                        "category"
+                    );
+                })
+            )
+        )[0];
 
         return new ProductEntity(
-            entity?.id,
-            entity?.name,
-            entity?.description,
-            entity?.additionalInfo,
-            entity?.price,
-            entity?.weight,
-            entity?.measureUnit,
-            entity?.image,
-            (entity?.category as CategoryClass)?.image
+            productPopulate?.id,
+            productPopulate?.name,
+            productPopulate?.description,
+            productPopulate?.additionalInfo,
+            productPopulate?.price,
+            productPopulate?.weight,
+            productPopulate?.measureUnit,
+            productPopulate?.image,
+            (productPopulate?.category as CategoryClass)?.image,
+            productPopulate?.isFav
         );
     }
 
-    async getBySearch(searchString: string, organizationId: UniqueId) {
-        const entities = await this.productModel.find({
-            organization: organizationId,
-            name: { $regex: searchString, $options: "i" }
-        });
+    async getBySearch(
+        searchString: string,
+        organizationId: UniqueId,
+        userId: UniqueId
+    ) {
+        const result = await this.productModel.aggregate([
+            {
+                $match: {
+                    organization: new Types.ObjectId(organizationId),
+                    name: { $regex: searchString, $options: "i" }
+                }
+            },
+            {
+                $lookup: {
+                    from: "favorites",
+                    as: "favorites",
+                    let: { productId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                user: new Types.ObjectId(userId),
+                                $expr: { $in: ["$$productId", "$products"] }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    isFav: {
+                        $cond: [
+                            { $eq: [{ $size: "$favorites" }, 1] },
 
-        const result = entities.map((entity) => {
-            return new ProductEntity(
-                entity?.id,
-                entity?.name,
-                entity?.description,
-                entity?.additionalInfo,
-                entity?.price,
-                entity?.weight,
-                entity?.measureUnit,
-                entity?.image,
-                (entity?.category as CategoryClass)?.image
-            );
-        });
+                            true,
+                            false
+                        ]
+                    }
+                }
+            },
+            {
+                $unset: "favorites"
+            }
+        ]);
 
-        return result;
+        const productsPopulate = await Promise.all(
+            result.map(async (product) => {
+                return await new this.productModel(product).populate(
+                    "category"
+                );
+            })
+        );
+
+        return productMapper(productsPopulate);
     }
 }

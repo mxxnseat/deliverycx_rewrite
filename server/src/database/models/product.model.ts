@@ -47,6 +47,9 @@ export class ProductClass {
 
     @prop({ enum: MeasureUnit })
     public measureUnit!: MeasureUnit;
+
+    @prop()
+    public isFav!: boolean;
 }
 
 export const ProductSchema = buildSchema(ProductClass);

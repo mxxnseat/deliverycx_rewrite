@@ -30,6 +30,9 @@ export class ProductEntity {
     @ApiProperty()
     private readonly categoryImage?: ImagePath;
 
+    @ApiProperty()
+    private readonly isFav?: boolean;
+
     constructor(
         id: string | undefined,
         name?: string,
@@ -39,7 +42,8 @@ export class ProductEntity {
         weight?: number,
         measureUnit?: "шт" | "порц",
         image?: ImagePath,
-        categoryImage?: ImagePath
+        categoryImage?: ImagePath,
+        isFav?: boolean
     ) {
         this.id = id;
         this.name = name;
@@ -50,6 +54,7 @@ export class ProductEntity {
         this.measureUnit = measureUnit;
         this.image = image;
         this.categoryImage = categoryImage;
+        this.isFav = isFav;
     }
 
     public get getId(): string | undefined {
@@ -74,11 +79,15 @@ export class ProductEntity {
         return this.name;
     }
 
-    public getImage() {
+    public get getImage() {
         return this.image;
     }
 
-    public getCategoryImage() {
+    public get getCategoryImage() {
         return this.categoryImage;
+    }
+
+    public get getIsFav() {
+        return this.isFav;
     }
 }
