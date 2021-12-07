@@ -6,6 +6,7 @@ import {
     Query,
     Req,
     Res,
+    Session,
     UseFilters,
     UsePipes,
     ValidationPipe
@@ -39,9 +40,13 @@ export class ProductController {
         @Query()
         query: GetAllDTO,
         @Req() request: Request,
-        @Res() response: Response
+        @Res() response: Response,
+        @Session() session: Record<string, string>
     ) {
-        const products = await this.productUsecase.getAll(query.categoryId);
+        const products = await this.productUsecase.getAll(
+            query.categoryId,
+            session.user
+        );
 
         response.status(HttpStatus.OK).json(products);
     }
@@ -53,11 +58,13 @@ export class ProductController {
     @Get("search")
     async getBySearch(
         @Query() query: SearchQueryDTO,
-        @Res() response: Response
+        @Res() response: Response,
+        @Session() session: Record<string, string>
     ) {
         const products = await this.productUsecase.search(
             query.searchString,
-            query.organizationId
+            query.organizationId,
+            session.user
         );
 
         response.status(HttpStatus.OK).json(products);
@@ -75,9 +82,13 @@ export class ProductController {
     async getOne(
         @Param() param: GetByIdDTO,
         @Res() response: Response,
-        @Req() request: Request
+        @Req() request: Request,
+        @Session() session: Record<string, string>
     ) {
-        const product = await this.productUsecase.getOne(param.id);
+        const product = await this.productUsecase.getOne(
+            param.id,
+            session.user
+        );
 
         if (product instanceof Error) {
             return response.status(product.code).json({

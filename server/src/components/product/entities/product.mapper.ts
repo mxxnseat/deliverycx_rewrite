@@ -3,9 +3,10 @@ import { Mapper } from "../../../common/abstracts/mapper.interface";
 import { ProductEntity } from "./product.entity";
 import { CategoryClass } from "../../../database/models/category.model";
 
-export const productMapper: Mapper<ProductClass, Array<ProductEntity>> = (
-    p
-) => {
+export const productMapper: Mapper<
+    ProductClass & { isFav: boolean },
+    Array<ProductEntity>
+> = (p) => {
     return p.map((product) => {
         return new ProductEntity(
             product.id,
@@ -16,7 +17,8 @@ export const productMapper: Mapper<ProductClass, Array<ProductEntity>> = (
             product.weight,
             product.measureUnit,
             product.image,
-            (product.category as CategoryClass)?.image
+            (product.category as CategoryClass)?.image,
+            product.isFav
         );
     });
 };

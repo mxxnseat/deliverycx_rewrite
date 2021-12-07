@@ -4,10 +4,10 @@ declare global {
     }
 }
 
-export {};
-
 declare module "express-session" {
     interface SessionData {
         user: UniqueId;
     }
 }
+
+export {};

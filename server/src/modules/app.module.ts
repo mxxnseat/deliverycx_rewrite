@@ -10,6 +10,7 @@ import { UserModule } from "src/ioc/user.module";
 import { CategoryModule } from "../ioc/category.module";
 import { ProductModule } from "../ioc/product.module";
 import { OrderModule } from "src/ioc/order.module";
+import { FavoriteModule } from "src/ioc/favorite.module";
 
 @Module({
     imports: [
@@ -22,7 +23,8 @@ import { OrderModule } from "src/ioc/order.module";
         OrganizationModule,
         UserModule,
         CartModule,
-        OrderModule
+        OrderModule,
+        FavoriteModule
     ],
     providers: [
         {
