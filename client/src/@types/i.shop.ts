@@ -1,32 +1,25 @@
 export interface ICategory {
-  image: string,
-  _id: string,
-  code: string | null,
-  isIncludedInMenu: boolean,
-  name: string,
-  order: number
+    image: string;
+    id: string;
+    name: string;
 }
 export interface IProduct<C = ICategory> {
-  image: string,
-  id: string,
-  category: string,
-  code: string,
-  group: C,
-  isIncludedInMenu: boolean,
-  name: string,
-  isFav: boolean,
-  order: number,
-  price: number,
-  weight: number,
-  measureUnit: "порц" | "шт",
-  description: string,
-  additionalInfo: string,
+    id: string;
+    name: string;
+    description: string;
+    additionalInfo: string;
+    price: number;
+    weight: number;
+    measureUnit: string;
+    image: string;
+    categoryImage: string;
+    isFav: boolean;
 }
 export interface IFavorites {
-  list: string[]
+    list: string[];
 }
-export interface IResponseProductCard{
-  sauces: IProduct[],
-  product: IProduct,
-  group: ICategory
+export interface IResponseProductCard {
+    sauces: IProduct[];
+    product: IProduct;
+    group: ICategory;
 }

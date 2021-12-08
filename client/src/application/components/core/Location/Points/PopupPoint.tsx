@@ -47,7 +47,7 @@ const PopupPoint = () => {
                   alt="Телефон заведения"
                />
 
-               {address.street}
+               {address.address}
             </div>
             <div className="welcome__select-adress__info phone">
                <img
@@ -55,8 +55,8 @@ const PopupPoint = () => {
                   alt="Телефон заведения"
                />
 
-               <a href={`tel: ${address.contacts.phone}`}>
-                  {address.contacts.phone}
+               <a href={`tel: ${address.phone}`}>
+                  {address.phone}
                </a>
             </div>
 

@@ -94,11 +94,11 @@ const YMapPoint = () => {
                             width="100"
                             height="100vh"
                             defaultState={{
-                                center: addresses[0] ? [addresses[statePoint.slideIndex].latitude, addresses[statePoint.slideIndex].longitude] : [0.0, 0.0],
+                                center: addresses[0] ? [addresses[statePoint.slideIndex].cords[0], addresses[statePoint.slideIndex].cords[1]] : [0.0, 0.0],
                                 zoom: 18
                             }}
                             state={{
-                                center: addresses[0] ? [addresses[statePoint.slideIndex].latitude, addresses[statePoint.slideIndex].longitude] : [0.0, 0.0],
+                                center: addresses[0] ? [addresses[statePoint.slideIndex].cords[0], addresses[statePoint.slideIndex].cords[1]] : [0.0, 0.0],
                                 zoom: 18,
                                 
                             }}
@@ -110,7 +110,7 @@ const YMapPoint = () => {
                                             onClick={() => placemarkClickHandler(address,index)}
                                             key={index}
                                             options={placeMarkOption}
-                                            geometry={[address.latitude, address.longitude]}
+                                            geometry={[address.cords[0], address.cords[1]]}
                                         />
                                     );
                                 })

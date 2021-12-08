@@ -13,19 +13,19 @@ export const RTKShop = createApi({
   tagTypes: ['Shop'],
   endpoints: (builder) => ({
     getCategories: builder.query<ICategory[],string>({
-      query: () => {
+      query: (organizationid) => {
         return ({
           method: "GET",
-          url: `api/getCategories`
+          url: `category/all?organizationId=${organizationid}`
         })
       },
       transformResponse: (response: ICategory[]) => [...response,staticCategories],
     }),
-    getProducts:builder.query<IProduct[],any>({
-      query: (query) => {
+    getProducts:builder.query<IProduct[],string>({
+      query: (catId) => {
         return ({
           method: 'GET',
-          url: `api/getProducts?${encodeQueryData(query)}`,
+          url: `product/all?categoryId=${catId}`,
         })
       },
      

@@ -15,7 +15,7 @@ type IProps = {
 }
 
 const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
-  const organization = adapterSelector.createSelectors<IPoint>(selector => selector.point, val => val._id)
+  const organization = adapterSelector.createSelectors<IPoint>(selector => selector.point, val => val.id)
   const { data, isLoading } = useGetProductCartQuery({ productId, organization })
   
   useEffect(() => {
@@ -48,16 +48,7 @@ const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
           </div>
           
         </div>
-        {
-              data.product.code && data.product.code.match(/^HI-\d+$/) ?
-                <div className="product-card__henkali-info">
-                  <div className="product-card__order-from">Заказ от 3 шт.</div>
-                  <div className="product-card__bonus">
-                      При заказе дюжины хинкалей<br />
-                      Вы платите за 11!
-                  </div>
-                </div> : ''
-        }
+        
         <div className="container">
                 <div className="product-card__description">
                     {

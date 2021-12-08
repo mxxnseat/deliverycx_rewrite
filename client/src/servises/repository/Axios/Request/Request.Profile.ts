@@ -18,8 +18,8 @@ interface IUpdateUserResponse {
 class RequestProfile extends ApiSuper{
 
   @methods('post')
-  register(organization:string) {
-    return this.request<IDatReg>('profile/register')
+  register() {
+    return this.request<IDatReg>('/user/create')
   }
   @methods('post')
   update(data:IUpdateData) {
