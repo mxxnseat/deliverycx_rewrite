@@ -5,6 +5,7 @@ import {
     prop,
     Ref
 } from "@typegoose/typegoose";
+import { Types } from "mongoose";
 import { CategoryClass } from "./category.model";
 import { OrganizationClass } from "./organization.model";
 
@@ -20,6 +21,9 @@ enum MeasureUnit {
 export class ProductClass {
     @prop({ ref: () => OrganizationClass })
     public organization!: Ref<OrganizationClass>;
+
+    @prop({ type: Types.ObjectId })
+    public _id!: Types.ObjectId;
 
     @prop()
     public id!: UniqueId;

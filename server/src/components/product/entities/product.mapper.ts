@@ -9,7 +9,7 @@ export const productMapper: Mapper<
 > = (p) => {
     return p.map((product) => {
         return new ProductEntity(
-            product.id,
+            product._id,
             product.name,
             product.description,
             product.additionalInfo,

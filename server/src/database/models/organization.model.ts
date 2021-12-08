@@ -6,6 +6,7 @@ import {
     Ref,
     Severity
 } from "@typegoose/typegoose";
+import { Types } from "mongoose";
 import { CityClass } from "./city.model";
 
 @ModelOptions({
@@ -13,6 +14,9 @@ import { CityClass } from "./city.model";
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class OrganizationClass {
+    @prop({ type: Types.ObjectId })
+    public _id!: Types.ObjectId;
+
     @prop()
     public id!: UniqueId;
 

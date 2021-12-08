@@ -6,6 +6,6 @@ export const categoryMapper: Mapper<CategoryClass, Array<CategoryEntity>> = (
     p
 ) => {
     return p.map((category) => {
-        return new CategoryEntity(category.id, category.name, category.image);
+        return new CategoryEntity(category._id, category.name, category.image);
     });
 };

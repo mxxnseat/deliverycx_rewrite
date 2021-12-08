@@ -11,7 +11,7 @@ export const organizationMapper: Mapper<
         const address = `${organization.address.street}, ${organization.address.home}`;
 
         return new OrganizationEntity(
-            organization.id,
+            organization._id,
             address,
             (organization.city as CityClass)?.name,
             [organization.address.latitude, organization.address.longitude],

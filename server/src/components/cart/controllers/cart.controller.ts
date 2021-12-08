@@ -6,7 +6,9 @@ import {
     Post,
     Session,
     UseFilters,
-    UseGuards
+    UseGuards,
+    UsePipes,
+    ValidationPipe
 } from "@nestjs/common";
 import { AuthGuard } from "src/guards/authorize.guard";
 import { cartDTO } from "../dto/add.dto";
@@ -16,6 +18,7 @@ import { CartUsecase } from "../usecases/cart.usecase";
 import { ApiBody, ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { CartEntity } from "../entities/cart.entity";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
+import { ValidationException } from "src/filters/validation.filter";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -24,6 +27,12 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 })
 @ApiCookieAuth()
 @Controller("cart")
+@UseFilters(new ValidationException())
+@UsePipes(
+    new ValidationPipe({
+        transform: true
+    })
+)
 @UseFilters(new UnauthorizedFilter())
 @UseGuards(AuthGuard)
 export class CartController {

@@ -16,6 +16,7 @@ import { ApiResponse } from "@nestjs/swagger";
 import { FavoriteUsecase } from "../usecases/favorite.usecase";
 import { FavoriteEntity } from "../entities/favorite.entity";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
+import { ValidationException } from "src/filters/validation.filter";
 
 @Controller("favorite")
 @ApiResponse({
@@ -23,6 +24,7 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
     description: "в случае если пользователь без сессионных кук"
 })
 @UseFilters(new UnauthorizedFilter())
+@UseFilters(new ValidationException())
 @UsePipes(new ValidationPipe({ transform: true }))
 @UseGuards(AuthGuard)
 export class FavoriteController {

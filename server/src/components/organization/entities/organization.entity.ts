@@ -1,8 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Types } from "mongoose";
+import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 
 export class OrganizationEntity {
     @ApiProperty()
-    private readonly id: UniqueId;
+    @IsMongoIdObject()
+    private readonly id: Types.ObjectId;
 
     @ApiProperty()
     private readonly address?: string;
@@ -26,7 +29,7 @@ export class OrganizationEntity {
     private readonly workTime?: string;
 
     constructor(
-        id: UniqueId,
+        id: Types.ObjectId,
         address?: string,
         city?: string,
         cords?: [number, number],
