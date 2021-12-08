@@ -3,7 +3,8 @@ import {
     getModelForClass,
     ModelOptions,
     prop,
-    Ref
+    Ref,
+    Severity
 } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { CategoryClass } from "./category.model";
@@ -15,7 +16,7 @@ enum MeasureUnit {
 }
 
 @ModelOptions({
-    options: { customName: "Product" },
+    options: { customName: "Product", allowMixed: Severity.ALLOW },
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class ProductClass {

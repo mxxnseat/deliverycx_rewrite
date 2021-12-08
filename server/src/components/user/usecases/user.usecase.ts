@@ -14,4 +14,8 @@ export class UserUsecase {
     ) {
         return await this.userRepository.create(username, name, phone);
     }
+
+    async getUser(userId: UniqueId) {
+        return await this.userRepository.getUser(userId);
+    }
 }

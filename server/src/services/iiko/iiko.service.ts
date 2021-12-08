@@ -25,7 +25,6 @@ export class IikoService implements IIiko {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
     ): Promise<string> {
-        console.log("SEND REQUEST TO IIKO");
         const token = await this.getToken();
 
         const requestString = `${process.env.SERVICE_URL}/api/0/orders/add?access_token=${token}`;

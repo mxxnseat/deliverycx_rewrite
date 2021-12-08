@@ -18,7 +18,9 @@ export class CityController {
         @Query()
         query: CityQueryDTO
     ) {
-        const result = this.cityUsecase.getAll(query.search);
+        const result = this.cityUsecase.getAll(
+            query.search ? query.search : ""
+        );
 
         return result;
     }

@@ -6,4 +6,6 @@ export abstract class IUserRepository {
         name: string,
         phone: string
     ): Promise<UserEntity>;
+
+    abstract getUser(userId: UniqueId): Promise<UserEntity>;
 }

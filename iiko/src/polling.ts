@@ -149,7 +149,7 @@ class IikoService {
                             { upsert: true }
                         );
 
-                        await Promise.all(
+                        const categories = await Promise.all(
                             data.groups.map(async (category) => {
                                 await CategoryModel.updateOne(
                                     {
@@ -159,13 +159,16 @@ class IikoService {
                                         $setOnInsert: {
                                             id: category.id,
                                             name: category.name,
-                                            image: category.images[
-                                                category.images.length - 1
-                                            ]
-                                                ? category.images[
-                                                      category.images.length - 1
-                                                  ].imageUrl
-                                                : "",
+                                            image: await downloader.download(
+                                                category.images[
+                                                    category.images.length - 1
+                                                ]
+                                                    ? category.images[
+                                                          category.images
+                                                              .length - 1
+                                                      ].imageUrl
+                                                    : ""
+                                            ),
                                             order: category.order,
                                             organization: _id
                                         }
@@ -174,6 +177,23 @@ class IikoService {
                                 );
                             })
                         );
+
+                        const favoriteCategory =
+                            await CategoryModel.findOneAndUpdate(
+                                {
+                                    name: "Избранное",
+                                    organization: _id
+                                },
+                                {
+                                    $setOnInsert: {
+                                        organization: _id,
+                                        name: "Избранное",
+                                        order: categories.length,
+                                        image: "/static/shop/favorite.png"
+                                    }
+                                },
+                                { upsert: true, new: true }
+                            );
 
                         await Promise.all(
                             data.products.map(async (product) => {
