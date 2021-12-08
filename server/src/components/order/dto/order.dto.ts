@@ -1,9 +1,11 @@
 import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsPhoneNumber, IsObject } from "class-validator";
+import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 
 export class OrderDTO {
     @ApiProperty()
+    @IsMongoIdObject()
     organization: UniqueId;
 
     @ApiProperty()
@@ -11,9 +13,9 @@ export class OrderDTO {
 
     @ApiProperty({
         properties: {
-            city: { type: "string" },
-            street: { type: "string" },
-            home: { type: "number", minimum: 1 },
+            city: { type: "string", example: "Симферополь" },
+            street: { type: "string", example: "Турецкая" },
+            home: { type: "number", minimum: 1, example: 15 },
             flat: { type: "number" },
             intercom: { type: "number" },
             entrance: { type: "number" },
