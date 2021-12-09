@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Inject, MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { APP_FILTER } from "@nestjs/core";
 import { ConfigModule } from "@nestjs/config";
 import { InternalException } from "src/filters/internal.filter";
@@ -12,6 +12,10 @@ import { ProductModule } from "../ioc/product.module";
 import { OrderModule } from "src/ioc/order.module";
 import { FavoriteModule } from "src/ioc/favorite.module";
 import { BaseErrorsFilter } from "src/filters/base.filter";
+import * as RedisStore from "connect-redis";
+import * as session from "express-session";
+import { createClient } from "redis";
+import { RedisModule } from "src/ioc/redis.module";
 
 @Module({
     imports: [
@@ -25,7 +29,8 @@ import { BaseErrorsFilter } from "src/filters/base.filter";
         UserModule,
         CartModule,
         OrderModule,
-        FavoriteModule
+        FavoriteModule,
+        RedisModule
     ],
     providers: [
         {
@@ -38,4 +43,31 @@ import { BaseErrorsFilter } from "src/filters/base.filter";
         }
     ]
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    constructor(
+        @Inject("REDIS") private readonly redis: ReturnType<typeof createClient>
+    ) {}
+
+    configure(consumer: MiddlewareConsumer) {
+        console.log(this.redis);
+
+        consumer
+            .apply(
+                session({
+                    store: new (RedisStore(session))({
+                        client: this.redis,
+                        logErrors: true
+                    }),
+                    secret: process.env.SESSION_SECRET,
+                    resave: true,
+                    saveUninitialized: true,
+                    cookie: {
+                        sameSite: true,
+                        httpOnly: false,
+                        maxAge: 60000
+                    }
+                })
+            )
+            .forRoutes("*");
+    }
+}
