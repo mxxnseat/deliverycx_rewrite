@@ -20,7 +20,7 @@ export function usePoints() {
   const history = useHistory();
   const dispatch = useDispatch();
   const selectedCity = useSelector((state: RootState) => state.location.city);
-  const { data: addresses,isLoading } = useGetPointsQuery(selectedCity._id)
+  const { data: addresses,isFetching } = useGetPointsQuery(selectedCity.id)
   
   const [statePoint, dispatchPoint] = useReducer(PointsReducer, initialStatePoints);
   
@@ -28,7 +28,7 @@ export function usePoints() {
   /**/
   useEffect(() => {
     if (Object.keys(selectedCity).length) {
-      (addresses && !isLoading) && nearPoint(addresses)
+      (addresses && !isFetching) && nearPoint(addresses)
     } else {
       history.goBack()
     }
@@ -72,10 +72,11 @@ export function usePoints() {
     if (data) {
         const index = data.reduce(function (r, val, i, array) {
             return i &&
-                (Math.abs(array[r].latitude - cord[0]) < Math.abs(val.latitude - cord[0])
-                && Math.abs(array[r].longitude - cord[1]) < Math.abs(val.longitude - cord[1]))
+                (Math.abs(array[r].cords[0] - cord[0]) < Math.abs(val.cords[0] - cord[0])
+                && Math.abs(array[r].cords[1] - cord[1]) < Math.abs(val.cords[1] - cord[1]))
                 ? r : i;
         }, -1);
+      
         dispatchPoint({
           type: ReducerActionTypePoints.slidePoint,
           payload: index  
@@ -86,15 +87,19 @@ export function usePoints() {
 
   const selectPointHandler = async (address: IPoint) => {
     try {
-      const { data:regData } = await RequestProfile.register(address._id)
+      const { data: regData } = await RequestProfile.register()
+      /*
       if (regData.isNew) {
         localStorage.setItem("authToken", regData.access!);
       }
-      dispatch(setPoint(address))
+      
       const { data } = await RequestProfile.update({
         organization: address._id,
       })
-      dispatch(setProfileAction(data.user))
+      */
+      dispatch(setProfileAction(regData))
+
+      dispatch(setPoint(address))
       history.push(ROUTE_APP.SHOP.SHOP_MAIN)
       
     } catch (error) {
@@ -115,7 +120,7 @@ export function usePoints() {
     nearPoint
   })
   this.status({
-    isLoading
+    isFetching
   })
   
 }

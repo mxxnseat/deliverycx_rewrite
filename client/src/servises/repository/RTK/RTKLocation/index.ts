@@ -11,13 +11,13 @@ export const RTKLocation = createApi({
     getCiti: builder.query<ICity[],string>({
       query: (city) => ({
         method: "get",
-        url: `api/getCities?city=${city}`
+        url: `city/all?search=${city}`
       }),
     }),
     getPoints: builder.query<IPoint[],string>({
       query: (cityId) => ({
         method: "get",
-        url: `api/getAddresses?city=${cityId}`
+        url: `organization/all?cityId=${cityId}`
       }),
     }),
     

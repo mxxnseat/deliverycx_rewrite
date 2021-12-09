@@ -14,7 +14,8 @@ const Shop = () => {
         enter: { opacity: 1 },
         leave: { opacity: 0 },
     });
-
+    // <ShopProduct searchQuery={isSearch} />
+    // <ShopLinkToCart />
     return transitions((style, item) => (
         <>
             {!item ?
@@ -27,9 +28,9 @@ const Shop = () => {
                   <Categories />  
                   <Stocks />
                   <div className="shop__box-items container">
-                      {<ShopProduct searchQuery={isSearch} />}
+                    {<ShopProduct searchQuery={isSearch} />}
                   </div>
-                  <ShopLinkToCart />
+                  
                 </animated.div>
                 :
                 <animated.div style={style}>

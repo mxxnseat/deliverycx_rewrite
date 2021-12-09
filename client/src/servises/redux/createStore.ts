@@ -13,6 +13,7 @@ import locationSlice from './slice/locationSlice';
 import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/RTKLocation';
 import { SHOP_API_REDUCER_KEY, RTKShop } from 'servises/repository/RTK/RTKShop';
 import ShopSlice from './slice/shopSlice';
+import { CATEGORIES_API_REDUCER_KEY, RTKCategories } from 'servises/repository/RTK/RTKCategories';
 
 const history = createBrowserHistory()
 const persistConfig = {
@@ -22,6 +23,7 @@ const persistConfig = {
     AUTH_API_REDUCER_KEY,
     LOCATION_API_REDUCER_KEY,
     SHOP_API_REDUCER_KEY,
+    CATEGORIES_API_REDUCER_KEY,
     profileSlice.name,
     ShopSlice.name
   ],
@@ -44,12 +46,14 @@ const persistConfig = {
 
 const createRootReducer = combineReducers({
   //router: connectRouter(history),
-  [profileSlice.name]:profileSlice.reducer,
   [authApi.reducerPath]: authApi.reducer,
+  [RTKLocation.reducerPath]: RTKLocation.reducer,
+  [RTKCategories.reducerPath]:RTKCategories.reducer,
+  [RTKShop.reducerPath]: RTKShop.reducer,
+  [profileSlice.name]:profileSlice.reducer,
   [locationSlice.name]: locationSlice.reducer,
   [ShopSlice.name]: ShopSlice.reducer,
-  [RTKLocation.reducerPath]: RTKLocation.reducer,
-  [RTKShop.reducerPath]: RTKShop.reducer
+  
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);

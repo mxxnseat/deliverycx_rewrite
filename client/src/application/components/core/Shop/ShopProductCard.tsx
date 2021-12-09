@@ -15,53 +15,44 @@ type IProps = {
 }
 
 const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
-  const organization = adapterSelector.createSelectors<IPoint>(selector => selector.point, val => val._id)
-  const { data, isLoading } = useGetProductCartQuery({ productId, organization })
+  const organization = adapterSelector.createSelectors<IPoint>(selector => selector.point, val => val.id)
+  const { data:product, isLoading } = useGetProductCartQuery(productId)
   
   useEffect(() => {
 
-    !isLoading && setgrop(data?.group)
-  }, [data])
+    !isLoading && setgrop(product?.categoryImage)
+  }, [product])
   
   return (
-    (!isLoading && data) ? 
+    (!isLoading && product) ? 
       <>
       <div className="product-card__image-wrap">
         <div className="container">
 
-            <img className="product-card__image" src={data.product.image} alt="Картинка продукта" />
+            <img className="product-card__image" src={product.image} alt="Картинка продукта" />
 
-            <div className="product-card__title">{data.product.name}</div>
+            <div className="product-card__title">{product.name}</div>
             <div className="row justify-between">
-                <AddToFavorites id={data.product.id} _class="add-favorite" isFav={data.product.isFav} />
+                <AddToFavorites id={product.id} _class="add-favorite" isFav={product.isFav} />
                 {/* <button className="add-favorite"></button> */}
                 <div className="product-card__price">
                     <div className="product-card__measure">
                         {
-                            data.product.measureUnit === "порц" ? `${convertWeight(data.product.weight)} г` : "1 шт"
+                            product.measureUnit === "порц" ? `${convertWeight(product.weight)} г` : "1 шт"
                         }
                     </div>
-                    <span className="select-red">{data.product.price} ₽</span>
+                    <span className="select-red">{product.price} ₽</span>
                 </div>
-                <AddToCart id={productId} groupImage={data.group.image} _class={"product-card__add"} />
+                <AddToCart id={productId} groupImage={product.categoryImage} _class={"product-card__add"} />
             </div>
           </div>
           
         </div>
-        {
-              data.product.code && data.product.code.match(/^HI-\d+$/) ?
-                <div className="product-card__henkali-info">
-                  <div className="product-card__order-from">Заказ от 3 шт.</div>
-                  <div className="product-card__bonus">
-                      При заказе дюжины хинкалей<br />
-                      Вы платите за 11!
-                  </div>
-                </div> : ''
-        }
+        
         <div className="container">
                 <div className="product-card__description">
                     {
-                        data.product.description
+                        product.description
                     }
                 </div>
                 {/* <div className="product-card__ingredients">

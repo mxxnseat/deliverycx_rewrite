@@ -2,10 +2,10 @@ import { IProduct } from "@types"
 import convertWeight from "application/helpers/convertWeight";
 import { FC, useEffect, useRef } from "react"
 import { useHistory } from "react-router-dom";
-import AddToCart from "./AddToCart";
-import AddToFavorites from "./AddToFavorites";
+import AddToCart from "../../../../presentation/viewModel/viewShop/AddToCart";
+import AddToFavorites from "../../../../presentation/viewModel/viewShop/AddToFavorites";
 
-const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, group, measureUnit, weight, description, image, isFav }) => {
+const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, categoryImage, measureUnit, weight, description, image, isFav }) => {
     const history = useHistory();
     const cardRef = useRef<HTMLDivElement>(null);
     
@@ -55,7 +55,7 @@ const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, group,
                         <div className="product__item__price">{price} ₽</div>
                     </div>
  
-                    <AddToCart id={id} _class={"add-to-cart"} groupImage={group.image} />
+                    <AddToCart id={id} _class={"add-to-cart"} groupImage={categoryImage} />
                 </div>
             </div>
         </div>   

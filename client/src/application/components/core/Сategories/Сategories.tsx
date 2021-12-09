@@ -1,56 +1,38 @@
 import Slider from "infinite-react-carousel";
 import cn from "classnames";
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { useGetCategoriesQuery} from "servises/repository/RTK/RTKShop"
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { setCategories } from "servises/redux/slice/shopSlice";
-import { AdapterSelector } from "adapters/adapterStore";
-import { RootState, store } from "servises/redux/createStore";
-import { adapterSelector } from "servises/redux/selectors/selectors";
+import { useEffect, useRef } from 'react';
 import { ICategory } from "@types";
+import { adapterComponentUseCase } from "adapters/adapterComponents";
+import { useCategories } from "domain/use-case/useCaseCategories";
+import { useDispatch } from "react-redux";
+import { setCategories } from "servises/redux/slice/shopSlice";
+import { RTKShop } from "servises/repository/RTK/RTKShop";
 
 
 const Categories = () => {
-  /*
-  const useCasePoints = adapterComponentUseCase(useCategories)
-  const {categories,currentSlide,slider } = useCasePoints.data
-  const {setCurrentSlide,handleSliderClick} = useCasePoints.handlers
-  const { isLoading } = useCasePoints.status
-  */
-  const dispatch = useDispatch();
-  const [currentSlide, setCurrentSlide] = useState<number>(0) 
   const slider = useRef<typeof Slider>(null);
-  const { data:categories, isLoading } = useGetCategoriesQuery('')
-  const category = adapterSelector.useSelectors<ICategory>(selector => selector.category)
-  
+
+  const useCasePoints = adapterComponentUseCase(useCategories)
+  const {categories,currentSlide,category } = useCasePoints.data
+  const {setCurrentSlide,handleSliderClick} = useCasePoints.handlers
+  const { isFetching } = useCasePoints.status
   
   useEffect(() => {
     /*
-    if (Object.keys(category).length && categories) {
-      const catIndex = categories.findIndex((cat) => cat.order === category.order)
-      dispatch(setCategories(categories[catIndex]))
-    } else {
-      
-      categories && dispatch(setCategories(categories[0]))
+    if (Object.keys(category).length) {
+      const catIndex = categories.findIndex((cat:any) => cat.id === category.id)
+      setCurrentSlide(catIndex);
+      //dispatch(setCategories(categories[catIndex]))
     }
     */
-    
-  },[categories])
-  
-  
-  
-  const handleSliderClick = useCallback((index: number) => {
-    slider.current?.slickGoTo(index);
-    setCurrentSlide(index);
-    categories && dispatch(setCategories(categories[index]))
-  }, [categories])
-    
-    
    
     
+  }, [isFetching])
+    
+    
   
-  return !isLoading && categories ? (
+  return !isFetching && categories ? (
     <Slider
       className="categories"
       initialSlide={currentSlide}
@@ -63,13 +45,13 @@ const Categories = () => {
       
   >
       {
-          categories.map((category, i) => {
+          categories.map((category:ICategory, i:number) => {
               const CN = cn("categories__item", {active: currentSlide === i});
               
               return (
                   <div key={i}
                       className={CN}
-                      onClick={() => handleSliderClick(i)}
+                      onClick={() => handleSliderClick(i,slider)}
                   >
                       <div className="categories__item__content-wrapper">
                           <div className="categories__item__img-wrap">

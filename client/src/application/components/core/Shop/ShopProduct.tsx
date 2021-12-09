@@ -3,7 +3,7 @@ import { adapterComponentUseCase } from "adapters/adapterComponents"
 import LoaderProduct from "application/components/common/Loaders/loaderProduct"
 import { useCaseShop } from "domain/use-case/useCaseShop"
 import FavoriteEmpty from "presentation/viewModel/viewShop/FavoriteEmpty"
-import ShopProductItem from "presentation/viewModel/viewShop/ShopProductItems"
+import ShopProductItem from "application/components/core/Shop/ShopProductItems"
 import { FC} from "react"
 
 interface IProps {

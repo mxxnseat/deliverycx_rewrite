@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import cn from "classnames";
-import { useCitiList } from "domain/use-case/useCaseLocation/useCitiList";
+import { useCitiList } from "domain/use-case/useCaseLocation";
 
 
 const CityList = () => {
@@ -25,7 +25,7 @@ const CityList = () => {
                 
                 !isLoading && cities && cities.map((city:any) => {
                     const CN = cn("welcome__city", { selected: false}) //city.name === selectedCity?.name 
-                    return <div key={city._id} onClick={() => selectCiti(city)} className={CN}>
+                    return <div key={city.id} onClick={() => selectCiti(city)} className={CN}>
                         {city.name}
                     </div>
                 })
