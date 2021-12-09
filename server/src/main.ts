@@ -9,11 +9,15 @@ async function bootstrap() {
         session({
             secret: process.env.SESSION_SECRET,
             resave: true,
-            saveUninitialized: true
+            saveUninitialized: true,
+            cookie: {
+                sameSite: false,
+                httpOnly: false
+            }
         })
     );
     app.enableCors({
-        origin: "*",
+        origin: "http://localhost:3000",
         credentials: true
     });
 
