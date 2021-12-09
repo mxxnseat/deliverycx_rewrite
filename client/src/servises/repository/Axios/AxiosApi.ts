@@ -59,15 +59,25 @@ export abstract class ApiSuper{
 
 /**
  * @decorator
- * @param method методы запроса 'post' | 'get'
+ * @param method методы запроса 'post' | 'get' | 'put'
  * @description в зависимости от метода, добавляет в params, method и data из аргументов управляющей функции
  * @returns вызывает управляющиею функцию
  */
-export function methods(method:'post' | 'get') {
+export function methods(method:'post' | 'get' | 'put') {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const childFunction = descriptor.value;
     const get_args = (fn:any) => fn.toString().match(/\((.*)\)/)[1].split(", ")
     descriptor.value = function (this: Iparams, ...arg: []) {
+      // eslint-disable-next-line no-case-declarations
+      const data = arg.reduce((acc, n,i) => {
+        if (typeof n === 'object') {
+         return Object.assign(acc,n)
+        } else {
+          return Object.assign(acc, {
+            [get_args(childFunction)[i]]:n
+          })
+       } 
+      }, {})
       switch (method) {
         case 'get':
           this.params = {
@@ -76,22 +86,22 @@ export function methods(method:'post' | 'get') {
           }
           break;
         case 'post':
-          // eslint-disable-next-line no-case-declarations
-          const data = arg.reduce((acc, n,i) => {
-            if (typeof n === 'object') {
-             return Object.assign(acc,n)
-            } else {
-              return Object.assign(acc, {
-                [get_args(childFunction)[i]]:n
-              })
-           } 
-          }, {})
+          
+          
           this.params = {
             ...this.params,
             method,
             data
           }
           break;
+        case 'put':
+            
+            this.params = {
+              ...this.params,
+              method,
+              data
+            }
+            break;
         default: this.params = {...this.params}
       }
       return childFunction.call(this, ...arg)

@@ -9,7 +9,7 @@ class AxiosCreate {
 
   private constructor() {
       this.api = axios.create({
-          withCredentials: false,
+          withCredentials: true,
           baseURL: this.URL,
       })
       
@@ -24,7 +24,7 @@ class AxiosCreate {
       
       this.api.interceptors.request.use((config: AxiosRequestConfig)=>{
           const token = localStorage.getItem("authToken");
-          console.log(config.headers)
+          
           if(token && config.headers){
             config.headers.Authorization = `Bearer ${token}`;
            }
