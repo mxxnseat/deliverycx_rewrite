@@ -1,26 +1,17 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICart, ICategory, IProduct, IResponseProductCard } from '@types';
 import encodeQueryData from 'application/helpers/encodeQuery';
 import { staticCategories } from 'domain/use-case/useCaseCategories';
 import { baseQueryWithReauth } from '..';
-
+import { config } from "servises/repository/config"
 
 
 export const SHOP_API_REDUCER_KEY = 'RTK_Shop';
 export const RTKShop = createApi({
   reducerPath: SHOP_API_REDUCER_KEY,
-  baseQuery: baseQueryWithReauth,
+  baseQuery: fetchBaseQuery({ baseUrl: config.REACT_APP_API_URL }),
   tagTypes: ['Shop'],
   endpoints: (builder) => ({
-    getCategories: builder.query<ICategory[],string>({
-      query: (organizationid) => {
-        return ({
-          method: "GET",
-          url: `category/all?organizationId=${organizationid}`
-        })
-      },
-      transformResponse: (response: ICategory[]) => [...response,staticCategories],
-    }),
     getProducts:builder.query<IProduct[],string>({
       query: (catId) => {
         return ({
@@ -30,11 +21,11 @@ export const RTKShop = createApi({
       },
      
     }),
-    getProductCart:builder.query<IResponseProductCard,any>({
-      query: ({productId,organization}) => {
+    getProductCart:builder.query<IProduct,any>({
+      query: (productId) => {
         return ({
           method: "get",
-          url: `api/getProduct/${productId}?organization=${organization}`
+          url: `product/${productId}`
         })
       },
      
@@ -54,7 +45,6 @@ export const RTKShop = createApi({
   }),
 });
 export const {
-  useGetCategoriesQuery,
   useGetProductsQuery,
   useGetProductCartQuery,
   useAddToCartMutation

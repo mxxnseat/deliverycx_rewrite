@@ -6,10 +6,10 @@ type Dat = {
 }
 
 class RequestCategories extends ApiSuper{
-  @token
+ 
   @methods('get')
-  getCat(data: any, coutn: any) {
-    return this.request<Dat>('city')
+  getCat(organizationid: string,) {
+    return this.request<Dat>(`category/all?organizationId=${organizationid}`)
   }
 }
 export default new RequestCategories()

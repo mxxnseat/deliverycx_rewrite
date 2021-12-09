@@ -20,7 +20,7 @@ export function usePoints() {
   const history = useHistory();
   const dispatch = useDispatch();
   const selectedCity = useSelector((state: RootState) => state.location.city);
-  const { data: addresses,isLoading } = useGetPointsQuery(selectedCity.id)
+  const { data: addresses,isFetching } = useGetPointsQuery(selectedCity.id)
   
   const [statePoint, dispatchPoint] = useReducer(PointsReducer, initialStatePoints);
   
@@ -28,7 +28,7 @@ export function usePoints() {
   /**/
   useEffect(() => {
     if (Object.keys(selectedCity).length) {
-      (addresses && !isLoading) && nearPoint(addresses)
+      (addresses && !isFetching) && nearPoint(addresses)
     } else {
       history.goBack()
     }
@@ -120,7 +120,7 @@ export function usePoints() {
     nearPoint
   })
   this.status({
-    isLoading
+    isFetching
   })
   
 }

@@ -7,6 +7,7 @@ import { adapterComponentUseCase } from "adapters/adapterComponents";
 import { useCategories } from "domain/use-case/useCaseCategories";
 import { useDispatch } from "react-redux";
 import { setCategories } from "servises/redux/slice/shopSlice";
+import { RTKShop } from "servises/repository/RTK/RTKShop";
 
 
 const Categories = () => {
@@ -15,19 +16,23 @@ const Categories = () => {
   const useCasePoints = adapterComponentUseCase(useCategories)
   const {categories,currentSlide,category } = useCasePoints.data
   const {setCurrentSlide,handleSliderClick} = useCasePoints.handlers
-  const { isLoading } = useCasePoints.status
+  const { isFetching } = useCasePoints.status
   
-  
-  
-  
-  
-  
-    
-    
+  useEffect(() => {
+    /*
+    if (Object.keys(category).length) {
+      const catIndex = categories.findIndex((cat:any) => cat.id === category.id)
+      setCurrentSlide(catIndex);
+      //dispatch(setCategories(categories[catIndex]))
+    }
+    */
    
     
+  }, [isFetching])
+    
+    
   
-  return !isLoading && categories ? (
+  return !isFetching && categories ? (
     <Slider
       className="categories"
       initialSlide={currentSlide}

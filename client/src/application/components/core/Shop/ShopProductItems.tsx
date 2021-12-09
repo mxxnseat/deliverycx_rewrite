@@ -2,8 +2,8 @@ import { IProduct } from "@types"
 import convertWeight from "application/helpers/convertWeight";
 import { FC, useEffect, useRef } from "react"
 import { useHistory } from "react-router-dom";
-import AddToCart from "./AddToCart";
-import AddToFavorites from "./AddToFavorites";
+import AddToCart from "../../../../presentation/viewModel/viewShop/AddToCart";
+import AddToFavorites from "../../../../presentation/viewModel/viewShop/AddToFavorites";
 
 const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, categoryImage, measureUnit, weight, description, image, isFav }) => {
     const history = useHistory();
