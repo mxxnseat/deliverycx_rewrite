@@ -27,7 +27,6 @@ export class UserController {
                 .status(200)
                 .json(await this.userUsecase.getUser(session.user));
         }
-
         const username = await this.generateUsernameService.generate();
         const result = await this.userUsecase.create(username);
         session.user = result.getId;
