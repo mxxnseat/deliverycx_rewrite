@@ -16,8 +16,13 @@ export class ProductUsecase {
         return result;
     }
 
+    async getFavorites(userId: UniqueId) {
+        const result = await this.productRepository.getFavorites(userId);
+
+        return result;
+    }
+
     async getAll(categoryId: UniqueId, userId: UniqueId) {
-        console.log(categoryId);
         const result = await this.productRepository.getAll(categoryId, userId);
 
         return result;

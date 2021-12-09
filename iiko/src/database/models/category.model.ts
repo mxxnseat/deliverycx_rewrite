@@ -11,7 +11,7 @@ import { OrganizationClass } from "./organization.model";
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class CategoryClass {
-    @prop()
+    @prop({ required: false })
     public id!: UniqueId;
 
     @prop()

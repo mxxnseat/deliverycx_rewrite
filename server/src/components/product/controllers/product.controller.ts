@@ -36,11 +36,24 @@ export class ProductController {
         status: 200,
         type: [ProductEntity]
     })
+    @Get("favorites")
+    async getFavorites(
+        @Res() response: Response,
+        @Session() session: Record<string, string>
+    ) {
+        const products = await this.productUsecase.getFavorites(session.user);
+
+        response.status(HttpStatus.OK).json(products);
+    }
+
+    @ApiResponse({
+        status: 200,
+        type: [ProductEntity]
+    })
     @Get("all")
     async getAll(
         @Query()
         query: GetAllDTO,
-        @Req() request: Request,
         @Res() response: Response,
         @Session() session: Record<string, string>
     ) {
@@ -87,7 +100,6 @@ export class ProductController {
     async getOne(
         @Param() param: GetByIdDTO,
         @Res() response: Response,
-        @Req() request: Request,
         @Session() session: Record<string, string>
     ) {
         const product = await this.productUsecase.getOne(

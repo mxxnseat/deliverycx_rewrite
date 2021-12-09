@@ -8,21 +8,36 @@ import { CategoryClass } from "../../../database/models/category.model";
 import { BaseRepository } from "../../../common/abstracts/base.repository";
 import { productMapper } from "../entities/product.mapper";
 import { Inject, Injectable } from "@nestjs/common";
-import { Model, Types } from "mongoose";
+import { Document, Model, Types } from "mongoose";
+import { FavoriteClass } from "src/database/models/favorite.model";
 
 @Injectable()
 export class ProductRepository implements IProductRepository {
     constructor(
         @Inject("PRODUCT_MODEL")
-        private readonly productModel: Model<ProductClass>
+        private readonly productModel: Model<ProductClass>,
+
+        @Inject("FAVORITE_MODEL")
+        private readonly favoriteModel: Model<FavoriteClass>
     ) {}
+
+    async getFavorites(userId: UniqueId) {
+        const result = await this.favoriteModel
+            .findOne({ user: userId })
+            .populate("products");
+
+        return productMapper(
+            result.products.map((product: any) => ({
+                ...product.toObject(),
+                isFav: true
+            })) as (ProductClass & { isFav: boolean })[]
+        );
+    }
 
     async getAll(categoryId: UniqueId, userId: UniqueId): Promise<any> {
         const result = await this.productModel.aggregate([
             {
-                $match: {
-                    category: new Types.ObjectId(categoryId)
-                }
+                $match: { category: new Types.ObjectId(categoryId) }
             },
             {
                 $lookup: {
@@ -68,7 +83,6 @@ export class ProductRepository implements IProductRepository {
     }
 
     async getOne(productId: UniqueId, userId: UniqueId) {
-        console.log(productId);
         const result = await this.productModel.aggregate([
             {
                 $match: {

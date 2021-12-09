@@ -1,5 +1,5 @@
-import { Body, Controller, Post, Req, Session } from "@nestjs/common";
-import { Request } from "express";
+import { Body, Controller, Post, Req, Res, Session } from "@nestjs/common";
+import { Request, Response } from "express";
 import { GenerateUsernameService } from "../services/guestUsername.service";
 import { UserUsecase } from "../usecases/user.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -18,11 +18,20 @@ export class UserController {
         status: 200,
         type: UserEntity
     })
-    async create(@Session() session: Record<string, string>) {
-        const username = await this.generateUsernameService.generate();
+    async create(
+        @Session() session: Record<string, string>,
+        @Res() response: Response
+    ) {
+        if (session.user) {
+            return response
+                .status(200)
+                .json(await this.userUsecase.getUser(session.user));
+        }
 
+        const username = await this.generateUsernameService.generate();
         const result = await this.userUsecase.create(username);
         session.user = result.getId;
-        return result;
+
+        response.status(200).json(result);
     }
 }

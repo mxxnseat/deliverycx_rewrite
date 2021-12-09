@@ -5,6 +5,7 @@ import { ProductUsecase } from "../components/product/usecases/product.usecase";
 import { ProductController } from "../components/product/controllers/product.controller";
 import { DatabaseModule } from "../modules/database.module";
 import { productProviders } from "../components/product/providers/product.provider";
+import { favoriteProviders } from "src/components/favorites/providers/favorite.provider";
 
 @Module({
     imports: [DatabaseModule],
@@ -15,6 +16,7 @@ import { productProviders } from "../components/product/providers/product.provid
             provide: IProductRepository,
             useClass: ProductRepository
         },
+        ...favoriteProviders,
         ...productProviders
     ]
 })

@@ -6,6 +6,7 @@ import {
 } from "@typegoose/typegoose";
 import { CategoryClass } from "./category.model";
 import { OrganizationClass } from "./organization.model";
+import { Types } from "mongoose";
 
 enum MeasureUnit {
     PIECE = "шт",
