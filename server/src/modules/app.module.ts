@@ -14,11 +14,12 @@ import { FavoriteModule } from "src/ioc/favorite.module";
 import { BaseErrorsFilter } from "src/filters/base.filter";
 import * as RedisStore from "connect-redis";
 import * as session from "express-session";
-import { createClient } from "redis";
-import { RedisModule } from "src/ioc/redis.module";
+import { RedisClient } from "redis";
+import { RedisModule } from "src/modules/redis.module";
 
 @Module({
     imports: [
+        RedisModule,
         ConfigModule.forRoot({
             envFilePath: __dirname + "/../../.env"
         }),
@@ -29,8 +30,7 @@ import { RedisModule } from "src/ioc/redis.module";
         UserModule,
         CartModule,
         OrderModule,
-        FavoriteModule,
-        RedisModule
+        FavoriteModule
     ],
     providers: [
         {
@@ -44,13 +44,9 @@ import { RedisModule } from "src/ioc/redis.module";
     ]
 })
 export class AppModule implements NestModule {
-    constructor(
-        @Inject("REDIS") private readonly redis: ReturnType<typeof createClient>
-    ) {}
+    constructor(@Inject("REDIS") private readonly redis: RedisClient) {}
 
-    configure(consumer: MiddlewareConsumer) {
-        console.log(this.redis);
-
+    async configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(
                 session({
@@ -62,9 +58,8 @@ export class AppModule implements NestModule {
                     resave: true,
                     saveUninitialized: true,
                     cookie: {
-                        sameSite: true,
-                        httpOnly: false,
-                        maxAge: 60000
+                        sameSite: false,
+                        httpOnly: true
                     }
                 })
             )
