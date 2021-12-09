@@ -5,7 +5,10 @@ import { createClient } from "redis";
     providers: [
         {
             provide: "REDIS",
-            useValue: createClient({ port: 6379, host: "127.0.0.1" })
+            useValue: createClient({
+                port: +process.env.REDIS_PORT,
+                host: process.env.REDIS_HOST
+            })
         }
     ],
     exports: ["REDIS"]
