@@ -1,8 +1,8 @@
 import { ApiSuper, methods, token } from "../AxiosApi";
 
 type Dat = {
-  id: string
-  name:string
+  isFav: boolean
+  product:string
 }
 
 class RequestShop extends ApiSuper{

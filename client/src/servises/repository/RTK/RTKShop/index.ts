@@ -9,15 +9,23 @@ import { config } from "servises/repository/config"
 export const SHOP_API_REDUCER_KEY = 'RTK_Shop';
 export const RTKShop = createApi({
   reducerPath: SHOP_API_REDUCER_KEY,
-  baseQuery: fetchBaseQuery({ baseUrl: config.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: config.REACT_APP_API_URL,credentials: "include" }),
   tagTypes: ['Shop'],
   endpoints: (builder) => ({
     getProducts:builder.query<IProduct[],string>({
       query: (catId) => {
-        return ({
-          method: 'GET',
-          url: `product/all?categoryId=${catId}`,
-        })
+        if (catId === '61b1f708550ec40e2df28b5c') {
+          return ({
+            method: 'GET',
+            url: `/product/favorites`,
+          })
+        } else {
+          return ({
+            method: 'GET',
+            url: `product/all?categoryId=${catId}`,
+          })
+        }
+        
       },
      
     }),
@@ -30,23 +38,21 @@ export const RTKShop = createApi({
       },
      
     }),
-    addToCart:builder.mutation<ICart,string>({
-      query: (product) => {
+    searchProducts:builder.mutation<IProduct[],any>({
+      query: ({organizationId,searchString }) => {
         return ({
-          method: "POST",
-          url: `shop/addToCart`,
-          body: {
-            product
-          }
+          method: "get",
+          url: `/product/search?organizationId=${organizationId}&searchString=${searchString}`
         })
       },
      
     }),
+    
   }),
 });
 export const {
   useGetProductsQuery,
   useGetProductCartQuery,
-  useAddToCartMutation
+  useSearchProductsMutation
 } = RTKShop
 

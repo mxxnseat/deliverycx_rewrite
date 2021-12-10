@@ -25,4 +25,13 @@ export interface IInitialValues {
     // eslint-disable-next-line @typescript-eslint/ban-types
     times: object;
     city: string;
-  }
+}
+export interface IReqCart{
+  id: string,
+  productName: string,
+  productImage: string,
+  productTags: string[],
+  productId: string,
+  amount: number,
+  price: number
+}

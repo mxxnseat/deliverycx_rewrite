@@ -3,7 +3,11 @@ import Menu from "application/components/common/Menu/Menu";
 import { FC, memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const HeaderShop: FC = () => {
+type IProps ={
+    setSearch:any
+}
+
+const HeaderShop: FC<IProps> = ({setSearch}) => {
     const [isActiveMenu, setIsActiveMenu] = useState<boolean>(false);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -25,7 +29,7 @@ const HeaderShop: FC = () => {
             <div className="header__logo">
                 <img src={require("assets/img/logo2.png").default} alt="Логотип" />
             </div>
-            <div className="header__search" onClick={() => dispatch}></div>
+            <div className="header__search" onClick={() => setSearch(true)}></div>
         </header>
     )
 }

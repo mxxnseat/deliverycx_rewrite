@@ -3,7 +3,6 @@ import Entities from "../Entities"
 import { number } from 'yup';
 
 export interface ICartEntities{
-  list: ICartProducts
   totalPrice: number
   checkout:ICheckout
 }
@@ -18,7 +17,6 @@ class CartEntities extends Entities<ICartEntities>{
   constructor() {
     super()
     this.entities = {
-      list: this.list,
       totalPrice: this.totalPrice,
       checkout:this.checkout
     }

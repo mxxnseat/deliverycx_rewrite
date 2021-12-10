@@ -6,9 +6,10 @@ import Categories from "application/components/core/Сategories/Сategories";
 import Stocks from "application/components/common/Stocks/Stocks";
 import ShopProduct from "application/components/core/Shop/ShopProduct";
 import ShopLinkToCart from "application/components/core/Shop/ShopLinkToCart";
+import { useState } from "react";
 
 const Shop = () => {
-  const isSearch = ''
+    const [isSearch, setSearch] = useState(false)
     const transitions = useTransition(isSearch, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
@@ -22,19 +23,19 @@ const Shop = () => {
                 <animated.div className="shop__box" style={style}>
                   <div className="container">
                     <AdressInfo />
-                    <HeaderShop />
+                    <HeaderShop setSearch={setSearch} />
                     
                   </div>
                   <Categories />  
                   <Stocks />
                   <div className="shop__box-items container">
-                    {<ShopProduct searchQuery={isSearch} />}
+                    {<ShopProduct />}
                   </div>
-                  
+                  <ShopLinkToCart />
                 </animated.div>
                 :
                 <animated.div style={style}>
-                    <ShopSearch />
+                    <ShopSearch close={setSearch}/>
                 </animated.div>
             }
         </>

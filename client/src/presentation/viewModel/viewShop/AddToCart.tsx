@@ -3,7 +3,7 @@ import { FC, memo, useMemo, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import debounce from 'lodash.debounce';
 import { useSpring, animated, config } from 'react-spring'
-import { useAddToCartMutation } from "servises/repository/RTK/RTKShop";
+import { useAddToCartMutation } from "servises/repository/RTK/RTKCart";
 import { RequestCart } from "servises/repository/Axios/Request";
 
 interface IProps { 
@@ -24,7 +24,7 @@ const AddToCart: FC<IProps> = ({ id,_class, groupImage }) => {
         opacity: 0,
         config: {duration: 750, mass: 1, tension: 2000, friction: 2700 },
     }));
-
+    
     const root = document.querySelector("#root") as HTMLElement;
     const AnimateHandle = () => {
         try{

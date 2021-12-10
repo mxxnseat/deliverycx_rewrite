@@ -16,7 +16,7 @@ const ShopSlice = createSlice({
     builder
       .addMatcher(RTKCategories.endpoints.getCategori.matchFulfilled, (state, action) => {
         state.category = action.payload[0]
-      })
+      }) 
       
   },
 })

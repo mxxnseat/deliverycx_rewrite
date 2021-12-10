@@ -6,12 +6,10 @@ import FavoriteEmpty from "presentation/viewModel/viewShop/FavoriteEmpty"
 import ShopProductItem from "application/components/core/Shop/ShopProductItems"
 import { FC} from "react"
 
-interface IProps {
-  searchQuery?: string
-}
 
-const ShopProduct: FC<IProps> = ({ searchQuery }) => {
-  const useCasePoints = adapterComponentUseCase(useCaseShop,searchQuery)
+
+const ShopProduct = () => {
+  const useCasePoints = adapterComponentUseCase(useCaseShop)
   const { category,products } = useCasePoints.data
   const { isFetching} = useCasePoints.status
 

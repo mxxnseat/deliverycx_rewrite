@@ -33,7 +33,7 @@ const ShopProductCard: FC<IProps> = ({ productId, setgrop }) => {
 
             <div className="product-card__title">{product.name}</div>
             <div className="row justify-between">
-                <AddToFavorites id={product.id} _class="add-favorite" isFav={product.isFav} />
+                <AddToFavorites id={productId} _class="add-favorite" isFav={product.isFav} />
                 {/* <button className="add-favorite"></button> */}
                 <div className="product-card__price">
                     <div className="product-card__measure">
