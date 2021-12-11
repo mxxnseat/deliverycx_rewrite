@@ -5,14 +5,18 @@ import cn from "classnames";
 import { RootState } from "servises/redux/createStore";
 import { useOutside } from "application/hooks/useOutside";
 import { useDeepCompareEffect } from "application/hooks/useDeepCompareEffect";
+import { useGetCartAllQuery } from "servises/repository/RTK/RTKCart";
+import { cartSelector } from "servises/redux/slice/cartSlice";
 
 const ShopLinkToCart: FC = () => {
     const history = useHistory();
-    const cartList = useSelector((state: RootState)=> []);
+    const cartList = useSelector(cartSelector.selectAll);
     const [isPopupEmpty, setIsPopupEmpty] = useState(false);
     const [itemsCount, setItemsCount] = useState(0);
     const ref = useRef<HTMLDivElement | null>(null);
 
+    const {data} = useGetCartAllQuery()
+    console.log(data)
     const emptyCN = cn("link-to-cart", {open: isPopupEmpty});
 
     const linkHandler = () => {

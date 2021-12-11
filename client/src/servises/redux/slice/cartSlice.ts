@@ -7,6 +7,9 @@ const cartAdapter = createEntityAdapter<IReqCart>({
   selectId: (product) => product.id,
 })
 
+export const cartSelector = cartAdapter.getSelectors((state: any) => state.cart)
+
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState:cartAdapter.getInitialState(CartEntities.getEntities),

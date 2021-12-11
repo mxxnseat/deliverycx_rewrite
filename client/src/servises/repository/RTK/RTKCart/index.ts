@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { ICart, ICity, IPoint } from '@types';
+import { ICart, ICity, IPoint, IReqCart } from '@types';
 import { config } from "servises/repository/config"
 import { defFetchBaseQuery } from '..';
 
@@ -9,19 +9,28 @@ export const RTKCart = createApi({
   baseQuery: defFetchBaseQuery,
   tagTypes: ['Cart'],
   endpoints: (builder) => ({
+    getCartAll:builder.query<IReqCart[],void>({
+      query: () => '/cart',
+      providesTags: ['Cart']
+     
+    }),
     addToCart:builder.mutation<ICart,string>({
       query: (productId) => {
         return ({
           method: "POST",
-          url: `/cart/add`,
+          url: `/cart`,
           body: {
             productId
           }
         })
       },
-     
+      
     }),
     
   }),
 })
-export const {useAddToCartMutation} = RTKCart
+export const {
+  useAddToCartMutation,
+  useGetCartAllQuery
+  
+} = RTKCart
