@@ -45,7 +45,7 @@ export class CartController {
         status: 200,
         type: CartEntity
     })
-    @Post()
+    @Post("add")
     async add(
         @Body()
         addBody: cartDTO,
@@ -121,7 +121,7 @@ export class CartController {
         return result;
     }
 
-    @Get()
+    @Get("getAll")
     @ApiResponse({
         type: CartEntity,
         status: 200
