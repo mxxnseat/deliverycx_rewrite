@@ -8,13 +8,21 @@ export class CartUsecase {
     async getAll(userId: UniqueId) {
         const result = await this.CartRepository.getAll(userId);
 
-        return result;
+        const totalPrice = await this.CartRepository.calc(userId);
+        return {
+            cart: result,
+            totalPrice
+        };
     }
 
     async add(userId: UniqueId, productId: UniqueId) {
         const result = await this.CartRepository.add(userId, productId);
 
-        return result;
+        const totalPrice = await this.CartRepository.calc(userId);
+        return {
+            item: result,
+            totalPrice
+        };
     }
 
     async removeAll(userId: UniqueId) {
@@ -26,7 +34,11 @@ export class CartUsecase {
     async removeOne(userId: UniqueId, cartId: UniqueId) {
         const result = await this.CartRepository.removeOne(userId, cartId);
 
-        return result;
+        const totalPrice = await this.CartRepository.calc(userId);
+        return {
+            deletedId: result,
+            totalPrice
+        };
     }
 
     async changeAmount(userId: UniqueId, cartId: UniqueId, value: number) {
@@ -36,6 +48,10 @@ export class CartUsecase {
             value
         );
 
-        return result;
+        const totalPrice = await this.CartRepository.calc(userId);
+        return {
+            amount: result,
+            totalPrice
+        };
     }
 }

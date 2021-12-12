@@ -14,4 +14,6 @@ export abstract class ICartRepository {
         cartId: UniqueId,
         value: number
     ): Promise<number>;
+
+    abstract calc(userId: UniqueId): Promise<number>;
 }
