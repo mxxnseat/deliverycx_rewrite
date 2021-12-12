@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce';
 import { useSpring, animated, config } from 'react-spring'
 import { useAddToCartMutation } from "servises/repository/RTK/RTKCart";
 import { RequestCart } from "servises/repository/Axios/Request";
+import { fetchAddToCart } from "servises/redux/slice/cartSlice";
 
 interface IProps { 
     id: string,
@@ -47,9 +48,9 @@ const AddToCart: FC<IProps> = ({ id,_class, groupImage }) => {
         }catch(e){
             console.log(e)
         }
+        dispatch(fetchAddToCart(id))
         
-        //RequestCart.addToCart(id)
-        addCart(id)
+        //addCart(id)
     }
     const debouncedChangeHandler = debounce(AnimateHandle, 400)
     

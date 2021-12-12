@@ -1,4 +1,5 @@
 import CartChoise from "application/components/core/Cart/CartChoice";
+import CartList from "application/components/core/Cart/CartList";
 import HeaderBack from "presentation/viewModel/viewHead/HeaderBack";
 import { FC, ReactNode } from "react";
 import { Route } from "react-router-dom";
@@ -16,6 +17,7 @@ const CartLayout:FC<ICartLayout> = ({children}) => {
         </HeaderBack>
         <div className="container">
           <CartChoise />
+          <CartList />
           {children}
         </div>
         

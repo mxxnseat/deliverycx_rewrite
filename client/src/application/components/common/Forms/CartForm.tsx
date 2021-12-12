@@ -9,13 +9,16 @@ import { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "servises/redux/createStore";
 import { FormWrapper } from "./FormWrapper";
+import { useDispatch } from 'react-redux';
+import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 
 
 type ICartFrom = {
   wrappbuild:any
 };
 
-const CartFrom: FC<ICartFrom> = ({wrappbuild}) => {
+const CartFrom: FC<ICartFrom> = ({ wrappbuild }) => {
+  const dispatch = useDispatch()
   const { isVerify, ...user } = useSelector(
     (state: RootState) => state.profile
   );
@@ -67,7 +70,7 @@ const CartFrom: FC<ICartFrom> = ({wrappbuild}) => {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const debounceClearHandler = debounce(() => {
-   
+    dispatch(fetchDeleteCart()) 
   }, 400);
   
 

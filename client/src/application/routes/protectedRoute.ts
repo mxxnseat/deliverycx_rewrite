@@ -1,5 +1,6 @@
 import { IRoute } from "@types";
 import { CartDelivery, CartOnspot, CartPickup } from "application/components/core/Cart";
+import CartYmap from "application/components/core/Cart/CartYmap";
 import { ROUTE_APP } from "application/contstans/route.const";
 import { lazy } from "react";
 
@@ -31,6 +32,12 @@ const protectedRoutes: IRoute[] = [
     path: ROUTE_APP.CART.CART_PICKUP,
     component: CartPickup,
     layout:lazy(() => import('presentation/layout/Cart/CartLayout'))
+  },
+  {
+    exact: true,
+    path: ROUTE_APP.CART.CART_MAP,
+    component: CartYmap,
+    
   },
   
 ]

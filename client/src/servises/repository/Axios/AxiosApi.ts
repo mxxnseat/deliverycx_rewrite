@@ -59,11 +59,11 @@ export abstract class ApiSuper{
 
 /**
  * @decorator
- * @param method методы запроса 'post' | 'get' | 'put'
+ * @param method методы запроса 'post' | 'get' | 'put' | 'delete'
  * @description в зависимости от метода, добавляет в params, method и data из аргументов управляющей функции
  * @returns вызывает управляющиею функцию
  */
-export function methods(method:'post' | 'get' | 'put') {
+export function methods(method:'post' | 'get' | 'put' | 'delete') {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const childFunction = descriptor.value;
     const get_args = (fn:any) => fn.toString().match(/\((.*)\)/)[1].split(", ")
@@ -95,6 +95,14 @@ export function methods(method:'post' | 'get' | 'put') {
           }
           break;
         case 'put':
+            
+            this.params = {
+              ...this.params,
+              method,
+              data
+            }
+          break;
+        case 'delete':
             
             this.params = {
               ...this.params,

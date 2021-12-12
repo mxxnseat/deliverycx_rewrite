@@ -4,7 +4,9 @@ import { number } from 'yup';
 
 export interface ICartEntities{
   totalPrice: number
-  checkout:ICheckout
+  checkout: ICheckout
+  isError: any,
+  address:string
 }
 /**
  * @description синглтон
@@ -14,11 +16,15 @@ class CartEntities extends Entities<ICartEntities>{
   protected list = []
   protected totalPrice = 0
   protected checkout = {}
+  protected isError = {}
+  protected address = ''
   constructor() {
     super()
     this.entities = {
       totalPrice: this.totalPrice,
-      checkout:this.checkout
+      checkout: this.checkout,
+      isError: this.isError,
+      address:this.address
     }
   }
 

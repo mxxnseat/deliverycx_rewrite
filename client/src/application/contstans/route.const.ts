@@ -9,7 +9,8 @@ export const ROUTE_APP = {
   CART: {
     CART_DELIVERY: "/cart/delivery",
     CART_ONSPOT: "/cart/onspot",
-    CART_PICKUP:"/cart/pickup"
+    CART_PICKUP: "/cart/pickup",
+    CART_MAP: '/cart/map'
   },
   ORDER:"/order"
 }

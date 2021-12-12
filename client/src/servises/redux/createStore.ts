@@ -71,7 +71,7 @@ const customMiddleware: Middleware<Record<string, unknown>, RootState> = store =
   return res;
 };
 
-const middlewares = [logger,routerMiddleware(history),RTKCart.middleware,customMiddleware];
+const middlewares = [logger,routerMiddleware(history),customMiddleware];
 
 const store = configureStore({
   reducer:persistedReducer,
