@@ -4,6 +4,7 @@ import { ProductClass } from "../../../database/models/product.model";
 import { CartEntity } from "../entities/cart.entity";
 import { cartMapper } from "../entities/cart.mapper";
 import { ICartRepository } from "./interface.repository";
+import { Types } from "mongoose";
 
 export class CartRepository
     extends BaseRepository<CartClass, CartEntity>
@@ -44,33 +45,18 @@ export class CartRepository
     }
 
     async removeAll(userId: UniqueId) {
-        await CartModel.findOneAndUpdate(
-            {
-                user: userId
-            },
-            {
-                $set: {
-                    products: []
-                }
-            },
-            { new: true }
-        );
+        await CartModel.deleteMany({
+            user: userId
+        });
 
         return [] as [];
     }
 
     async removeOne(userId: UniqueId, cartId: UniqueId) {
-        await CartModel.findOneAndUpdate(
-            {
-                user: userId
-            },
-            {
-                $pull: {
-                    products: cartId
-                }
-            },
-            { new: true }
-        );
+        await CartModel.deleteOne({
+            user: userId,
+            _id: cartId
+        });
 
         return cartId;
     }
@@ -90,5 +76,42 @@ export class CartRepository
         );
 
         return result!.amount;
+    }
+
+    async calc(userId: UniqueId) {
+        const calcResult = await CartModel.aggregate([
+            {
+                $match: {
+                    user: new Types.ObjectId(userId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
+            {
+                $addFields: {
+                    firstProduct: {
+                        $first: "$product"
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalPrice: {
+                        $sum: {
+                            $multiply: ["$firstProduct.price", "$amount"]
+                        }
+                    }
+                }
+            }
+        ]);
+
+        return calcResult[0] ? calcResult[0].totalPrice : 0;
     }
 }

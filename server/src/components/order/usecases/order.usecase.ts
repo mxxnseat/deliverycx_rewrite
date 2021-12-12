@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
+import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { OrderDTO } from "../dto/order.dto";
 import { OrderEntity } from "../entities/order.entity";
@@ -11,7 +12,8 @@ export class OrderUsecase {
     constructor(
         private readonly orderRepository: IOrderRepository,
         private readonly orderService: IIiko,
-        private readonly validationCountService: ValidationCount
+        private readonly validationCountService: ValidationCount,
+        private readonly cartRepository: ICartRepository
     ) {}
 
     async create(
@@ -23,7 +25,10 @@ export class OrderUsecase {
 
         const orderResult = await this.orderService.create(cart, orderInfo);
 
-        await this.orderRepository.create(userId, CartEntity.calc(cart));
+        await this.orderRepository.create(
+            userId,
+            await this.cartRepository.calc(userId)
+        );
 
         return new OrderEntity(orderResult);
     }
