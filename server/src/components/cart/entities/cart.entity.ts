@@ -70,9 +70,7 @@ export class CartEntity {
         return this.price;
     }
 
-    public static calc(cart: Array<CartEntity>) {
-        return cart.reduce((acc, cartEl) => {
-            return acc + cartEl.getPrice * cartEl.getAmount;
-        }, 0);
+    public static calc(fn: () => number) {
+        return fn();
     }
 }
