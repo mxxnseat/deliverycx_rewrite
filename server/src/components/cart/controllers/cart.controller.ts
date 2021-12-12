@@ -19,6 +19,8 @@ import { ApiBody, ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { CartEntity } from "../entities/cart.entity";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { ValidationException } from "src/filters/validation.filter";
+import { Types } from "mongoose";
+import { number } from "joi";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -43,7 +45,12 @@ export class CartController {
     })
     @ApiResponse({
         status: 200,
-        type: CartEntity
+        schema: {
+            properties: {
+                item: { type: "object", example: CartEntity },
+                totalPrice: { type: "number", example: 1200 }
+            }
+        }
     })
     @Post("add")
     async add(
@@ -65,7 +72,15 @@ export class CartController {
     })
     @ApiResponse({
         status: 200,
-        type: String,
+        schema: {
+            properties: {
+                deletedId: {
+                    type: "string",
+                    example: "61b609abaabff8e544dfecee"
+                },
+                totalPrice: { type: "number", example: 1200 }
+            }
+        },
         description: "Возращает ID удаленного итема"
     })
     @Delete("removeOne")
@@ -103,7 +118,12 @@ export class CartController {
     })
     @ApiResponse({
         status: 200,
-        type: Number
+        schema: {
+            properties: {
+                amount: { type: "number", example: 100 },
+                totalPrice: { type: "number", example: 1200 }
+            }
+        }
     })
     @Post("amount")
     async changeAmount(
@@ -123,7 +143,12 @@ export class CartController {
 
     @Get("getAll")
     @ApiResponse({
-        type: CartEntity,
+        schema: {
+            properties: {
+                cart: { type: "array", example: [] },
+                totalPrice: { type: "number", example: 1200 }
+            }
+        },
         status: 200
     })
     async getAll(
