@@ -14,14 +14,15 @@ import { FavoriteModule } from "src/ioc/favorite.module";
 import { BaseErrorsFilter } from "src/filters/base.filter";
 import * as RedisStore from "connect-redis";
 import * as session from "express-session";
-import { RedisClient } from "redis";
-import { RedisModule } from "src/modules/redis.module";
-
+import * as path from "path";
+import { createClient } from "redis";
 @Module({
     imports: [
-        RedisModule,
         ConfigModule.forRoot({
-            envFilePath: __dirname + "/../../.env"
+            envFilePath: path.resolve(
+                __dirname,
+                `../../.${process.env.NODE_ENV}.env`
+            )
         }),
         ProductModule,
         CategoryModule,
@@ -44,14 +45,26 @@ import { RedisModule } from "src/modules/redis.module";
     ]
 })
 export class AppModule implements NestModule {
-    constructor(@Inject("REDIS") private readonly redis: RedisClient) {}
-
     async configure(consumer: MiddlewareConsumer) {
+        console.log(process.env.REDIS_HOST);
+
+        const redisClientConfig =
+            process.env.NODE_ENV === "production"
+                ? {
+                      host: `redis://redis`
+                  }
+                : {
+                      port: +process.env.REDIS_PORT,
+                      host: process.env.REDIS_HOST
+                  };
+
+        const redisClient = createClient(redisClientConfig);
+
         consumer
             .apply(
                 session({
                     store: new (RedisStore(session))({
-                        client: this.redis,
+                        client: redisClient,
                         logErrors: true
                     }),
                     secret: process.env.SESSION_SECRET,
