@@ -60,7 +60,7 @@ export class IikoService implements IIiko {
         );
 
         if (orderResponseInfo.problem?.hasProblem)
-            throw new BadRequestException(orderResponseInfo.problem.problem);
+            throw new BadRequestException(orderResponseInfo?.problem?.problem);
 
         return orderResponseInfo.number;
     }

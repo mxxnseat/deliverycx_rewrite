@@ -12,7 +12,7 @@ export class DownloadImage {
             const imageName = `${uuid.v4()}_${Date.now()}.${ext}`;
 
             await image.resize(300, Jimp.AUTO);
-            await image.writeAsync(`${process.cwd()}/static/${imageName}`);
+            await image.writeAsync(`/data/iiko/${imageName}`);
 
             return `/static/shop/${imageName}`;
         } catch (e) {

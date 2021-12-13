@@ -1,5 +1,19 @@
 version: "3.9"
+networks:
+    mongodb_net:
+        driver: bridge
 services:
+    deliverycx_client:
+        container_name: deliverycx_client
+        build:
+            context: .
+            dockerfile: ./Dockerfile.webserver
+        ports:
+          - "80:80"
+        volumes:
+          - ./static:/static
+        networks:
+          - mongodb_net
     deliverycx_backend:
         container_name: deliverycx_backend
         env_file:
@@ -9,16 +23,12 @@ services:
             - mongodb
         build:
             context: ./server
+        networks:
+          - mongodb_net
         links:
             - redis
         ports:
             - "5000:5000"
-    nginx:
-        restart: always
-        build:
-            context: ./nginx
-        ports:
-            - "80:80"
     redis:
         image: redis
         command:
@@ -29,9 +39,13 @@ services:
             - "--save 300 10"
             - "--save 60 10000"
         volumes:
-            - ~/redis/data:/data
+            - ./redis/data:/data
+        networks:
+          - mongodb_net
     mongodb:
         container_name: mongodb
         image: mongo
         volumes:
-            - ~/mongo/data:/data/db
+            - ./mongo/data:/data/db
+        networks:
+          - mongodb_net

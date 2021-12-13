@@ -17,7 +17,12 @@ docker-compose down
 
 ```
 убить все образы:
-docker rmi -f $(docker images -a -g)
+docker rmi -f $(docker images -a -q)
+```
+
+```
+Запустить айко:
+docker-compose -f ./docker-compose.iiko.yml up --build
 ```
 
 P.S
