@@ -1,26 +1,14 @@
-# Set the base image to Ubuntu
-FROM    ubuntu:trusty
+FROM node
 
-# File Author / Maintainer
-MAINTAINER Anand Mani Sankar
+WORKDIR /usr/node/app
 
-# Install Node.js and other dependencies
-RUN apt-get update && \
-    apt-get -y install python build-essential nodejs
+COPY package*.json ./
 
-# Provides cached layer for node_modules
-ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
-RUN mkdir -p /src && cp -a /tmp/node_modules /src/
-
+RUN npm install
 RUN npm run build
 
-# Define working directory
-WORKDIR /dist
-ADD . /dist
+COPY ./dist .
 
-# Expose port
-EXPOSE  3000
+EXPOSE 5000
 
-# Run app using nodemon
-CMD ["node", "/dist/main.js"]
+CMD ["node", "./main.js"]

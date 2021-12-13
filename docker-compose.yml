@@ -1,16 +1,37 @@
-nginx:
-    build: ./nginx
-    links:
-        - node1:node1
-    ports:
-        - "80:80"
-node1:
-    build: ./server
-    links:
-        - redis
-    ports:
-        - "8080"
-redis:
-    image: redis
-    ports:
-        - "6379"
+version: "3.9"
+services:
+    deliverycx_backend:
+        container_name: deliverycx_backend
+        env_file:
+            - ./server/.production.env
+        depends_on:
+            - redis
+            - mongodb
+        build:
+            context: ./server
+        links:
+            - redis
+        ports:
+            - "5000:5000"
+    nginx:
+        restart: always
+        build:
+            context: ./nginx
+        ports:
+            - "80:80"
+    redis:
+        image: redis
+        command:
+            - "redis-server"
+            - "--loglevel ${REDIS_LOGLEVEL:-warning}"
+            - "--databases 2"
+            - "--save 900 1"
+            - "--save 300 10"
+            - "--save 60 10000"
+        volumes:
+            - ~/redis/data:/data
+    mongodb:
+        container_name: mongodb
+        image: mongo
+        volumes:
+            - ~/mongo/data:/data/db
