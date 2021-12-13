@@ -46,8 +46,6 @@ import { createClient } from "redis";
 })
 export class AppModule implements NestModule {
     async configure(consumer: MiddlewareConsumer) {
-        console.log(process.env.REDIS_HOST);
-
         const redisClientConfig =
             process.env.NODE_ENV === "production"
                 ? {

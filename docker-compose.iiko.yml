@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+    iiko:
+      container_name: iiko
+      build:
+         context: ./iiko
+      volumes:
+        - ./static:/data/iiko
+      command: bash -c "cp ./favorite.png /data/iiko && ts-node ./src/polling.ts"
+      networks:
+        - mongodb
+networks:
+  mongodb:
+    external:
+      name: deliverycx_nest_mongodb_net    

@@ -159,16 +159,13 @@ class IikoService {
                                         $setOnInsert: {
                                             id: category.id,
                                             name: category.name,
-                                            image: await downloader.download(
-                                                category.images[
-                                                    category.images.length - 1
-                                                ]
-                                                    ? category.images[
-                                                          category.images
-                                                              .length - 1
-                                                      ].imageUrl
-                                                    : ""
-                                            ),
+                                            image: category.images[
+                                                category.images.length - 1
+                                            ]
+                                                ? category.images[
+                                                      category.images.length - 1
+                                                  ].imageUrl
+                                                : "",
                                             order: category.order,
                                             organization: _id
                                         }
@@ -237,6 +234,8 @@ class IikoService {
     }
 
     public async polling() {
+        console.log("start");
+
         await this.getToken();
         await this.getAddresses();
         await this.getNomenclature();
@@ -251,6 +250,7 @@ const iikoService = new IikoService(
 );
 
 connection().then(async () => {
+    console.log("success connect");
     await iikoService.polling();
 
     process.exit(1);

@@ -8,7 +8,10 @@ import { createBrowserHistory } from 'history';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
- const history = createBrowserHistory()
+const history = createBrowserHistory()
+
+console.log(1);
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
