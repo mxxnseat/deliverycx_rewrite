@@ -6,9 +6,14 @@ services:
     deliverycx_client:
         container_name: deliverycx_client
         build:
-            context: ./client
+            context: .
+            dockerfile: ./Dockerfile.webserver
+        ports:
+          - "80:80"
         volumes:
-          - ./client/build:/build
+          - ./static:/static
+        networks:
+          - mongodb_net
     deliverycx_backend:
         container_name: deliverycx_backend
         env_file:
@@ -24,16 +29,6 @@ services:
             - redis
         ports:
             - "5000:5000"
-    nginx:
-        restart: always
-        build:
-            context: ./nginx
-        ports:
-            - "80:80"
-        volumes:
-          - ./client/build:/var/www/client
-        networks:
-          - mongodb_net
     redis:
         image: redis
         command:

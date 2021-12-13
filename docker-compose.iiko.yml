@@ -4,6 +4,8 @@ services:
       container_name: iiko
       build:
          context: ./iiko
+      env_file:
+        - ./iiko/.production.env
       volumes:
         - ./static:/data/iiko
       command: bash -c "cp ./favorite.png /data/iiko && ts-node ./src/polling.ts"

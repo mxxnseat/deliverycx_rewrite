@@ -1,9 +1,9 @@
 import { config } from "dotenv";
 config({
-    path: __dirname + "/../.env"
+    path: __dirname + "/../.development.env"
 });
 process.chdir(`${__dirname}/../..`);
-
+console.log(process.env, __dirname);
 import axios from "axios";
 import { Types, Document } from "mongoose";
 

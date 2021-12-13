@@ -5,7 +5,7 @@ WORKDIR /usr/local/app
 COPY ./package*.json .
 COPY ./tsconfig.json .
 COPY ./src ./src
-COPY ./.env .
+# COPY ./.env .
 COPY ./favorite.png .
 
 RUN npm install
