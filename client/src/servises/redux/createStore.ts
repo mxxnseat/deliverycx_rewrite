@@ -14,7 +14,7 @@ import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/R
 import { SHOP_API_REDUCER_KEY, RTKShop } from 'servises/repository/RTK/RTKShop';
 import ShopSlice from './slice/shopSlice';
 import { CATEGORIES_API_REDUCER_KEY, RTKCategories } from 'servises/repository/RTK/RTKCategories';
-import cartSlice from './slice/cartSlice';
+import cartSlice, { fetchAllCart } from './slice/cartSlice';
 import { CART_API_REDUCER_KEY, RTKCart } from 'servises/repository/RTK/RTKCart';
 
 const history = createBrowserHistory()
@@ -81,7 +81,9 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 })
 
-const persistor = persistStore(store);
+const persistor = persistStore(store,undefined, async () => {
+  await store.dispatch(fetchAllCart() as any) 
+});
 
 export { store, persistor }
 export type RootState = ReturnType<typeof createRootReducer>;

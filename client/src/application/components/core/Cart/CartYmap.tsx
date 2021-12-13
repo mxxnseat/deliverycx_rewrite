@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAdress } from "servises/redux/slice/cartSlice";
 import { getGeoLocation } from "application/helpers/yandexapi";
 import { RootState } from "servises/redux/createStore";
-import MapSuggestComponent from "presentation/viewModel/viewCart/MapSuggest";
+import MapSuggestComponent from "application/components/common/Maps/MapSuggest";
 import { push } from 'connected-react-router';
 import { ROUTE_APP } from "application/contstans/route.const";
 import { useHistory } from "react-router-dom";
@@ -25,14 +25,16 @@ const CartYmap = () => {
   const history = useHistory()
   const { cords } = useSelector((state: RootState) => state.location.point);
   const city = useSelector((state: RootState) => state.location.point.city);
-    const [cord, setCord] = useState([]);
-    const [myPosition, setMyPosition] = useState<number[]>([]);
-    const [stateMap, setStateMap] = useState<number[]>([])
+  const selectAdress = useSelector((state: RootState) => state.cart.address);
+  const [cord, setCord] = useState([]);
+  const [myPosition, setMyPosition] = useState<number[]>([]);
+  const [stateMap, setStateMap] = useState<number[]>([])
   const [valueMap, setValueMap] = useState<string>('')
   const [disclaimer, setDisclaimer] = useState(false)
 
   useEffect(() => {
     getGeoLoc();
+    //selectAdress && setMyPosition(stateMap)
   }, []);
   
   const mapstate = useMemo(() => {
@@ -53,10 +55,12 @@ const CartYmap = () => {
   }
   const getGeoLoc = () => {
     getGeoLocation()?.then((res: any) => {
+      
         setStateMap([...res]);
         setMyPosition([...res]);
     })
-        .catch((e: unknown) => {
+      .catch((e: unknown) => {
+        
             setStateMap([cords[0], cords[1]]);
             setMyPosition([cords[0], cords[1]]);
         });
@@ -69,9 +73,9 @@ const CartYmap = () => {
     ]);
   }, []);
   const hendleMapPopup = () => {
-    if (valueMap) {
-      history && history.push(ROUTE_APP.CART.CART_DELIVERY)
-      dispatch(setAdress(valueMap))
+    if ((valueMap || selectAdress) && !disclaimer) {
+      history.push(ROUTE_APP.CART.CART_DELIVERY)
+      
       setValueMap('')
     }
   }

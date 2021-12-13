@@ -1,13 +1,13 @@
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cartSelector } from "servises/redux/slice/cartSlice";
 import cn from "classnames";
 import { useOutside } from "application/hooks/useOutside";
 import { useDeepCompareEffect } from "application/hooks/useDeepCompareEffect";
 import { ROUTE_APP } from "application/contstans/route.const";
 
-export function useAddCart(ref:any) {
+export function useAddCart(ref?:any) {
   const history = useHistory();
   const cartList = useSelector(cartSelector.selectAll);
   const [isPopupEmpty, setIsPopupEmpty] = useState(false);
@@ -38,8 +38,13 @@ export function useAddCart(ref:any) {
 }
 
 export function useCartItems() {
+  const history = useHistory()
   const cartList = useSelector(cartSelector.selectAll);
-
+  useEffect(() => {
+    if(cartList.length === 0){
+      history.push(ROUTE_APP.SHOP.SHOP_MAIN);
+    }
+  },[cartList])
   
   
   this.data({

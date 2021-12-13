@@ -1,10 +1,10 @@
 import { IProduct } from "@types"
 
-export type ICartProducts = {product: IProduct<string>} & { amount: number, _id: string }
-export interface ICart {
-    products: ICartProducts[],
-    totalPrice: number
+export type ICart<T> = {
+  [K in keyof T]: T[K]
+  
 }
+
 export interface ICheckout {
     success: boolean
     orderNumber: number

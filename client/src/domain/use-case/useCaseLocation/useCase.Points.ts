@@ -1,25 +1,24 @@
-import { FC, useEffect, useReducer, useState } from "react";
-import { YMaps, Map, Placemark } from 'react-yandex-maps';
-import cn from "classnames";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useReducer } from "react";
+import { useDispatch } from "react-redux";
 
 import { useHistory } from "react-router-dom";
-import { RootState } from "servises/redux/createStore";
 import { useGetPointsQuery } from "servises/repository/RTK/RTKLocation";
 import { IPoint } from "@types";
 import { initialStatePoints, PointsReducer, ReducerActionTypePoints } from "application/reducers/PointsReducer";
-import { TadapterCaseCallback } from "adapters/adapterComponents";
-import { mokPoint } from "application/components/core/Location/Points/YMapPoint";
 import { getGeoLocation } from "application/helpers/yandexapi";
 import RequestProfile from "servises/repository/Axios/Request/Request.Profile";
 import { setPoint } from "servises/redux/slice/locationSlice";
 import { setProfileAction } from "servises/redux/slice/profileSlice";
 import { ROUTE_APP } from "application/contstans/route.const";
+import { adapterSelector } from "servises/redux/selectors/selectors";
+import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 
 export function usePoints() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const selectedCity = useSelector((state: RootState) => state.location.city);
+ 
+  const selectedCity = adapterSelector.useSelectors(selector => selector.city)
+  const {id} = adapterSelector.useSelectors<IPoint>(selector => selector.point)
   const { data: addresses,isFetching } = useGetPointsQuery(selectedCity.id)
   
   const [statePoint, dispatchPoint] = useReducer(PointsReducer, initialStatePoints);
@@ -98,8 +97,8 @@ export function usePoints() {
       })
       */
       dispatch(setProfileAction(regData))
-
       dispatch(setPoint(address))
+      address.id !== id && dispatch(fetchDeleteCart())
       history.push(ROUTE_APP.SHOP.SHOP_MAIN)
       
     } catch (error) {

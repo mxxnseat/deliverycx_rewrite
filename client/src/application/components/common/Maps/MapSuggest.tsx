@@ -21,7 +21,7 @@ const MapSuggestComponent = ({ handl, cord, disc }: any) => {
         const validAdress: string = getObj?.properties.get('metaDataProperty.GeocoderMetaData.precision');
         const cords = [...getObj.geometry._coordinates]
         handl(cords)
-
+        
         if (validAdress === 'exact') {
           cord(cords)
           disc(false)

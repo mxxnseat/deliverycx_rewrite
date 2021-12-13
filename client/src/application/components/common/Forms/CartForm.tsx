@@ -11,18 +11,18 @@ import { RootState } from "servises/redux/createStore";
 import { FormWrapper } from "./FormWrapper";
 import { useDispatch } from 'react-redux';
 import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
+import { useEffect } from 'react';
 
 
-type ICartFrom = {
-  wrappbuild:any
-};
 
-const CartFrom: FC<ICartFrom> = ({ wrappbuild }) => {
+
+const CartFrom = () => {
   const dispatch = useDispatch()
   const { isVerify, ...user } = useSelector(
     (state: RootState) => state.profile
   );
   const { city } = useSelector((state: RootState) => state.location.point);
+  const selectAddress = useSelector((state: RootState) => state.cart.address);
   const errors:any = []
   const initialValues: IInitialValues = {
     comment: "",
@@ -72,6 +72,10 @@ const CartFrom: FC<ICartFrom> = ({ wrappbuild }) => {
   const debounceClearHandler = debounce(() => {
     dispatch(fetchDeleteCart()) 
   }, 400);
+
+  useEffect(() => {
+    selectAddress && formik.setFieldValue("address", selectAddress)
+  },[])
   
 
   return (
@@ -79,8 +83,7 @@ const CartFrom: FC<ICartFrom> = ({ wrappbuild }) => {
       <form onSubmit={formik.handleSubmit}>
         <div className="cart__form">
           {
-            formWrapper.adress()
-            
+            formWrapper.adress()         
           }
           {
             formWrapper.name()

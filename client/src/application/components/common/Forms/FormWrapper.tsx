@@ -2,6 +2,8 @@
 import { Field } from "formik";
 import FormFieldWrapper from "./FormFieldWrapper";
 import InputMask from "react-input-mask";
+import { useHistory } from 'react-router-dom';
+import { ROUTE_APP } from 'application/contstans/route.const';
 
 interface IWrapper{
   adress(): void
@@ -9,9 +11,11 @@ interface IWrapper{
   phone():void
 }
 
-export const FormWrapper = (formik: any):IWrapper => {
+export const FormWrapper = (formik: any): IWrapper => {
+  const history = useHistory()
   return {
     adress() {
+       
       return(
       <div className="adress_fild">
         <FormFieldWrapper
@@ -21,7 +25,7 @@ export const FormWrapper = (formik: any):IWrapper => {
           error={formik.errors.address ? true : false}
           errorValue={formik.errors.address}
         >
-          <div className="adress_fild__address" onClick={() => true}>
+          <div className="adress_fild__address" onClick={() => history.push(ROUTE_APP.CART.CART_MAP)}>
             {formik.values.address.length
               ? formik.values.address
               : "Выберете адрес"}
@@ -114,11 +118,4 @@ export const FormWrapper = (formik: any):IWrapper => {
 
 export type IWrapperBuilder = {
   delivery:(wrapper:IWrapper) => void
-}
-export const WrapperBuilder:IWrapperBuilder = {
-  delivery: (wrapper: IWrapper) => {
-    wrapper.adress()
-    wrapper.name()
-    wrapper.phone()
-  }
 }

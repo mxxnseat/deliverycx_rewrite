@@ -14,7 +14,7 @@ export const RTKCart = createApi({
       providesTags: ['Cart']
      
     }),
-    addToCart:builder.mutation<ICart,string>({
+    addToCart:builder.mutation<any,string>({
       query: (productId) => {
         return ({
           method: "POST",
