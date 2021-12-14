@@ -2,7 +2,8 @@ import { IIiko } from "./iiko.abstract";
 import axios from "axios";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, Inject } from "@nestjs/common";
+import { OrganizationModel } from "../../database/models/organization.model";
 
 export class IikoService implements IIiko {
     private async getToken() {
@@ -28,11 +29,14 @@ export class IikoService implements IIiko {
         const token = await this.getToken();
 
         const requestString = `${process.env.SERVICE_URL}/api/0/orders/add?access_token=${token}`;
+        const organization = await OrganizationModel.findById(
+            orderInfo.organization
+        );
 
         const { data: orderResponseInfo } = await axios.post<OrderInfoIiko>(
             requestString,
             {
-                organization: orderInfo.organization,
+                organization: organization.id,
                 customer: {
                     name: orderInfo.name,
                     phone: orderInfo.phone

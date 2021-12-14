@@ -34,13 +34,13 @@ export class CartRepository
         const product = result.product as ProductClass;
 
         return new CartEntity(
-            result._id,
-            product.name,
-            product.image,
-            product.tags,
-            product.id,
-            result.amount,
-            product.price
+            result?._id,
+            product?.name,
+            product?.image,
+            product?.tags,
+            product?.id,
+            result?.amount,
+            product?.price
         );
     }
 
