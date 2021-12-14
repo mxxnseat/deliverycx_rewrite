@@ -16,8 +16,9 @@ services:
           - deliverycx_backend
         volumes:
           - ./static:/static
-          - ./certbot/www:/var/www/certbot/:ro
+          - ./dhparam:/etc/nginx/dhparam
           - ./certbot/conf/:/etc/nginx/ssl/:ro
+          - ./certbot/data:/var/www/letsencrypt
         networks:
           - mongodb_net
     deliverycx_backend:
@@ -57,6 +58,8 @@ services:
             - mongodb_net
     certbot:
         image: certbot/certbot
+        command: certonly --webroot --webroot-path=/var/www/letsencrypt --email kirill_shkarun@mail.ru --agree-tos --no-eff-email -d xn--e1aybc.xn--80apgfh0ct5a.xn--p1ai
         volumes:
-            - ./certbot/www/:/var/www/certbot/:rw
+            - ./certbot/logs/:/var/log/letsencrypt
             - ./certbot/conf/:/etc/letsencrypt/:rw
+            - ./certbot/data:/var/www/letsencrypt
