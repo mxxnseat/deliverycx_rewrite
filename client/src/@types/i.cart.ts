@@ -1,8 +1,8 @@
 import { IProduct } from "@types"
 
-export type ICart<T> = {
-  [K in keyof T]: T[K]
-  
+export interface ICart{
+  totalPrice: number
+  address:string
 }
 
 export interface ICheckout {

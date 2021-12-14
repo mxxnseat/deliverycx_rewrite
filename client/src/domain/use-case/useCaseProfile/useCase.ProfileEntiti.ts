@@ -14,4 +14,11 @@ export class useCaseProfileEntiti implements IuseCaseProfileEntiti{
       
     }
   }
+  getExtraReducersAction(builder:any) {
+    return {
+      ProfileAction: (thunk:any) => {
+        builder.addCase(thunk.fulfilled,ProfileEntitiesMetod.setProfileAction)
+      }
+    }
+  }
 }

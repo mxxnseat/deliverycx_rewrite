@@ -1,21 +1,16 @@
+import { IProfile } from "@types"
 import Entities from "../Entities"
 
-export interface IProfileEntities{
-  isAuth: boolean,
-  isVerify: boolean,
-  username: null | string,
-  name: null | string,
-  phone: null | string
-}
+export type IProfileEntities = IProfile
 /**
  * @description синглтон
  * @method init полиморф, может не принимать аргументов или любой аргумент и изменяет entities
  */
 class ProfileEntities extends Entities<IProfileEntities>{
-  protected isAuth = false
+  protected isAuth = true
   protected isVerify = false
   protected username = null
-  protected name = "vasa"
+  protected name = ""
   protected phone = null
   constructor() {
     super()

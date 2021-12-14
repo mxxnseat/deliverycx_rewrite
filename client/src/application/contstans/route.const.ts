@@ -12,5 +12,8 @@ export const ROUTE_APP = {
     CART_PICKUP: "/cart/pickup",
     CART_MAP: '/cart/map'
   },
-  ORDER:"/order"
+  ORDER: "/order",
+  PAGES: {
+    ABOUT:'/about'
+  }
 }
