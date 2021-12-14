@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { ICity } from "@types";
 import cn from "classnames";
 import { useCitiList } from "domain/use-case/useCaseLocation";
 
@@ -7,7 +8,7 @@ const CityList = () => {
     
     
     const useCaseCitiList = useCitiList()
-    const { cities } = useCaseCitiList.data
+    const { cities,selectedCity } = useCaseCitiList.data
     const { selectCiti, setSerchCiti } = useCaseCitiList.handlers
     const { isLoading } = useCaseCitiList.status 
     
@@ -23,8 +24,8 @@ const CityList = () => {
 
             {
                 
-                !isLoading && cities && cities.map((city:any) => {
-                    const CN = cn("welcome__city", { selected: false}) //city.name === selectedCity?.name 
+                !isLoading && cities && cities.map((city:ICity) => {
+                    const CN = cn("welcome__city", { selected: city.name === selectedCity.name}) //city.name === selectedCity?.name 
                     return <div key={city.id} onClick={() => selectCiti(city)} className={CN}>
                         {city.name}
                     </div>

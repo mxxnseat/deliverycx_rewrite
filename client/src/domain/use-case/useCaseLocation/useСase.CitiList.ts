@@ -6,11 +6,12 @@ import { useHistory } from "react-router-dom";
 import { RootState } from "servises/redux/createStore";
 import { setCiti } from "servises/redux/slice/locationSlice";
 import { useGetCitiQuery } from "servises/repository/RTK/RTKLocation";
+import { adapterSelector } from "servises/redux/selectors/selectors";
 
 export function useCitiList(){
   const history = useHistory();
   const dispatch = useDispatch()
-  const { city: activeCity } = useSelector((state: RootState) => state.location);
+  const selectedCity = adapterSelector.useSelectors(selector => selector.city)
   const [serchCiti, setSerchCiti] = useState('');
   const {data:cities,isLoading} = useGetCitiQuery(serchCiti)
     
@@ -23,7 +24,7 @@ export function useCitiList(){
     data: {
       serchCiti,
       cities,
-      activeCity,
+      selectedCity,
     },
     handlers: {
       selectCiti,

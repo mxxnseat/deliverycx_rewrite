@@ -18,7 +18,7 @@ export function usePoints() {
   const dispatch = useDispatch();
  
   const selectedCity = adapterSelector.useSelectors(selector => selector.city)
-  const {id} = adapterSelector.useSelectors<IPoint>(selector => selector.point)
+  const {id} = adapterSelector.useSelectors(selector => selector.point)
   const { data: addresses,isFetching } = useGetPointsQuery(selectedCity.id)
   
   const [statePoint, dispatchPoint] = useReducer(PointsReducer, initialStatePoints);
