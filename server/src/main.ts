@@ -5,7 +5,7 @@ import { doc } from "./docs/api.doc";
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.enableCors({
-        origin: "*",
+        origin: process.env.CLIENT_PATH,
         credentials: true
     });
 
