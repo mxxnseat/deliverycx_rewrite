@@ -1,9 +1,7 @@
+import { ICart } from "@types"
 import Entities from "../Entities"
 
-export interface ICartEntities{
-  totalPrice: number
-  address:string
-}
+export type ICartEntities = ICart
 /**
  * @description синглтон
  * @method init полиморф, может не принимать аргументов или любой аргумент и изменяет entities
