@@ -49,7 +49,7 @@ export class AppModule implements NestModule {
         const redisClientConfig =
             process.env.NODE_ENV === "production"
                 ? {
-                      host: `redis://redis`
+                      host: process.env.REDIS_HOST
                   }
                 : {
                       port: +process.env.REDIS_PORT,
