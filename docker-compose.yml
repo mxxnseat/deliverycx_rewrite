@@ -10,6 +10,8 @@ services:
             dockerfile: ./Dockerfile.webserver
         ports:
           - "80:80"
+        depends_on:
+          - deliverycx_backend
         volumes:
           - ./static:/static
         networks:
