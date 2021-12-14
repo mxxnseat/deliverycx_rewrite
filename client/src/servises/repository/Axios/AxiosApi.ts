@@ -82,7 +82,7 @@ export function methods(method: "post" | "get" | "put" | "delete") {
         const get_args = (fn: any) =>
             fn
                 .toString()
-                .match(/\((.*)\)/)[1]
+                .match(/\((.*?)\)/)[1]
                 .split(", ");
 
         descriptor.value = function (this: Iparams, ...arg: []) {
