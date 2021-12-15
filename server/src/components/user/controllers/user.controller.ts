@@ -23,10 +23,19 @@ export class UserController {
         @Res() response: Response
     ) {
         if (session.user) {
-            return response
-                .status(200)
-                .json(await this.userUsecase.getUser(session.user));
+            const user = await this.userUsecase.getUser(session.user);
+
+            let result = user;
+
+            if (!user.check()) {
+                const username = await this.generateUsernameService.generate();
+                result = await this.userUsecase.create(username);
+                session.user = result.getId;
+            }
+
+            return response.status(200).json(result);
         }
+
         const username = await this.generateUsernameService.generate();
         const result = await this.userUsecase.create(username);
         session.user = result.getId;

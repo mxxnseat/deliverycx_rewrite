@@ -149,29 +149,34 @@ class IikoService {
                             { upsert: true }
                         );
 
+                        // console.log(data.groups);
+
                         const categories = await Promise.all(
                             data.groups.map(async (category) => {
-                                await CategoryModel.updateOne(
-                                    {
-                                        id: category.id
-                                    },
-                                    {
-                                        $setOnInsert: {
-                                            id: category.id,
-                                            name: category.name,
-                                            image: category.images[
-                                                category.images.length - 1
-                                            ]
-                                                ? category.images[
-                                                      category.images.length - 1
-                                                  ].imageUrl
-                                                : "",
-                                            order: category.order,
-                                            organization: _id
-                                        }
-                                    },
-                                    { upsert: true }
-                                );
+                                if (category.description !== "HIDDEN") {
+                                    await CategoryModel.updateOne(
+                                        {
+                                            id: category.id
+                                        },
+                                        {
+                                            $setOnInsert: {
+                                                id: category.id,
+                                                name: category.name,
+                                                image: category.images[
+                                                    category.images.length - 1
+                                                ]
+                                                    ? category.images[
+                                                          category.images
+                                                              .length - 1
+                                                      ].imageUrl
+                                                    : "",
+                                                order: category.order,
+                                                organization: _id
+                                            }
+                                        },
+                                        { upsert: true }
+                                    );
+                                }
                             })
                         );
 

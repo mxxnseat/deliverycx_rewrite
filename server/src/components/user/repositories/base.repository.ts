@@ -31,6 +31,6 @@ export class UserRepository implements IUserRepository {
     async getUser(userId: UniqueId) {
         const result = await this.userModel.findOne({ _id: userId });
 
-        return new UserEntity(result._id, result.username);
+        return new UserEntity(result?._id, result?.username);
     }
 }

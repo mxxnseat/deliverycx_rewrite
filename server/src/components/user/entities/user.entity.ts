@@ -36,6 +36,10 @@ export class UserEntity {
         this.address = address;
     }
 
+    public check() {
+        return !!this.id;
+    }
+
     public get getAddress() {
         return this.address;
     }
