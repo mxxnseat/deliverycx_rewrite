@@ -19,12 +19,9 @@ export const cartSelector = cartAdapter.getSelectors(
 
 export const fetchAllCart = createAsyncThunk(
     "cart/getAll",
-    async (_, { dispatch, getState, rejectWithValue }) => {
+    async (_, { dispatch, rejectWithValue }) => {
         try {
-            const state = getState();
             const request = await RequestCart.allCart();
-            console.log(`cart get all`, request.data);
-
             if (request.status == 200 && request.data) {
                 dispatch(addAllCart(request.data.cart));
                 dispatch(setTotalPrice(request.data.totalPrice));
@@ -38,7 +35,7 @@ export const fetchAddToCart = createAsyncThunk(
     "cart/add",
     async (id: string, { dispatch, rejectWithValue }) => {
         try {
-            const request = await RequestCart.addToCart(id);
+            const request = await RequestCart.addToCart({ productId: id });
             if (request.status == 200 && request.data) {
                 dispatch(addCart(request.data.item));
                 dispatch(setTotalPrice(request.data.totalPrice));
@@ -55,7 +52,7 @@ export const fetchChangeAmount = createAsyncThunk(
         try {
             const request = await RequestCart.changeAmount(change);
             console.log(request, change);
-            if (request.status == 201) {
+            if (request.status == 200) {
                 dispatch(
                     changeCart({
                         id: change.cartId,
@@ -71,10 +68,10 @@ export const fetchChangeAmount = createAsyncThunk(
 );
 
 export const fetchRemoveCart = createAsyncThunk(
-    "cart/remove",
+    "cart/removeOne",
     async (cartId: string, { dispatch, rejectWithValue }) => {
         try {
-            const request = await RequestCart.removeCart(cartId);
+            const request = await RequestCart.removeCart({ cartId });
             if (request.status == 200 && cartId === request.data.deletedId) {
                 dispatch(removeCart(cartId));
                 dispatch(setTotalPrice(request.data.totalPrice));
@@ -86,7 +83,7 @@ export const fetchRemoveCart = createAsyncThunk(
 );
 
 export const fetchDeleteCart = createAsyncThunk(
-    "cart/remove",
+    "cart/deleteAll",
     async (_, { dispatch, rejectWithValue }) => {
         try {
             const request = await RequestCart.deleteCart();
@@ -104,7 +101,7 @@ export const fetchOrderCart = createAsyncThunk(
     async (value: any, { dispatch, rejectWithValue }) => {
         try {
             const request = await RequestCart.OrderCart(value);
-            console.log(request);
+            return request.data.number;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
@@ -126,6 +123,17 @@ const cartSlice = createSlice({
         setTotalPrice: (state, action) => {
             state.totalPrice = action.payload;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchOrderCart.fulfilled, (state, action) => {
+            state.orderNumber = action.payload;
+        }),
+            builder.addCase(fetchOrderCart.rejected, (state) => {
+                state.orderError = {
+                    error: "что-то пошло не так",
+                    status: 500
+                };
+            });
     }
 });
 export const {

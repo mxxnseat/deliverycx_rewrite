@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICategory } from '@types';
 import { staticCategories } from 'domain/use-case/useCaseCategories';
 import { config } from "servises/repository/config"
+import { defFetchBaseQuery } from '..';
 
 export interface IAuthResponse{
   isAuth: boolean,
@@ -14,7 +15,7 @@ export interface IAuthResponse{
 export const CATEGORIES_API_REDUCER_KEY = 'RTK_Categories';
 export const RTKCategories = createApi({
   reducerPath: CATEGORIES_API_REDUCER_KEY,
-  baseQuery: fetchBaseQuery({ baseUrl: config.REACT_APP_API_URL }),
+  baseQuery: defFetchBaseQuery,
   endpoints: (builder) => ({
     getCategori: builder.query<ICategory[],string>({
       query: (organizationid) => {

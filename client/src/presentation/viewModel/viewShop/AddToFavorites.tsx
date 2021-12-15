@@ -17,7 +17,7 @@ const AddToFavorites: FC<IProps> = ({ id, isFav, _class}) => {
     
 
     const debaunceHandleClick = debounce(async () => {
-        const {data} = await RequestShop.addFavorites(id)
+        const {data} = await RequestShop.addFavorites({productId: id})
         setIsActive(data.isFav);
         
     }, 400);

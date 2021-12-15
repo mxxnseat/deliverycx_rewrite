@@ -1,36 +1,70 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { ICart, IReqCart } from "@types";
 import { ApiSuper, methods, token } from "../AxiosApi";
 
-type ICartAxios<T> = {
-  [K in keyof T]: T[K]
+
+// получаем
+namespace ReqCart{
+  export type getAll = {
+    cart: IReqCart[]
+    totalPrice: number
+  }
+  export type add = {
+    item: IReqCart,
+    totalPrice: number
+  }
+  export type amount = {
+    amount: number
+    totalPrice: number
+  }
+  export type removeOne = {
+    deletedId: string
+    totalPrice: number
+  }
+  export type orderCreate = {
+    number:number
+  }
   
+}
+// передаем
+namespace ResCart{
+  export type add = {
+    productId:string
+  }
+  export type amount = {
+    amount: number
+    cartId:string
+  }
+  export type removeOne = {
+    cartId: string
+  }
 }
 
 
 class RequestCart extends ApiSuper{
   @methods('get')
   allCart() {
-    return this.request<ICartAxios<{cart:IReqCart[],totalPrice: number}>>('/cart/getAll')
+    return this.request<ReqCart.getAll>('/cart/getAll')
   }
   @methods('post')
-  addToCart(productId:string) {
-    return this.request<ICartAxios<{item:IReqCart,totalPrice: number}>>('/cart/add')
+  addToCart(body:ResCart.add) {
+    return this.request<ReqCart.add>('/cart/add')
   }
   @methods('post')
-  changeAmount(body:any) {
-    return this.request<ICartAxios<{amount:number,totalPrice: number}>>('/cart/amount')
+  changeAmount(body:ResCart.amount) {
+    return this.request<ReqCart.amount>('/cart/amount')
   }
   @methods('delete')
-  removeCart(cartId:string) {
-    return this.request<ICartAxios<{deletedId:string,totalPrice: number}>>('/cart/removeOne')
+  removeCart(body:ResCart.removeOne) {
+    return this.request<ReqCart.removeOne>('/cart/removeOne')
   }
   @methods('delete')
   deleteCart() {
-    return this.request<number>('/cart/deleteAll')
+    return this.request<[]>('/cart/deleteAll')
   }
   @methods('post')
   OrderCart(body:any) {
-    return this.request<{number:string}>('/order/create')
+    return this.request<ReqCart.orderCreate>('/order/create')
   }
 }
 export default new RequestCart()

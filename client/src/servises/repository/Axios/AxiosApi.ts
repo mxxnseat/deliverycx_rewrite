@@ -87,48 +87,32 @@ export function methods(method: "post" | "get" | "put" | "delete") {
 
         descriptor.value = function (this: Iparams, ...arg: []) {
             // eslint-disable-next-line no-case-declarations
+            
             const data = arg.reduce((acc, n, i) => {
                 if (typeof n === "object") {
                     return Object.assign(acc, n);
                 } else {
-                    console.log(get_args(childFunction)[i]);
-
+                    return acc
+                    /*
                     return Object.assign(acc, {
                         [get_args(childFunction)[i]]: n
                     });
+                    */
                 }
             }, {});
-            switch (method) {
-                case "get":
-                    this.params = {
-                        ...this.params,
-                        method
-                    };
-                    break;
-                case "post":
-                    this.params = {
-                        ...this.params,
-                        method,
-                        data
-                    };
-                    break;
-                case "put":
-                    this.params = {
-                        ...this.params,
-                        method,
-                        data
-                    };
-                    break;
-                case "delete":
-                    this.params = {
-                        ...this.params,
-                        method,
-                        data
-                    };
-                    break;
-                default:
-                    this.params = { ...this.params };
+            if (method === 'get') {
+                this.params = {
+                    ...this.params,
+                    method
+                };
+            } else if (method === 'post' || method === 'put' || method === 'delete') {
+                this.params = {
+                    ...this.params,
+                    method,
+                    data
+                };
             }
+            
             return childFunction.call(this, ...arg);
         };
     };
