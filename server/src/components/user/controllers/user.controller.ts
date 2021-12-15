@@ -1,9 +1,18 @@
-import { Body, Controller, Post, Req, Res, Session } from "@nestjs/common";
-import { Request, Response } from "express";
+import {
+    Body,
+    Controller,
+    Patch,
+    Post,
+    Req,
+    Res,
+    Session
+} from "@nestjs/common";
+import { Request, response, Response } from "express";
 import { GenerateUsernameService } from "../services/guestUsername.service";
 import { UserUsecase } from "../usecases/user.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "../entities/user.entity";
+import { UpdateDTO } from "../dto/update.dto";
 
 @ApiTags("User endpoints")
 @Controller("user")
@@ -41,5 +50,16 @@ export class UserController {
         session.user = result.getId;
 
         response.status(200).json(result);
+    }
+
+    @Patch("update")
+    async update(
+        @Session() session: Record<string, string>,
+        @Body() body: UpdateDTO,
+        @Res() response: Response
+    ) {
+        await this.userUsecase.updateUser(session.user, body);
+
+        response.status(201).json();
     }
 }

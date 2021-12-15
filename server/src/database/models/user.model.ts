@@ -5,6 +5,7 @@ import {
     prop,
     Ref
 } from "@typegoose/typegoose";
+import { Types } from "mongoose";
 import { CartClass } from "./cart.model";
 
 class Address {
@@ -30,6 +31,9 @@ export class UserClass {
 
     @prop()
     public phone!: string;
+
+    @prop({ type: Types.ObjectId })
+    public selectedOrganization: Types.ObjectId;
 
     @prop()
     public address!: Address;

@@ -72,7 +72,7 @@ export function token(
  * @description в зависимости от метода, добавляет в params, method и data из аргументов управляющей функции
  * @returns вызывает управляющиею функцию
  */
-export function methods(method: "post" | "get" | "put" | "delete") {
+export function methods(method: "post" | "get" | "put" | "delete" | "patch") {
     return function (
         target: any,
         propertyKey: string,
@@ -87,12 +87,12 @@ export function methods(method: "post" | "get" | "put" | "delete") {
 
         descriptor.value = function (this: Iparams, ...arg: []) {
             // eslint-disable-next-line no-case-declarations
-            
+
             const data = arg.reduce((acc, n, i) => {
                 if (typeof n === "object") {
                     return Object.assign(acc, n);
                 } else {
-                    return acc
+                    return acc;
                     /*
                     return Object.assign(acc, {
                         [get_args(childFunction)[i]]: n
@@ -100,19 +100,24 @@ export function methods(method: "post" | "get" | "put" | "delete") {
                     */
                 }
             }, {});
-            if (method === 'get') {
+            if (method === "get") {
                 this.params = {
                     ...this.params,
                     method
                 };
-            } else if (method === 'post' || method === 'put' || method === 'delete') {
+            } else if (
+                method === "post" ||
+                method === "put" ||
+                method === "delete" ||
+                method === "patch"
+            ) {
                 this.params = {
                     ...this.params,
                     method,
                     data
                 };
             }
-            
+
             return childFunction.call(this, ...arg);
         };
     };

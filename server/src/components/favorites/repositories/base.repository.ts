@@ -12,6 +12,19 @@ export class FavoriteRepository implements IFavoriteRepository {
         private readonly favoriteModel: Model<FavoriteClass>
     ) {}
 
+    async clear(userId: UniqueId) {
+        await this.favoriteModel.findOneAndUpdate(
+            {
+                user: userId
+            },
+            {
+                $set: {
+                    products: []
+                }
+            }
+        );
+    }
+
     async add_remove(productId: UniqueId, userId: UniqueId) {
         let action: any = {};
 

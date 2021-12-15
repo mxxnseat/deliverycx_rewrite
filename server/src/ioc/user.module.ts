@@ -1,4 +1,7 @@
 import { Module } from "@nestjs/common";
+import { favoriteProviders } from "src/components/favorites/providers/favorite.provider";
+import { FavoriteRepository } from "src/components/favorites/repositories/base.repository";
+import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
 import { UserController } from "src/components/user/controllers/user.controller";
 import { userProviders } from "src/components/user/providers/user.provider";
 import { UserRepository } from "src/components/user/repositories/base.repository";
@@ -14,6 +17,8 @@ import { DatabaseModule } from "src/modules/database.module";
         GenerateUsernameService,
         UserUsecase,
         { provide: IUserRepository, useClass: UserRepository },
+        { provide: IFavoriteRepository, useClass: FavoriteRepository },
+        ...favoriteProviders,
         ...userProviders
     ]
 })

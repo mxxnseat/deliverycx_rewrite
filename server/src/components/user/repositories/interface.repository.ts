@@ -8,4 +8,9 @@ export abstract class IUserRepository {
     ): Promise<UserEntity>;
 
     abstract getUser(userId: UniqueId): Promise<UserEntity>;
+
+    abstract updateUser(
+        userId: UniqueId,
+        updateProps: any
+    ): Promise<UserEntity>;
 }
