@@ -10,9 +10,9 @@ import { CartClass } from "./cart.model";
 
 class Address {
     public street: string;
-    public home: string;
+    public home: number;
 
-    constructor(street: string, home: string) {
+    constructor(street: string, home: number) {
         this.street = street;
         this.home = home;
     }

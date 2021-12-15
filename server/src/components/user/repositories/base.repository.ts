@@ -3,6 +3,7 @@ import { Model } from "mongoose";
 import { UserClass } from "../../../database/models/user.model";
 import { IUserRepository } from "./interface.repository";
 import { Inject, Injectable } from "@nestjs/common";
+import { IUpdateProps } from "../interfaces/update.interface";
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -34,9 +35,12 @@ export class UserRepository implements IUserRepository {
         return new UserEntity(result?._id, result?.username);
     }
 
-    async updateUser(userId: UniqueId, updateProps: any) {
+    async updateUser(userId: UniqueId, updateProps: IUpdateProps) {
         const user = await this.userModel.findByIdAndUpdate(userId, {
-            selectedOrganization: updateProps.organizationId
+            selectedOrganization: updateProps.organizationId,
+            name: updateProps.name,
+            phone: updateProps.phone,
+            address: { ...updateProps.address }
         });
 
         return new UserEntity(

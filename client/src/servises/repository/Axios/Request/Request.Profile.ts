@@ -8,7 +8,10 @@ type IDatReg = {
 interface IUpdateData {
     name?: string;
     phone?: string;
-    email?: string;
+    address?: {
+        home: number;
+        street: string;
+    };
     organizationId?: string;
 }
 interface IUpdateUserResponse {
