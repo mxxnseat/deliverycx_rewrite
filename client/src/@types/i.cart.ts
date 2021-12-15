@@ -2,12 +2,17 @@ import { IProduct } from "@types"
 
 export interface ICart{
   totalPrice: number
-  address:string
+  address: string
+  orderError: ICheckoutError
+  orderNumber:ICheckout
 }
 
 export interface ICheckout {
-    success: boolean
-    orderNumber: number
+  number:number
+}
+export interface ICheckoutError {
+  error: string,
+  status:number
 }
 export interface IInitialValues {
     comment: string;

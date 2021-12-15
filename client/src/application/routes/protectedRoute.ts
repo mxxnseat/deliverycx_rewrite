@@ -39,6 +39,12 @@ const protectedRoutes: IRoute[] = [
     component: CartYmap,
     
   },
+  {
+    exact: true,
+    path: ROUTE_APP.CART.CART_ORDER,
+    component: lazy(() => import('application/components/core/Cart/CheckOut')),
+    
+  },
   
 ]
 

@@ -9,11 +9,15 @@ export type ICartEntities = ICart
 class CartEntities extends Entities<ICartEntities>{
   protected totalPrice = 0
   protected address = ''
+  protected orderError = {}
+  protected orderNumber = null
   constructor() {
     super()
     this.entities = {
       totalPrice: this.totalPrice,
-      address:this.address
+      address: this.address,
+      orderError: this.orderError,
+      orderNumber:this.orderNumber
     }
   }
 

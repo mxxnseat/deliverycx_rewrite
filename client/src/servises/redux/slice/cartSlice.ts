@@ -15,9 +15,8 @@ export const cartSelector = cartAdapter.getSelectors((state: RootState) => state
 
 export const fetchAllCart = createAsyncThunk(
   'cart/getAll',
-  async (_, {dispatch,getState,rejectWithValue }) => {
+  async (_, {dispatch,rejectWithValue }) => {
     try {
-      const state = getState()
       
       const request = await RequestCart.allCart()
       if (request.status == 200 && request.data) {
@@ -32,9 +31,9 @@ export const fetchAllCart = createAsyncThunk(
 )
 export const fetchAddToCart = createAsyncThunk(
   'cart/add',
-  async (id:string, {dispatch,rejectWithValue }) => {
+  async (productId:string, {dispatch,rejectWithValue }) => {
     try {
-      const request = await RequestCart.addToCart(id)
+      const request = await RequestCart.addToCart({productId})
       if (request.status == 201 && request.data) {
         dispatch(addCart(request.data.item))
         dispatch(setTotalPrice(request.data.totalPrice))
@@ -66,11 +65,11 @@ export const fetchChangeAmount = createAsyncThunk(
 )
 
 export const fetchRemoveCart = createAsyncThunk(
-  'cart/remove',
+  'cart/removeOne',
   async (cartId:string, {dispatch,rejectWithValue }) => {
     try {
       
-      const request = await RequestCart.removeCart(cartId)
+      const request = await RequestCart.removeCart({cartId})
       if (request.status == 200 && cartId === request.data.deletedId) {
         dispatch(removeCart(cartId))
         dispatch(setTotalPrice(request.data.totalPrice))
@@ -84,7 +83,7 @@ export const fetchRemoveCart = createAsyncThunk(
 )
 
 export const fetchDeleteCart = createAsyncThunk(
-  'cart/remove',
+  'cart/deleteAll',
   async (_, {dispatch,rejectWithValue }) => {
     try {
       
@@ -104,12 +103,9 @@ export const fetchOrderCart = createAsyncThunk(
   'cart/order',
   async (value:any, {dispatch,rejectWithValue }) => {
     try {
-      
       const request = await RequestCart.OrderCart(value)
-      console.log(request)
-      
-      
-    } catch (error:any) {
+      return request.data.number
+    } catch (error: any) {
       return rejectWithValue(error.response.data)
     }
   }
@@ -129,8 +125,20 @@ const cartSlice = createSlice({
     },
     setTotalPrice:(state, action) => {
       state.totalPrice = action.payload
-    }
+    },
+    
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchOrderCart.fulfilled,(state, action) => {
+      state.orderNumber = action.payload
+    }),
+    builder.addCase(fetchOrderCart.rejected,(state) => {
+      state.orderError = {
+        error: "что-то пошло не так",
+        status:500
+      }
+    })
+  }
   
   
 })

@@ -22,7 +22,7 @@ const CartFrom = () => {
     (state: RootState) => state.profile
   );
   const { city } = useSelector((state: RootState) => state.location.point);
-  const selectAddress = useSelector((state: RootState) => state.cart.address);
+  const {address:selectAddress,orderError} = useSelector((state: RootState) => state.cart);
   const errors:any = []
   const initialValues: IInitialValues = {
     comment: "",
@@ -100,9 +100,9 @@ const CartFrom = () => {
             placeholder="Напишите сюда, если хотите добавить еще какую-то информацию о заказе..."
           ></textarea>
 
-          {errors["500"] && (
+          {orderError.status === 500 && (
             <div className="server-error">
-              Что-то пошло не так. Для подтверждения Вашего заказа, пожалуйста{" "}
+              Что-то пошло не так. Для подтверждения Вашего заказа, пожалуйста
               <b>нажмите кнопку «Заказать» еще раз.</b>
             </div>
           )}
