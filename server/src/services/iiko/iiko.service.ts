@@ -63,6 +63,8 @@ export class IikoService implements IIiko {
             }
         );
 
+        console.log(orderResponseInfo);
+
         if (orderResponseInfo.problem?.hasProblem)
             throw new BadRequestException(orderResponseInfo?.problem?.problem);
 

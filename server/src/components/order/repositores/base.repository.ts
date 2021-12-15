@@ -9,10 +9,7 @@ import { IOrderRepository } from "./interface.repository";
 export class OrderRepository implements IOrderRepository {
     constructor(
         @Inject("ORDER_MODEL")
-        private readonly orderModel: Model<OrderClass>,
-
-        @Inject("CART_MODEL")
-        private readonly cartModel: Model<CartClass>
+        private readonly orderModel: Model<OrderClass>
     ) {}
 
     async create(userId: UniqueId, cartPrice: number) {
@@ -30,7 +27,5 @@ export class OrderRepository implements IOrderRepository {
             },
             { upsert: true }
         );
-
-        await this.cartModel.deleteMany({ user: userId });
     }
 }

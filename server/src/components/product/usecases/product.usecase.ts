@@ -23,6 +23,14 @@ export class ProductUsecase {
     }
 
     async getAll(categoryId: UniqueId, userId: UniqueId) {
+        const isFind = await this.productRepository.getAll(categoryId, userId);
+
+        if (isFind.length === 0) {
+            const result = await this.productRepository.getFavorites(userId);
+
+            return result;
+        }
+
         const result = await this.productRepository.getAll(categoryId, userId);
 
         return result;

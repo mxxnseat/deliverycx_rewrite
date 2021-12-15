@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Post,
+    Res,
     Session,
     UseFilters,
     UseGuards,
@@ -21,6 +22,7 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { ValidationException } from "src/filters/validation.filter";
 import { Types } from "mongoose";
 import { number } from "joi";
+import { Response } from "express";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -57,14 +59,15 @@ export class CartController {
         @Body()
         addBody: cartDTO,
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.add(
             session.user,
             addBody.productId
         );
 
-        return result;
+        response.status(200).json(result);
     }
 
     @ApiBody({

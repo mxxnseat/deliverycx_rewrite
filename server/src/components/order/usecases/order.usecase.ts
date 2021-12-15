@@ -1,6 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { Model } from "mongoose";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
+import { CartClass } from "src/database/models/cart.model";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { OrderDTO } from "../dto/order.dto";
 import { OrderEntity } from "../entities/order.entity";
@@ -13,7 +15,8 @@ export class OrderUsecase {
         private readonly orderRepository: IOrderRepository,
         private readonly orderService: IIiko,
         private readonly validationCountService: ValidationCount,
-        private readonly cartRepository: ICartRepository
+        private readonly cartRepository: ICartRepository,
+        @Inject("CART_MODEL") private readonly cartModel: Model<CartClass>
     ) {}
 
     async create(
@@ -29,6 +32,8 @@ export class OrderUsecase {
             userId,
             await this.cartRepository.calc(userId)
         );
+
+        await this.cartModel.deleteMany({ user: userId });
 
         return new OrderEntity(orderResult);
     }
