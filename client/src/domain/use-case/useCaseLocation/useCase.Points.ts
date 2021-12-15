@@ -109,7 +109,6 @@ export function usePoints() {
         organization: address._id,
       })
       */
-            console.log(11111111);
 
             dispatch(setProfileAction(regData));
             dispatch(setPoint(address));
