@@ -91,14 +91,15 @@ export class CartController {
         @Body()
         removeBody: RemoveOneDTO,
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.removeOne(
             session.user,
             removeBody.cartId
         );
 
-        return result;
+        response.status(200).json(result);
     }
 
     @ApiResponse({
@@ -109,11 +110,12 @@ export class CartController {
     @Delete("deleteAll")
     async deleteAll(
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.removeAll(session.user);
 
-        return result;
+        response.status(200).json(result);
     }
 
     @ApiBody({
@@ -133,7 +135,8 @@ export class CartController {
         @Body()
         changeAmountBody: ChangeAmountDTO,
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.changeAmount(
             session.user,
@@ -141,7 +144,7 @@ export class CartController {
             changeAmountBody.amount
         );
 
-        return result;
+        response.status(200).json(result);
     }
 
     @Get("getAll")
@@ -156,10 +159,11 @@ export class CartController {
     })
     async getAll(
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.getAll(session.user);
 
-        return result;
+        response.status(200).json(result);
     }
 }
