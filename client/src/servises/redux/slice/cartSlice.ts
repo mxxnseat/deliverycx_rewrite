@@ -57,7 +57,7 @@ export const fetchChangeAmount = createAsyncThunk(
                 dispatch(
                     changeCart({
                         id: change.cartId,
-                        changes: { amount: request.data.amount as number }
+                        changes:request.data.item
                     })
                 );
                 dispatch(setTotalPrice(request.data.totalPrice));
