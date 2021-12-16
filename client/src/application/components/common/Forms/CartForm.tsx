@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 import { useEffect } from 'react';
 import React from "react";
+import FromPopUp from "./FromPopUp";
 
 
 type IProps = {
@@ -119,6 +120,7 @@ const CartFrom:FC<IProps> = ({builder}) => {
               Заказать
             </button>
           </div>
+          
         </div>
       </form>
     </FormikProvider>

@@ -7,15 +7,36 @@ import { ROUTE_APP } from 'application/contstans/route.const';
 import { ReactNode } from 'react';
 import React from "react";
 
-interface IWrapper{
+interface IWrapper {
   adress(): ReactNode
   name(): ReactNode
-  phone():ReactNode
+  phone(): ReactNode
+  deliv(): ReactNode
 }
-
 export const FormWrapper = (formik: any): IWrapper => {
   const history = useHistory()
   return {
+    deliv() {
+      return (
+        <FormFieldWrapper
+          placeholderIco={require("assets/i/delev.svg").default}
+          placeholderValue="Доставка"
+          isValid={
+            !formik.values.deliv.length || formik.errors.deliv ? true : false
+          }
+          error={formik.errors.deliv && formik.touched.deliv ? true : false}
+          errorValue={formik.errors.deliv}
+        >
+          <Field
+            className="form__field-wrapper__input"
+            name="name"
+            placeholder="Ваше имя"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+          />
+        </FormFieldWrapper>
+      )
+    },
     adress() {
        
       return(
