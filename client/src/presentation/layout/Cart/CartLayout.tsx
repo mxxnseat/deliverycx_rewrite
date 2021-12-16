@@ -18,7 +18,9 @@ const CartLayout: FC<ICartLayout> = ({ children }) => {
         <CartHeader />
         <div className="container">
           <CartChoise />
+          </div>
           <CartList />
+          <div className="container">
           <CartTotal />
           {children}
         </div>

@@ -8,23 +8,40 @@ import { useDispatch } from "react-redux";
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import cn from "classnames";
 import { fetchChangeAmount, fetchRemoveCart } from "servises/redux/slice/cartSlice";
+import classNames from "classnames";
 
 interface IProps{
   product: IReqCart,
+  errorSchema: Record<string, {message: string}>
 }
 
-const CartItem: FC<IProps> = ({ product }) => {
+const CartItem: FC<IProps> = ({ product, errorSchema }) => {
   const useCasePoints = useContext(CartContext)
   const dispatch = useDispatch();
   const [changeCount, setChangeCount] = useState<number>(product.amount)
-  
+  const [error, setError] = useState<null | string>(null);
+
   const debouncedChangeHandler = useMemo(() => debounce(({ id, count }: any) =>
     dispatch(fetchChangeAmount({ amount:count,cartId:id })), 200), [product.amount]) 
   const removeHandler = ()=>{
       dispatch(fetchRemoveCart(product.id));
   }
 
+  const CN = classNames({
+      cart__item: true,
+      error
+  })
+
   useEffect(() => () => debouncedChangeHandler.cancel(), [product.amount]);
+
+  useEffect(()=>{
+    //   console.log(product.pro)
+    const tag = product.productTags?.find(el=>el!=="HIDDEN")?.match(/[a-z]{2,}/i)![0];
+
+    if(tag && tag in errorSchema){
+        setError(errorSchema?.HI?.message);
+    }
+  }, [errorSchema])
 
   const changeCountHandler = ({ id, type, code}: any) => {
       if (typeof changeCount === 'number') {
@@ -50,9 +67,9 @@ const CartItem: FC<IProps> = ({ product }) => {
       }
   }
 
-  //const {} =  useCasePoints.handlers
     return (
-        <div className="cart__item">
+        <div className={CN}>
+            
             <div className="cart__item__img-wrap">
                 <img src={product.productImage} alt={product.productName} />
             </div>
@@ -107,7 +124,14 @@ const CartItem: FC<IProps> = ({ product }) => {
                     />
                 </button>
             </div>
-
+            {error && 
+                <div className="cart__item__validate">
+                    {
+                        error
+                    }
+                </div>
+            }
+            
             
         </div>
     );

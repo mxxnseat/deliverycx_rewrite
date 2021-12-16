@@ -4,6 +4,7 @@ import {
     createSlice
 } from "@reduxjs/toolkit";
 import { IReqCart } from "@types";
+import { AxiosError } from "axios";
 import CartEntities from "domain/entities/CartEntities/Cart.entities";
 import { RequestCart } from "servises/repository/Axios/Request";
 import { RTKCart } from "servises/repository/RTK/RTKCart";
@@ -103,7 +104,12 @@ export const fetchOrderCart = createAsyncThunk(
             const request = await RequestCart.OrderCart(value);
             return request.data.number;
         } catch (error: any) {
-            return rejectWithValue(error.response.data);
+            // Ошибка валидации по количеству
+            if (error.response.status === 422) {
+                dispatch(setErrors(error.response.data));
+            } else {
+                return rejectWithValue(error.response.data);
+            }
         }
     }
 );
@@ -122,6 +128,9 @@ const cartSlice = createSlice({
         },
         setTotalPrice: (state, action) => {
             state.totalPrice = action.payload;
+        },
+        setErrors: (state, action) => {
+            state.orderError = action.payload.errors;
         }
     },
     extraReducers: (builder) => {
@@ -143,6 +152,7 @@ export const {
     removeCart,
     deleteCart,
     setAdress,
-    setTotalPrice
+    setTotalPrice,
+    setErrors
 } = cartSlice.actions;
 export default cartSlice;

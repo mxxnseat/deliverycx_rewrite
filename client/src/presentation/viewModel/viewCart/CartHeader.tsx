@@ -7,9 +7,14 @@ import { ROUTE_APP } from 'application/contstans/route.const';
 const CartHeader = () => {
   const history = useHistory();
   const useCaseCart = adapterComponentUseCase(useAddCart)
-  const { itemsCount } = useCaseCart.data
+  const { itemsCount } = useCaseCart.data;
+
+  const historyHandler = ()=>{
+    history.push(ROUTE_APP.SHOP.SHOP_MAIN);
+    
+  }
   return (
-    <HeaderBack onClickCb={()=> history.push(ROUTE_APP.SHOP.SHOP_MAIN)} >
+    <HeaderBack onClickCb={historyHandler}>
         Ваш заказ <span className="select-red">{itemsCount}</span> блюд
     </HeaderBack>
   )

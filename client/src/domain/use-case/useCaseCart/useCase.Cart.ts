@@ -6,6 +6,7 @@ import cn from "classnames";
 import { useOutside } from "application/hooks/useOutside";
 import { useDeepCompareEffect } from "application/hooks/useDeepCompareEffect";
 import { ROUTE_APP } from "application/contstans/route.const";
+import { RootState } from "servises/redux/createStore";
 
 export function useAddCart(ref?: any) {
     const history = useHistory();
@@ -41,6 +42,7 @@ export function useAddCart(ref?: any) {
 export function useCartItems() {
     const history = useHistory();
     const cartList = useSelector(cartSelector.selectAll);
+    const orderError = useSelector((state: RootState) => state.cart.orderError);
     useEffect(() => {
         if (cartList.length === 0) {
             history.push(ROUTE_APP.SHOP.SHOP_MAIN);
@@ -48,7 +50,8 @@ export function useCartItems() {
     }, [cartList]);
 
     this.data({
-        cartList
+        cartList,
+        orderError: orderError
     });
     this.handlers({});
 }
