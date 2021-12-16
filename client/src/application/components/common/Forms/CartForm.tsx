@@ -8,15 +8,18 @@ import { debounce } from "lodash";
 import { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "servises/redux/createStore";
-import { FormWrapper } from "./FormWrapper";
+import { FormBuilder, FormWrapper } from "./FormWrapper";
 import { useDispatch } from 'react-redux';
 import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 import { useEffect } from 'react';
+import React from "react";
 
 
+type IProps = {
+  builder:any
+}
 
-
-const CartFrom = () => {
+const CartFrom:FC<IProps> = ({builder}) => {
   const dispatch = useDispatch()
   const { isVerify, ...user } = useSelector(
     (state: RootState) => state.profile
@@ -66,8 +69,8 @@ const CartFrom = () => {
       );
     },
   });
-  const formWrapper = FormWrapper(formik);
-
+  const formWrapper = new FormBuilder(formik);
+  
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const debounceClearHandler = debounce(() => {
     dispatch(fetchDeleteCart()) 
@@ -83,13 +86,7 @@ const CartFrom = () => {
       <form onSubmit={formik.handleSubmit}>
         <div className="cart__form">
           {
-            formWrapper.adress()         
-          }
-          {
-            formWrapper.name()
-          }
-          {
-            formWrapper.phone()
+            formWrapper.getInitinal(builder)
           }
           
           <textarea

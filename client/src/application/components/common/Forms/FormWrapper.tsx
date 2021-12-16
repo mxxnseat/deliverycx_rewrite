@@ -4,11 +4,13 @@ import FormFieldWrapper from "./FormFieldWrapper";
 import InputMask from "react-input-mask";
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
+import { ReactNode } from 'react';
+import React from "react";
 
 interface IWrapper{
-  adress(): void
-  name(): void
-  phone():void
+  adress(): ReactNode
+  name(): ReactNode
+  phone():ReactNode
 }
 
 export const FormWrapper = (formik: any): IWrapper => {
@@ -116,6 +118,28 @@ export const FormWrapper = (formik: any): IWrapper => {
   };
 };
 
-export type IWrapperBuilder = {
-  delivery:(wrapper:IWrapper) => void
+
+export class FormBuilder{
+  protected wrapp:IWrapper
+  constructor(fromik:any) {
+    this.wrapp = FormWrapper(fromik)
+  }
+  createBuild(wrappers:IWrapper[]) {
+    return wrappers.map((wrapp:IWrapper,index:number) => {
+      return React.createElement(React.Fragment, {key: index}, wrapp)
+    })
+  }
+  getInitinal(build:(builder:IWrapper)=> IWrapper[]) {
+    return React.createElement(React.Fragment, null, this.createBuild(build(this.wrapp)) )
+  }
+}
+
+export const FormBuilderCart = {
+  delivery:(builder:any):IWrapper[] => {
+    return [
+      builder.adress(),
+      builder.name(),
+      builder.phone()
+    ]   
+  }
 }
