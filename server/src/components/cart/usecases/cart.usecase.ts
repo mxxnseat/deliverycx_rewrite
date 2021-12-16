@@ -50,7 +50,7 @@ export class CartUsecase {
 
         const totalPrice = await this.CartRepository.calc(userId);
         return {
-            amount: result,
+            item: result,
             totalPrice
         };
     }

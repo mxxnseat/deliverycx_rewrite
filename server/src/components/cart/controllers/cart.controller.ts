@@ -125,7 +125,7 @@ export class CartController {
         status: 200,
         schema: {
             properties: {
-                amount: { type: "number", example: 100 },
+                item: { type: "object", example: CartEntity },
                 totalPrice: { type: "number", example: 1200 }
             }
         }

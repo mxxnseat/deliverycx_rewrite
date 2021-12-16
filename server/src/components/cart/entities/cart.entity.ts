@@ -38,7 +38,7 @@ export class CartEntity {
         this.productImage = productImage;
         this.productId = productId;
         this.amount = amount;
-        this.price = price;
+        this.price = price * amount;
         this.productTags = productTags;
     }
 

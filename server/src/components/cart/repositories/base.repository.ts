@@ -73,9 +73,19 @@ export class CartRepository
                 }
             },
             { new: true }
-        );
+        ).populate("product");
 
-        return result!.amount;
+        const product = result.product as ProductClass;
+
+        return new CartEntity(
+            result._id,
+            product.name,
+            product.image,
+            product.tags,
+            product.id,
+            result.amount,
+            product.price
+        );
     }
 
     async calc(userId: UniqueId) {
