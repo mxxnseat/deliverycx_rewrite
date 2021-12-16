@@ -4,16 +4,39 @@ import FormFieldWrapper from "./FormFieldWrapper";
 import InputMask from "react-input-mask";
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
+import { ReactNode } from 'react';
+import React from "react";
 
-interface IWrapper{
-  adress(): void
-  name(): void
-  phone():void
+interface IWrapper {
+  adress(): ReactNode
+  name(): ReactNode
+  phone(): ReactNode
+  deliv(): ReactNode
 }
-
 export const FormWrapper = (formik: any): IWrapper => {
   const history = useHistory()
   return {
+    deliv() {
+      return (
+        <FormFieldWrapper
+          placeholderIco={require("assets/i/delev.svg").default}
+          placeholderValue="Доставка"
+          isValid={
+            !formik.values.deliv.length || formik.errors.deliv ? true : false
+          }
+          error={formik.errors.deliv && formik.touched.deliv ? true : false}
+          errorValue={formik.errors.deliv}
+        >
+          <Field
+            className="form__field-wrapper__input"
+            name="name"
+            placeholder="Ваше имя"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+          />
+        </FormFieldWrapper>
+      )
+    },
     adress() {
        
       return(
@@ -116,6 +139,28 @@ export const FormWrapper = (formik: any): IWrapper => {
   };
 };
 
-export type IWrapperBuilder = {
-  delivery:(wrapper:IWrapper) => void
+
+export class FormBuilder{
+  protected wrapp:IWrapper
+  constructor(fromik:any) {
+    this.wrapp = FormWrapper(fromik)
+  }
+  createBuild(wrappers:IWrapper[]) {
+    return wrappers.map((wrapp:IWrapper,index:number) => {
+      return React.createElement(React.Fragment, {key: index}, wrapp)
+    })
+  }
+  getInitinal(build:(builder:IWrapper)=> IWrapper[]) {
+    return React.createElement(React.Fragment, null, this.createBuild(build(this.wrapp)) )
+  }
+}
+
+export const FormBuilderCart = {
+  delivery:(builder:any):IWrapper[] => {
+    return [
+      builder.adress(),
+      builder.name(),
+      builder.phone()
+    ]   
+  }
 }

@@ -435,6 +435,81 @@
     padding-top: 25px;
     background-color: transparent;
 }
+.popupFixCart{
+    position: fixed;
+    bottom: calc(14vh - 15px);
+    width: 100%;
+    max-width: 375px;
+    padding:0 35px 30px 35px;
+    margin-left: -20px;
+    background-color: #EFEFEF;
+    border-top-right-radius: 24px;
+    border-top-left-radius: 24px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    box-shadow: -1.45153px -30.966px 60px rgba(0, 0, 0, 0.25), -0.559108px -11.9276px 19.1111px rgba(0, 0, 0, 0.151852), -0.118273px -2.52316px 4.88889px rgba(0, 0, 0, 0.0981481);
+    z-index: 999;
+    &_box{
+        position: relative;
+        padding-top: 35px;
+        &__plash{
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 72px;
+            height: 4px;
+            background: #CCCCCC;
+            opacity: 0.5;
+            border-radius: 50px;
+        }
+        &__title{
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-family: sf-ui-bold;
+            span{
+                color:  #333333;
+                font-size: 17px;
+                font-weight: bold;
+                margin-left: 25px;
+            }
+        }
+        &__list{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            
+        }
+        &__list-item{
+            cursor: pointer;
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #CCCCCC;
+            &:last-child{
+                 border-bottom:none
+            } 
+        }
+        .active{
+            color:#8D191D;
+            .item_ok{
+                float: right;
+            }
+        }
+        &_item__icon{
+            display: inline-block;
+            margin-right: 20px;
+        }
+        &_item__text{
+            display: inline-block;
+            font-family: sf-ui-bold;
+            color: #333333;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    }
+}
 
 @media only screen and (max-width: 560px) and (orientation: portrait) {
     .mapsPopup {
