@@ -5,17 +5,29 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
 import { RootState } from "servises/redux/createStore";
+import HeaderBack from "presentation/viewModel/viewHead/HeaderBack";
+import { useDispatch } from 'react-redux';
+import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 
-const CheckOut: FC = () : JSX.Element => {
+const CheckOut: FC = (): JSX.Element => {
+  const dispatch = useDispatch()
   const history = useHistory()
   const orderNumber = useSelector((state: RootState) => state.cart.orderNumber);
   useEffect(() => {
     !orderNumber && history.push(ROUTE_APP.CART.CART_DELIVERY)
-  },[orderNumber])
+  }, [orderNumber])
+  
+  const handleBacktoShop = () => {
+    dispatch(fetchDeleteCart());
+    history.push(ROUTE_APP.SHOP.SHOP_MAIN)
+  }
 
 
   return (
-    
+    <div className="cart">
+      <HeaderBack onClickCb={handleBacktoShop}>
+        Вернутся в магазин
+      </HeaderBack>
         <div className="checkout">
           <img src={require("assets/img/ok.png").default} />
           <div className="checkout__title">Спасибо за заказ!</div>
@@ -24,7 +36,7 @@ const CheckOut: FC = () : JSX.Element => {
           Ваш заказ оформлен. <br />
           С вами свяжится администратор.</p>
         </div>
-     
+     </div>
     
   )
 }

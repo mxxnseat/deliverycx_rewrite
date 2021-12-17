@@ -14,7 +14,7 @@ namespace ReqCart{
     totalPrice: number
   }
   export type amount = {
-    amount: number
+    item: IReqCart
     totalPrice: number
   }
   export type removeOne = {
