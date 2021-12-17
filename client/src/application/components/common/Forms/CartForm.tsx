@@ -14,19 +14,22 @@ import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 import { useEffect } from 'react';
 import React from "react";
 import FromPopUp from "./FromPopUp";
+import { useHistory } from 'react-router-dom';
+import { ROUTE_APP } from 'application/contstans/route.const';
 
 
 type IProps = {
   builder:any
 }
 
-const CartFrom:FC<IProps> = ({builder}) => {
+const CartFrom: FC<IProps> = ({ builder }) => {
+  const history = useHistory()
   const dispatch = useDispatch()
   const { isVerify, ...user } = useSelector(
     (state: RootState) => state.profile
   );
   const { city } = useSelector((state: RootState) => state.location.point);
-  const {address:selectAddress,orderError} = useSelector((state: RootState) => state.cart);
+  const {address:selectAddress,orderError,orderNumber} = useSelector((state: RootState) => state.cart);
   const errors:any = []
   const initialValues: IInitialValues = {
     comment: "",
@@ -80,7 +83,9 @@ const CartFrom:FC<IProps> = ({builder}) => {
   useEffect(() => {
     selectAddress && formik.setFieldValue("address", selectAddress)
   },[])
-  
+  useEffect(() => {
+    orderNumber && history.push(ROUTE_APP.CART.CART_ORDER)
+  },[orderNumber])
 
   return (
     <FormikProvider value={formik}>
