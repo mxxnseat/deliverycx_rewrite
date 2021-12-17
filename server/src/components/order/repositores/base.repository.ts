@@ -12,7 +12,7 @@ export class OrderRepository implements IOrderRepository {
         private readonly orderModel: Model<OrderClass>
     ) {}
 
-    async create(userId: UniqueId, cartPrice: number) {
+    async create(userId: UniqueId, cartPrice: number, orderNumber: string) {
         await this.orderModel.findOneAndUpdate(
             { user: userId },
             {
@@ -21,7 +21,8 @@ export class OrderRepository implements IOrderRepository {
                 },
                 $push: {
                     orders: {
-                        price: cartPrice
+                        price: cartPrice,
+                        orderNum: orderNumber
                     }
                 }
             },

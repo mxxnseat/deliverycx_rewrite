@@ -2,7 +2,7 @@ import {
     buildSchema,
     getModelForClass,
     ModelOptions,
-    Prop,
+    prop,
     Ref
 } from "@typegoose/typegoose";
 import { warnMixed } from "@typegoose/typegoose/lib/internal/utils";
@@ -10,7 +10,10 @@ import { Types } from "mongoose";
 import { UserClass } from "./user.model";
 
 class NestedOrderClass {
+    @prop({ type: Number })
     price!: number;
+    @prop({ type: String })
+    orderNum!: string;
 }
 
 @ModelOptions({
@@ -18,11 +21,11 @@ class NestedOrderClass {
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class OrderClass {
-    @Prop({ ref: "User", type: Types.ObjectId })
+    @prop({ ref: "User", type: Types.ObjectId })
     user!: Ref<UserClass>;
 
-    @Prop({ required: true, default: [], type: warnMixed })
-    orders: [NestedOrderClass];
+    @prop({ required: true, default: [], type: NestedOrderClass })
+    orders!: [NestedOrderClass];
 }
 
 export const OrderSchema = buildSchema(OrderClass);
