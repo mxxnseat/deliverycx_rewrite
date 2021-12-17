@@ -131,6 +131,11 @@ const cartSlice = createSlice({
         },
         setErrors: (state, action) => {
             state.orderError = action.payload.errors;
+        },
+        accessOrder:(state) => {
+            state.orderNumber = null
+            state.orderError = {}
+            state.address = ''
         }
     },
     extraReducers: (builder) => {
@@ -153,6 +158,7 @@ export const {
     deleteCart,
     setAdress,
     setTotalPrice,
-    setErrors
+    setErrors,
+    accessOrder
 } = cartSlice.actions;
 export default cartSlice;
