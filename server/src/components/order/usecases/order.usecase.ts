@@ -26,15 +26,16 @@ export class OrderUsecase {
     ) {
         this.validationCountService.validate(cart);
 
-        const orderResult = await this.orderService.create(cart, orderInfo);
+        const orderNumber = await this.orderService.create(cart, orderInfo);
 
         await this.orderRepository.create(
             userId,
-            await this.cartRepository.calc(userId)
+            await this.cartRepository.calc(userId),
+            orderNumber
         );
 
         await this.cartModel.deleteMany({ user: userId });
 
-        return new OrderEntity(orderResult);
+        return new OrderEntity(orderNumber);
     }
 }

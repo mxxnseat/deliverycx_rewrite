@@ -9,7 +9,9 @@ import { Types } from "mongoose";
 import { CartClass } from "./cart.model";
 
 class Address {
+    @prop({ type: String })
     public street: string;
+    @prop({ type: Number })
     public home: number;
 
     constructor(street: string, home: number) {
@@ -35,7 +37,7 @@ export class UserClass {
     @prop({ type: Types.ObjectId })
     public selectedOrganization: Types.ObjectId;
 
-    @prop()
+    @prop({ type: Address })
     public address!: Address;
 
     @prop({ ref: () => CartClass })
