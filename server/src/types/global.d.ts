@@ -1,6 +1,7 @@
 type UniqueId = string;
 type ImagePath = string;
 type Token = string;
+type RedirectURI = string | null;
 
 //Iiko responses
 interface OrderInfoIiko {

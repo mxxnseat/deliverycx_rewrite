@@ -21,6 +21,11 @@ import { BaseErrorsFilter } from "src/filters/base.filter";
 import { EmptyCartError } from "../errors/order.error";
 import { BaseError } from "src/common/errors/base.error";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
+import { PaymentService } from "../services/payment/payment.service";
+import {
+    IPaymentWebhookBody,
+    PaymentMethods
+} from "../services/payment/payment.abstract";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -40,7 +45,8 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,
-        private readonly CartRepository: ICartRepository
+        private readonly CartRepository: ICartRepository,
+        private readonly PaymentService: PaymentService
     ) {}
 
     @ApiResponse({
@@ -66,8 +72,39 @@ export class OrderController {
             throw new EmptyCartError();
         }
 
+        const redirectUrl = await this.PaymentService.route(
+            PaymentMethods.CARD
+            // body.paymentMethod
+        );
+
+        if (redirectUrl !== null) {
+            return response.status(301).redirect(redirectUrl);
+        }
+
         const result = await this.OrderUsecase.create(session.user, cart, body);
 
         response.status(200).json(result);
     }
+
+    @Post("webhook")
+    async onlinePay(
+        @Body() body: IPaymentWebhookBody,
+        @Session() session: Record<string, string>
+    ) {
+        if (body.object.status === "succeded") {
+            const cart = await this.CartRepository.getAll(session.user);
+
+            const result = await this.OrderUsecase.create(
+                session.user,
+                cart,
+                body as any
+            );
+        }
+    }
 }
+
+// {"type":"notification","event":"payment.waiting_for_capture","object":{"id":"2185355e-000f-5081-a000-0000000",
+// "status":"waiting_for_capture","paid":true,"amount":{"value":"10.00","currency":"RUB"},"created_at":"2017-09-27T12:07:58.702Z",
+// "expires_at":"2017-11-03T12:08:23.080Z","metadata":{},"payment_method":{"type":"bank_card","id":"2185355e-000f-5081-a000-0000000",
+// "saved":false,"card":{"last4":"1026","expiry_month":"12","expiry_year":"2025","card_type":"Unknown"},"title":"Bank card *1026"},
+// "recipient":{"account_id":"000005","gateway_id":"0000015"}}}
