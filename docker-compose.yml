@@ -19,8 +19,7 @@ services:
           - ./dhparam:/etc/nginx/dhparam
           - ./certbot/conf/:/etc/nginx/ssl/:ro
           - ./certbot/data:/var/www/letsencrypt
-          - ./nginx/logs/access.log:/var/www/logs/nginx-access.log
-          - ./nginx/logs/error.log:/var/www/logs/nginx-error.log
+       
         networks:
           - mongodb_net
     deliverycx_backend:
