@@ -72,13 +72,18 @@ export class OrderController {
             throw new EmptyCartError();
         }
 
-        const redirectUrl = await this.PaymentService.route(
+        const paymentResult = await this.PaymentService.route(
             PaymentMethods.CARD
             // body.paymentMethod
         );
 
-        if (redirectUrl !== null) {
-            return response.status(301).redirect(redirectUrl);
+        console.log(paymentResult);
+
+        if (paymentResult !== null) {
+            console.log("we are redirected");
+            // console.log(paymentResult);
+            return response.status(301).redirect(paymentResult);
+            // return;
         }
 
         const result = await this.OrderUsecase.create(session.user, cart, body);
@@ -86,19 +91,20 @@ export class OrderController {
         response.status(200).json(result);
     }
 
-    @Post("webhook")
+    @Post("yowebhook")
     async onlinePay(
         @Body() body: IPaymentWebhookBody,
         @Session() session: Record<string, string>
     ) {
         if (body.object.status === "succeded") {
-            const cart = await this.CartRepository.getAll(session.user);
+            // const cart = await this.CartRepository.getAll(session.user);
 
-            const result = await this.OrderUsecase.create(
-                session.user,
-                cart,
-                body as any
-            );
+            console.log("create order with orderUsecase");
+            // const result = await this.OrderUsecase.create(
+            //     session.user,
+            //     cart,
+            //     body as any
+            // );
         }
     }
 }
