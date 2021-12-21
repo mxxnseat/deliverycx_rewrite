@@ -7,7 +7,6 @@ import {
     ICapturePayment
 } from "@a2seven/yoo-checkout";
 import { IPaymentWebhookDto } from "../../components/order/dto/paymentWebhook.dto";
-import { createClient, RedisClient } from "redis";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
 import { OrderDTO } from "src/components/order/dto/order.dto";
@@ -63,8 +62,6 @@ export class PaymentService extends IPaymentService {
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<string> {
-        const idempotenceKey = uuidv4();
-
         const { paymentMethod, ...orderInfo } = body;
         const { address, ...rest } = orderInfo;
         const metadata = {
@@ -86,6 +83,7 @@ export class PaymentService extends IPaymentService {
             payment_method_data: {
                 type: "bank_card"
             },
+            capture: false as any,
             confirmation: {
                 type: "redirect",
                 return_url: "test" // Set return url. Will be тест.хинкалыч.рф/order/success
@@ -96,16 +94,7 @@ export class PaymentService extends IPaymentService {
             }
         };
 
-        // const webHookList = await this.checkout.getWebHookList();
-        // console.log(webHookList);
-        const payment = await this.checkout.createPayment(
-            createPayload,
-            idempotenceKey
-        );
-        console.log("payment", payment.id);
-
-        // save key payment.id to redis with value userId;
-        // this.redisClient.set(payment.id, userId);
+        const payment = await this.checkout.createPayment(createPayload);
 
         const redirectUrl = payment.confirmation.confirmation_url;
 
