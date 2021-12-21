@@ -6,8 +6,8 @@ import { OrderController } from "src/components/order/controllers/order.controll
 import { orderProviders } from "src/components/order/providers/order.provider";
 import { OrderRepository } from "src/components/order/repositores/base.repository";
 import { IOrderRepository } from "src/components/order/repositores/interface.repository";
-import { IPaymentService } from "src/components/order/services/payment/payment.abstract";
-import { PaymentService } from "src/components/order/services/payment/payment.service";
+import { IPaymentService } from "src/services/payment/payment.abstract";
+import { PaymentService } from "src/services/payment/payment.service";
 import { ValidationCount } from "src/components/order/services/validationCount/validationCount.service";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
 import { DatabaseModule } from "src/modules/database.module";

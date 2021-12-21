@@ -2,7 +2,7 @@ import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsPhoneNumber, IsObject } from "class-validator";
 import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
-import { PaymentMethods } from "../services/payment/payment.abstract";
+import { PaymentMethods } from "../../../services/payment/payment.abstract";
 
 export class OrderDTO {
     @ApiProperty()

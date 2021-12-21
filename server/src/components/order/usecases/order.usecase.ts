@@ -12,7 +12,6 @@ export class OrderUsecase {
     constructor(
         private readonly orderRepository: IOrderRepository,
         private readonly orderService: IIiko,
-        private readonly validationCountService: ValidationCount,
         private readonly cartRepository: ICartRepository
     ) {}
 
@@ -21,8 +20,6 @@ export class OrderUsecase {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
     ) {
-        this.validationCountService.validate(cart);
-
         const orderNumber = await this.orderService.create(cart, orderInfo);
 
         await this.orderRepository.create(
