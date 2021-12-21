@@ -1,7 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { IPaymentService } from "./payment.abstract";
-
-import { YooCheckout, ICreatePayment } from "@a2seven/yoo-checkout";
+import { v4 as uuidv4 } from "uuid";
+import {
+    YooCheckout,
+    ICreatePayment,
+    ICapturePayment
+} from "@a2seven/yoo-checkout";
+import { IPaymentWebhookDto } from "../../dto/paymentWebhook.dto";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
@@ -11,13 +16,33 @@ export class PaymentService extends IPaymentService {
         super();
 
         this.checkout = new YooCheckout({
-            shopId: "865102",
-            secretKey: "test_ZxNVT_a-d2CPNbTtfSCe522B9K_kUTBnyWD34Wjl_jM"
+            shopId: "866115",
+            secretKey: "test_LT0AumHCI0dRW43iMJ2P8yodIlETm2sZQQb8LG9llQs"
         });
     }
 
+    async captrurePayment(body: IPaymentWebhookDto) {
+        const idempotenceKey = uuidv4();
+        console.log(body);
+
+        const capturePayload: ICapturePayment = {
+            amount: {
+                value: body.object.amount.value,
+                currency: body.object.amount.currency
+            }
+        };
+
+        const payment = await this.checkout.capturePayment(
+            body.object.id,
+            capturePayload,
+            idempotenceKey
+        );
+
+        console.log(payment);
+    }
+
     async byCard(): Promise<string> {
-        const idempotenceKey = "02347fc4-a1f0-49db-807e-f0d67c2ed5a5";
+        const idempotenceKey = uuidv4();
 
         const createPayload: ICreatePayment = {
             amount: {
@@ -33,6 +58,8 @@ export class PaymentService extends IPaymentService {
             }
         };
 
+        // const webHookList = await this.checkout.getWebHookList();
+        // console.log(webHookList);
         const payment = await this.checkout.createPayment(
             createPayload,
             idempotenceKey

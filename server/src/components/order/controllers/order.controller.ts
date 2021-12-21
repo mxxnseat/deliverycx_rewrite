@@ -22,10 +22,7 @@ import { EmptyCartError } from "../errors/order.error";
 import { BaseError } from "src/common/errors/base.error";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../services/payment/payment.service";
-import {
-    IPaymentWebhookBody,
-    PaymentMethods
-} from "../services/payment/payment.abstract";
+import { PaymentMethods } from "../services/payment/payment.abstract";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -81,7 +78,6 @@ export class OrderController {
 
         if (paymentResult !== null) {
             console.log("we are redirected");
-            // console.log(paymentResult);
             return response.status(301).redirect(paymentResult);
             // return;
         }
@@ -89,23 +85,6 @@ export class OrderController {
         const result = await this.OrderUsecase.create(session.user, cart, body);
 
         response.status(200).json(result);
-    }
-
-    @Post("yowebhook")
-    async onlinePay(
-        @Body() body: IPaymentWebhookBody,
-        @Session() session: Record<string, string>
-    ) {
-        if (body.object.status === "succeded") {
-            // const cart = await this.CartRepository.getAll(session.user);
-
-            console.log("create order with orderUsecase");
-            // const result = await this.OrderUsecase.create(
-            //     session.user,
-            //     cart,
-            //     body as any
-            // );
-        }
     }
 }
 

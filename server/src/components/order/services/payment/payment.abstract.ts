@@ -5,9 +5,6 @@ export enum PaymentMethods {
     CARD = "CARD"
 }
 
-export interface IPaymentWebhookBody {
-    object: { status: "waiting_for_capture" | "succeded" };
-}
 
 export abstract class IPaymentService {
     /*
