@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import { IReqCart } from "@types";
-import { CartContext } from "application/components/core/Cart/CartList";
+import { CartContext } from "application/components/core/Cart/CartBasket/CartList";
 import debounce from "lodash.debounce";
 import { useDispatch } from "react-redux";
 import { FC, useCallback, useContext, useEffect, useMemo, useState } from "react";

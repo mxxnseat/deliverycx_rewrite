@@ -40,3 +40,7 @@ export interface IReqCart{
   amount: number,
   price: number
 }
+export interface IPayment{
+  id: string,
+  value: string
+}
