@@ -7,18 +7,7 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     app.set("trust proxy", true);
     app.enableCors({
-        origin: (origin, cb) => {
-            if (
-                [process.env.CLIENT_PATH, "https://yoomoney.ru"].indexOf(
-                    origin
-                ) !== -1 ||
-                !origin
-            ) {
-                cb(null, true);
-            } else {
-                cb(new Error("Not allowed by CORS"));
-            }
-        },
+        origin: [process.env.CLIENT_PATH, "https://yoomoney.ru"],
 
         credentials: true
     });
