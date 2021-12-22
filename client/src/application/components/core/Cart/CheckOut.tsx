@@ -7,7 +7,7 @@ import { ROUTE_APP } from 'application/contstans/route.const';
 import { RootState } from "servises/redux/createStore";
 import HeaderBack from "presentation/viewModel/viewHead/HeaderBack";
 import { useDispatch } from 'react-redux';
-import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
+import { accessOrder, fetchDeleteCart } from "servises/redux/slice/cartSlice";
 
 const CheckOut: FC = (): JSX.Element => {
   const dispatch = useDispatch()
@@ -19,6 +19,7 @@ const CheckOut: FC = (): JSX.Element => {
   
   const handleBacktoShop = () => {
     dispatch(fetchDeleteCart());
+    dispatch(accessOrder())
     history.push(ROUTE_APP.SHOP.SHOP_MAIN)
   }
 
