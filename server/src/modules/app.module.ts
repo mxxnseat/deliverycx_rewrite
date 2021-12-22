@@ -69,6 +69,7 @@ export class AppModule implements NestModule {
                     }),
                     secret: process.env.SESSION_SECRET,
                     resave: true,
+
                     saveUninitialized: false,
                     cookie: {
                         sameSite: true,

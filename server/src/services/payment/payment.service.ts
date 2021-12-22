@@ -13,28 +13,26 @@ import { OrderDTO } from "src/components/order/dto/order.dto";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
-    private checkout: YooCheckout;
-
     constructor(
         private readonly cartRepository: ICartRepository,
         private readonly orderUsecase: OrderUsecase
     ) {
         super();
-
-        this.checkout = new YooCheckout({
-            shopId: "866115",
-            secretKey: "test_LT0AumHCI0dRW43iMJ2P8yodIlETm2sZQQb8LG9llQs"
-        });
     }
 
     async captrurePayment(body: IPaymentWebhookDto) {
+        const checkout = new YooCheckout({
+            shopId: "866115",
+            secretKey: "test_LT0AumHCI0dRW43iMJ2P8yodIlETm2sZQQb8LG9llQs"
+        });
+
         const capturePayload: ICapturePayment = {
             amount: {
                 value: body.object.amount.value,
                 currency: body.object.amount.currency
             }
         };
-        const payment = await this.checkout.capturePayment(
+        const payment = await checkout.capturePayment(
             body.object.id,
             capturePayload,
             body.object.id
@@ -44,7 +42,7 @@ export class PaymentService extends IPaymentService {
             body.object.metadata.userId
         );
 
-        this.orderUsecase.create(body.object.metadata.userId, cart, {
+        await this.orderUsecase.create(body.object.metadata.userId, cart, {
             address: {
                 city: body.object.metadata.address_city,
                 street: body.object.metadata.address_street,
@@ -60,27 +58,14 @@ export class PaymentService extends IPaymentService {
             phone: body.object.metadata.phone,
             paymentMethod: body.object.metadata.paymentMethod
         });
-
-        /*  
-                read body.object.id from body,
-                try found in redis and call orderUsecase
-            */
-
-        // this.redisClient.get(body.object.id, async (err, userId) => {
-        //     const cart = await this.cartRepository.getAll(userId);
-
-        //     // console.log(cart);
-
-        //     // console.log(payment);
-
-        //     /*  TODO:
-        //         transfer ordetInfo throught methods
-        //     */
-        //     this.orderUsecase.create(userId, cart, {} as any);
-        // });
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<string> {
+        const checkout = new YooCheckout({
+            shopId: "866115",
+            secretKey: "test_LT0AumHCI0dRW43iMJ2P8yodIlETm2sZQQb8LG9llQs"
+        });
+
         const { paymentMethod, ...orderInfo } = body;
         const { address, ...rest } = orderInfo;
         const metadata = {
@@ -107,12 +92,12 @@ export class PaymentService extends IPaymentService {
             capture: false as any,
             confirmation: {
                 type: "redirect",
-                return_url: "test" // Set return url. Will be тест.хинкалыч.рф/order/success
+                return_url: "https://тест.хинкалыч.рф/order/success" // Set return url. Will be тест.хинкалыч.рф/order/success
             },
             metadata
         };
 
-        const payment = await this.checkout.createPayment(createPayload);
+        const payment = await checkout.createPayment(createPayload);
 
         const redirectUrl = payment.confirmation.confirmation_url;
 
