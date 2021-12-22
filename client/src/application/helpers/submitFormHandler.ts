@@ -28,7 +28,8 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
                 floor: values.floor
             },
             phone: values.phone,
-            comment: values.comment
+            comment: values.comment,
+            payment_method:values.payment_method
         };
         await store.dispatch(fetchOrderCart(val) as any);
         resolve(true);
