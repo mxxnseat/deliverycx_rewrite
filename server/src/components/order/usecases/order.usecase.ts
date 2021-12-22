@@ -5,7 +5,6 @@ import { IIiko } from "src/services/iiko/iiko.abstract";
 import { OrderDTO } from "../dto/order.dto";
 import { OrderEntity } from "../entities/order.entity";
 import { IOrderRepository } from "../repositores/interface.repository";
-import { ValidationCount } from "../services/validationCount/validationCount.service";
 
 @Injectable()
 export class OrderUsecase {

@@ -40,7 +40,26 @@ export class PaymentService extends IPaymentService {
             body.object.id
         );
 
-        // console.log(body);
+        const cart = await this.cartRepository.getAll(
+            body.object.metadata.userId
+        );
+
+        this.orderUsecase.create(body.object.metadata.userId, cart, {
+            address: {
+                city: body.object.metadata.address_city,
+                street: body.object.metadata.address_street,
+                entrance: body.object.metadata.address_entrance,
+                flat: body.object.metadata.address_flat,
+                floor: body.object.metadata.address_floor,
+                home: body.object.metadata.address_home,
+                intercom: body.object.metadata.address_intercom
+            },
+            comment: body.object.metadata.comment,
+            name: body.object.metadata.name,
+            organization: body.object.metadata.organization,
+            phone: body.object.metadata.phone,
+            paymentMethod: body.object.metadata.paymentMethod
+        });
 
         /*  
                 read body.object.id from body,
@@ -66,13 +85,15 @@ export class PaymentService extends IPaymentService {
         const { address, ...rest } = orderInfo;
         const metadata = {
             ...rest,
+            userId,
             address_city: address.city,
             address_street: address.street,
             address_home: address.home,
             address_entrance: address.entrance,
             address_flat: address.flat,
             address_floor: address.floor,
-            address_intercom: address.intercom
+            address_intercom: address.intercom,
+            paymentMethod
         };
 
         const createPayload: ICreatePayment = {
@@ -88,10 +109,7 @@ export class PaymentService extends IPaymentService {
                 type: "redirect",
                 return_url: "test" // Set return url. Will be тест.хинкалыч.рф/order/success
             },
-            metadata: {
-                ...metadata,
-                user: userId
-            }
+            metadata
         };
 
         const payment = await this.checkout.createPayment(createPayload);
