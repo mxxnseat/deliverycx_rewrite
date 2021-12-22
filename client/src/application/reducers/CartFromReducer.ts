@@ -1,4 +1,4 @@
-import { CartFormMetods } from "application/components/core/Cart/CartMetods";
+import { CartFormMetods } from "application/components/core/Cart/CartForm/CartMetods";
 import { ReducerAction } from ".";
 
 export const initialStateCartForm = {

@@ -1,6 +1,6 @@
-import CartFrom from "application/components/core/Cart/CartForm";
-import { FormBuilderCart } from "../CartFormBuilder";
-import { CartFormMetods } from "../CartMetods";
+import CartFrom from "application/components/core/Cart/CartForm/CartForm";
+import { FormBuilderCart } from "../CartForm/CartFormBuilder";
+import { CartFormMetods } from "../CartForm/CartMetods";
 
 
 const CartDelivery = () => {
