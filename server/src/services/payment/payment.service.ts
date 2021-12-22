@@ -22,8 +22,8 @@ export class PaymentService extends IPaymentService {
 
     async captrurePayment(body: IPaymentWebhookDto) {
         const checkout = new YooCheckout({
-            shopId: "866115",
-            secretKey: "test_LT0AumHCI0dRW43iMJ2P8yodIlETm2sZQQb8LG9llQs"
+            shopId: "866226",
+            secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
         });
 
         const capturePayload: ICapturePayment = {
@@ -62,8 +62,8 @@ export class PaymentService extends IPaymentService {
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<string> {
         const checkout = new YooCheckout({
-            shopId: "866115",
-            secretKey: "test_LT0AumHCI0dRW43iMJ2P8yodIlETm2sZQQb8LG9llQs"
+            shopId: "866226",
+            secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
         });
 
         const { paymentMethod, ...orderInfo } = body;
