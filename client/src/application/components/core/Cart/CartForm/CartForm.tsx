@@ -3,19 +3,20 @@
 import { IInitialValues, ISubmitData } from "@types";
 import submitHandler from "application/helpers/submitFormHandler";
 import schema from "application/helpers/validationSchema";
-import { Field, useFormik, FormikProvider } from "formik";
+import { useFormik, FormikProvider } from "formik";
 import { debounce } from "lodash";
 import { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "servises/redux/createStore";
-import { FormBuilder, FormWrapper } from "./FormWrapper";
 import { useDispatch } from 'react-redux';
 import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 import { useEffect } from 'react';
-import React from "react";
-import FromPopUp from "./FromPopUp";
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
+import { adapterComponentUseCase } from 'adapters/adapterComponents';
+import { useCartForm } from "domain/use-case/useCaseCart";
+import { FormBuilder } from "application/components/common/Forms";
+import FromPopUp from "application/components/common/Forms/FromPopUp";
 
 
 type IProps = {
@@ -58,6 +59,11 @@ const CartFrom: FC<IProps> = ({ builder }) => {
 
   const [payment, setPayment] = useState(paymentMethods[0]);
   const [times, setTimes] = useState<object>(timesArray[0]);
+  const useCaseForm = adapterComponentUseCase(useCartForm)
+  const { stateForm } = useCaseForm.data
+  console.log('form',stateForm)
+  
+  
   const formik = useFormik({
     initialValues,
     validationSchema: schema,
@@ -65,7 +71,7 @@ const CartFrom: FC<IProps> = ({ builder }) => {
       submitHandler<ISubmitData>(
         {
           ...values,
-          payment,
+          payment_method:stateForm.payment.id,
           times,
           city: city.name,
         },
@@ -73,7 +79,7 @@ const CartFrom: FC<IProps> = ({ builder }) => {
       );
     },
   });
-  const formWrapper = new FormBuilder(formik);
+  const formWrapper = new FormBuilder(formik,useCaseForm);
   
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const debounceClearHandler = debounce(() => {

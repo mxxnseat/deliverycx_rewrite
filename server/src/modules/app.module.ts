@@ -16,6 +16,7 @@ import * as RedisStore from "connect-redis";
 import * as session from "express-session";
 import * as path from "path";
 import { createClient } from "redis";
+import { WebhookModule } from "src/ioc/webhook.module";
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -31,7 +32,8 @@ import { createClient } from "redis";
         UserModule,
         CartModule,
         OrderModule,
-        FavoriteModule
+        FavoriteModule,
+        WebhookModule
     ],
     providers: [
         {
@@ -67,6 +69,7 @@ export class AppModule implements NestModule {
                     }),
                     secret: process.env.SESSION_SECRET,
                     resave: true,
+
                     saveUninitialized: false,
                     cookie: {
                         sameSite: true,

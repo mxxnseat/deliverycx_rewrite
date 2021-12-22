@@ -21,6 +21,9 @@ import { BaseErrorsFilter } from "src/filters/base.filter";
 import { EmptyCartError } from "../errors/order.error";
 import { BaseError } from "src/common/errors/base.error";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
+import { PaymentService } from "../../../services/payment/payment.service";
+import { PaymentMethods } from "../../../services/payment/payment.abstract";
+import { ValidationCount } from "../services/validationCount/validationCount.service";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -40,7 +43,9 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,
-        private readonly CartRepository: ICartRepository
+        private readonly CartRepository: ICartRepository,
+        private readonly PaymentService: PaymentService,
+        private readonly validationCountService: ValidationCount
     ) {}
 
     @ApiResponse({
@@ -64,6 +69,19 @@ export class OrderController {
 
         if (!cart.length) {
             throw new EmptyCartError();
+        }
+
+        this.validationCountService.validate(cart);
+
+        const paymentResult = await this.PaymentService.route(
+            body,
+            session.user
+        );
+
+        console.log(paymentResult);
+
+        if (paymentResult !== null) {
+            return response.status(301).redirect(paymentResult);
         }
 
         const result = await this.OrderUsecase.create(session.user, cart, body);

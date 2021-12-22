@@ -1,6 +1,6 @@
 import CartChoise from "application/components/core/Cart/CartChoice";
-import CartList from "application/components/core/Cart/CartList";
-import CartTotal from "application/components/core/Cart/CartTotal";
+import CartList from "application/components/core/Cart/CartBasket/CartList";
+import CartTotal from "application/components/core/Cart/CartBasket/CartTotal";
 import CartHeader from "presentation/viewModel/viewCart/CartHeader";
 import HeaderBack from "presentation/viewModel/viewHead/HeaderBack";
 import { FC, ReactNode } from "react";
