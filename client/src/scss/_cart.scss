@@ -275,6 +275,10 @@
             }
         }
     }
+    .addnew_cart{
+        background-color: #EFEFEF;
+        padding: 10px 0;
+    }
     .checkout_box {
         height: 100vh;
         background: url("../assets/img/starik.png") right bottom no-repeat;
@@ -449,6 +453,7 @@
     border-bottom-left-radius: 0;
     box-shadow: -1.45153px -30.966px 60px rgba(0, 0, 0, 0.25), -0.559108px -11.9276px 19.1111px rgba(0, 0, 0, 0.151852), -0.118273px -2.52316px 4.88889px rgba(0, 0, 0, 0.0981481);
     z-index: 999;
+    animation: 0.2s show ease;
     &_box{
         position: relative;
         padding-top: 35px;
@@ -468,6 +473,7 @@
             margin-top: 20px;
             margin-bottom: 10px;
             font-family: sf-ui-bold;
+            cursor: pointer;
             span{
                 color:  #333333;
                 font-size: 17px;
@@ -487,16 +493,23 @@
             padding-top: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid #CCCCCC;
+            svg{
+                fill:#333333   
+            }
             &:last-child{
                  border-bottom:none
             } 
         }
-        .active{
-            color:#8D191D;
-            .item_ok{
-                float: right;
+        .active_item{
+            svg{
+               fill:#8D191D 
+            }
+            .popupFixCart_box_item__text{
+                color:#8D191D;
             }
         }
+        
+        
         &_item__icon{
             display: inline-block;
             margin-right: 20px;
@@ -510,6 +523,10 @@
         }
     }
 }
+@keyframes show {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
 @media only screen and (max-width: 560px) and (orientation: portrait) {
     .mapsPopup {
