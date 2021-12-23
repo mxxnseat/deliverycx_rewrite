@@ -13,17 +13,23 @@ import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
-import { adapterComponentUseCase } from 'adapters/adapterComponents';
+import { adapterComponentUseCase, TadapterCaseCallback } from 'adapters/adapterComponents';
 import { useCartForm } from "domain/use-case/useCaseCart";
 import { FormBuilder } from "application/components/common/Forms";
-import FromPopUp from "application/components/common/Forms/FromPopUp";
+import CartModals from "../CartModals/CartModals";
+import React from "react";
 
 
 type IProps = {
-  builder:any
+  builder: any
+  paths:string
 }
-
-const CartFrom: FC<IProps> = ({ builder }) => {
+export const CartFormContext = React.createContext<TadapterCaseCallback>({
+  data: {},
+  handlers: {},
+  status:{}
+});
+const CartFrom: FC<IProps> = ({ builder,paths }) => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { isVerify, ...user } = useSelector(
@@ -59,9 +65,9 @@ const CartFrom: FC<IProps> = ({ builder }) => {
 
   const [payment, setPayment] = useState(paymentMethods[0]);
   const [times, setTimes] = useState<object>(timesArray[0]);
-  const useCaseForm = adapterComponentUseCase(useCartForm)
+  const useCaseForm = adapterComponentUseCase(useCartForm,paths)
   const { stateForm } = useCaseForm.data
-  console.log('form',stateForm)
+  
   
   
   const formik = useFormik({
@@ -131,6 +137,9 @@ const CartFrom: FC<IProps> = ({ builder }) => {
               Заказать
             </button>
           </div>
+          <CartFormContext.Provider value={useCaseForm}>
+            <CartModals paths={paths} />
+          </CartFormContext.Provider>
           
         </div>
       </form>

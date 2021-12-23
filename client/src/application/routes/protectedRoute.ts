@@ -16,7 +16,7 @@ const protectedRoutes: IRoute[] = [
     component: lazy(() => import('presentation/layout/Shop/ShopCardLayout'))
   },
   {
-    exact: true,
+    exact: false,
     path: ROUTE_APP.CART.CART_DELIVERY,
     component: CartDelivery,
     layout:lazy(() => import('presentation/layout/Cart/CartLayout'))
