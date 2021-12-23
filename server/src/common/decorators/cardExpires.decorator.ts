@@ -10,7 +10,7 @@ export function IsCardExpires(
 ) {
     return function (object: Object, propertyName: string) {
         registerDecorator({
-            name: "IsMongoIdObject",
+            name: "IsCardExpires",
             target: object.constructor,
             propertyName: propertyName,
             constraints: [],
