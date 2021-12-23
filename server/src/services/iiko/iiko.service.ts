@@ -58,7 +58,8 @@ export class IikoService implements IIiko {
                             name: cartEl.getProductName,
                             amount: cartEl.getAmount
                         };
-                    })
+                    }),
+                    comment: orderInfo.comment
                 }
             }
         );

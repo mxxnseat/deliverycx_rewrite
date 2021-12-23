@@ -49,4 +49,7 @@ export class OrderDTO {
         enum: PaymentMethods
     })
     paymentMethod: PaymentMethods;
+
+    @ApiProperty()
+    card: UniqueId;
 }

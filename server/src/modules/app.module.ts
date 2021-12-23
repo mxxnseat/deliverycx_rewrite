@@ -17,6 +17,8 @@ import * as session from "express-session";
 import * as path from "path";
 import { createClient } from "redis";
 import { WebhookModule } from "src/ioc/webhook.module";
+import { CardModule } from "src/ioc/card.module";
+
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -33,7 +35,8 @@ import { WebhookModule } from "src/ioc/webhook.module";
         CartModule,
         OrderModule,
         FavoriteModule,
-        WebhookModule
+        WebhookModule,
+        CardModule
     ],
     providers: [
         {

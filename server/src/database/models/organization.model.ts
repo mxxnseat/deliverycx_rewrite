@@ -39,6 +39,13 @@ export class OrganizationClass {
 
     @prop()
     public workTime!: string;
+
+    @prop({ type: () => Object })
+    public yopay!: {
+        isActive: boolean;
+        shopId: string;
+        token: string;
+    };
 }
 
 export const OrganizationSchema = buildSchema(OrganizationClass);

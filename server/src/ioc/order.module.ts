@@ -13,6 +13,7 @@ import { OrderUsecase } from "src/components/order/usecases/order.usecase";
 import { DatabaseModule } from "src/modules/database.module";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
+import { organizationProviders } from "src/components/organization/providers/organization.provider";
 
 @Module({
     imports: [DatabaseModule],

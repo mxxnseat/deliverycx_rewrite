@@ -81,7 +81,7 @@ export class OrderController {
         console.log(paymentResult);
 
         if (paymentResult !== null) {
-            return response.status(301).redirect(paymentResult);
+            return response.status(200).json(paymentResult);
         }
 
         const result = await this.OrderUsecase.create(session.user, cart, body);
