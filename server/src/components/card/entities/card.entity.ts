@@ -13,8 +13,8 @@ export class CardEntity {
 
     constructor(
         id: UniqueId,
-        expiresMonth: number,
-        expiresYear: number,
+        expiresMonth: string,
+        expiresYear: string,
         number: string,
         cardholder: string = "unknown"
     ) {

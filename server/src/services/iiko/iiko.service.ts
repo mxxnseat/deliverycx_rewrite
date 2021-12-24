@@ -71,4 +71,49 @@ export class IikoService implements IIiko {
 
         return orderResponseInfo.number;
     }
+
+    /*
+        check opportunity delivery
+    */
+    async check(cart: Array<CartEntity>, orderInfo: OrderDTO) {
+        const token = await this.getToken();
+        const requestString = `${process.env.SERVICE_URL}/api/0/orders/checkCreate?access_token=${token}`;
+
+        const organization = await OrganizationModel.findById(
+            orderInfo.organization
+        );
+
+        const { data } = await axios.post<OrderCheckCreationResult>(
+            requestString,
+            {
+                organization: organization.id,
+                customer: {
+                    name: orderInfo.name,
+                    phone: orderInfo.phone
+                },
+                order: {
+                    phone: orderInfo.phone,
+                    address: {
+                        city: orderInfo.address.city,
+                        street: orderInfo.address.street,
+                        home: orderInfo.address.home,
+                        apartament: orderInfo.address.flat,
+                        entrance: orderInfo.address.entrance,
+                        floor: orderInfo.address.floor,
+                        doorphone: orderInfo.address.intercom
+                    },
+                    items: cart.map((cartEl) => {
+                        return {
+                            id: cartEl.getProductId,
+                            name: cartEl.getProductName,
+                            amount: cartEl.getAmount
+                        };
+                    }),
+                    comment: orderInfo.comment
+                }
+            }
+        );
+
+        return data.resultState;
+    }
 }

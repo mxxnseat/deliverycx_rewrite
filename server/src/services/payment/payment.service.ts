@@ -50,21 +50,18 @@ export class PaymentService extends IPaymentService {
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
-        // const organization = await OrganizationModel.findById(
-        //     body.organization
-        // );
+        const organization = await OrganizationModel.findById(
+            body.organization
+        );
 
-        // const checkout = new YooCheckout({
-        //     shopId: organization.yopay.shopId,
-        //     secretKey: organization.yopay.token
-        // });
+        if (!organization.yopay.isActive) {
+            throw new PaymentError("Заведение не поддерживает оплату картой");
+        }
 
         const checkout = new YooCheckout({
-            shopId: "866226",
-            secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
+            shopId: organization.yopay.shopId,
+            secretKey: organization.yopay.token
         });
-
-        const cart = await this.cartRepository.getAll(userId);
 
         const createPayload: ICreatePayment = {
             amount: {
@@ -75,10 +72,10 @@ export class PaymentService extends IPaymentService {
                 type: "bank_card",
                 card: {
                     cardholder: "unknown",
-                    csc: "222",
-                    expiry_month: "12",
-                    expiry_year: "2029",
-                    number: "4111111111111111"
+                    csc: body.cvv,
+                    expiry_month: body.expires.month,
+                    expiry_year: body.expires.year,
+                    number: body.cardNumber
                 }
             },
             capture: true as any,
@@ -90,13 +87,12 @@ export class PaymentService extends IPaymentService {
 
         const payment = await checkout.createPayment(createPayload);
 
-        if (payment.status === "canceled") {
+        if (payment.status === "succeeded") {
+            const orderResult = await this.orderUsecase.create(userId, body);
+            return orderResult;
+        } else {
             throw new PaymentError("Оплата отменена");
         }
-
-        // console.log(body.comment);
-        const orderResult = await this.orderUsecase.create(userId, cart, body);
-        return orderResult;
     }
 
     _byCash(): null {

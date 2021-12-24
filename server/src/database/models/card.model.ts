@@ -24,12 +24,12 @@ export class CardClass {
     public number: string;
 
     @prop({ type: () => Number })
-    public cvv: number;
+    public cvv: string;
 
     @prop({ type: () => Object })
     public expires: {
-        year: number;
-        month: number;
+        year: string;
+        month: string;
     };
 
     @prop({ type: () => String, default: "UNKNOWN" })

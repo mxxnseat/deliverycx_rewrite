@@ -24,17 +24,17 @@ export function IsCardExpires(
                         .split(" ");
 
                     if (year.toString().length === 4) {
-                        year = +year.toString().slice(-2);
+                        year = year.toString().slice(-2);
                     }
 
-                    if (+currentDate[1].slice(-2) > year) {
+                    if (+currentDate[1].slice(-2) > +year) {
                         return false;
                     }
-                    if (month > 12 || month < 1) {
+                    if (+month > 12 || +month < 1) {
                         return false;
                     }
-                    if (year === +currentDate[1].slice(-2)) {
-                        if (month < +currentDate[0]) return false;
+                    if (+year === +currentDate[1].slice(-2)) {
+                        if (+month < +currentDate[0]) return false;
                     }
 
                     return true;

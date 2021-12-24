@@ -14,13 +14,10 @@ export class OrderUsecase {
         private readonly cartRepository: ICartRepository
     ) {}
 
-    async create(
-        userId: UniqueId,
-        cart: Array<CartEntity>,
-        orderInfo: OrderDTO
-    ) {
-        const orderNumber = await this.orderService.create(cart, orderInfo);
+    async create(userId: UniqueId, orderInfo: OrderDTO) {
+        const cart = await this.cartRepository.getAll(userId);
 
+        const orderNumber = await this.orderService.create(cart, orderInfo);
         await this.orderRepository.create(
             userId,
             await this.cartRepository.calc(userId),
@@ -30,5 +27,13 @@ export class OrderUsecase {
         await this.cartRepository.removeAll(userId);
 
         return new OrderEntity(orderNumber);
+    }
+
+    async checkOrder(userId, orderInfo: OrderDTO) {
+        const cart = await this.cartRepository.getAll(userId);
+
+        const result = await this.orderService.check(cart, orderInfo);
+
+        return result;
     }
 }

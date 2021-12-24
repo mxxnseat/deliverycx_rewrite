@@ -18,12 +18,13 @@ import { OrderDTO } from "../dto/order.dto";
 import { ValidationException } from "src/filters/validation.filter";
 import { OrderEntity } from "../entities/order.entity";
 import { BaseErrorsFilter } from "src/filters/base.filter";
-import { EmptyCartError } from "../errors/order.error";
+import { CannotDeliveryError, EmptyCartError } from "../errors/order.error";
 import { BaseError } from "src/common/errors/base.error";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentMethods } from "../../../services/payment/payment.abstract";
 import { ValidationCount } from "../services/validationCount/validationCount.service";
+import { ResultStateEnum } from "src/services/iiko/enum";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -53,39 +54,56 @@ export class OrderController {
         type: OrderEntity,
         description: "Возращает номер заказа"
     })
-    @ApiResponse({
-        status: 400,
-        type: BaseError,
-        description:
-            "В случае, если пользователь пытается сделать заказ с пустой корзиной"
-    })
     @Post("create")
     async create(
         @Body() body: OrderDTO,
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-        const cart = await this.CartRepository.getAll(session.user);
+        const paymentResult = await this.PaymentService.route(
+            body,
+            session.user
+        );
 
+        if (paymentResult !== null) {
+            return response.status(200).json(paymentResult);
+        }
+
+        const result = await this.OrderUsecase.create(session.user, body);
+
+        response.status(200).json(result);
+    }
+
+    @ApiResponse({
+        status: 200,
+        type: "OK",
+        description: "Возращает ОК в случае если доставка осуществляется"
+    })
+    @ApiResponse({
+        status: 400,
+        type: BaseError,
+        description:
+            "В случае, если пользователь пытается сделать заказ с пустой корзиной"
+    })
+    @Post("check")
+    async checkOrder(
+        @Body() body: OrderDTO,
+        @Session() session: Record<string, string>,
+        @Res() response: Response
+    ) {
+        const cart = await this.CartRepository.getAll(session.user);
         if (!cart.length) {
             throw new EmptyCartError();
         }
 
         this.validationCountService.validate(cart);
 
-        const paymentResult = await this.PaymentService.route(
-            body,
-            session.user
-        );
+        const result = await this.OrderUsecase.checkOrder(session.user, body);
 
-        console.log(paymentResult);
-
-        if (paymentResult !== null) {
-            return response.status(200).json(paymentResult);
+        if (result !== ResultStateEnum.Success) {
+            throw new CannotDeliveryError("Доставка не может быть совершена");
         }
 
-        const result = await this.OrderUsecase.create(session.user, cart, body);
-
-        response.status(200).json(result);
+        response.status(200).json("OK");
     }
 }

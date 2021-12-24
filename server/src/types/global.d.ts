@@ -4,8 +4,8 @@ type Token = string;
 type RedirectURI = string | null;
 
 type ExpiresType = {
-    year: number;
-    month: number;
+    year: string;
+    month: string;
 };
 
 //Iiko responses
@@ -28,4 +28,9 @@ interface OrderInfoIiko {
         hasProblem: boolean;
         problem: string;
     };
+}
+
+interface OrderCheckCreationResult {
+    problem: string;
+    resultState: ResultStateEnum;
 }
