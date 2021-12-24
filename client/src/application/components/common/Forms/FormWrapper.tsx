@@ -5,11 +5,11 @@ import InputMask from "react-input-mask";
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
 import { ReactNode } from 'react';
-import React from "react";
 import FormSelect from "./FormSelect";
 import { IPayment } from "@types";
 
 export interface IWrapper {
+  paymentPopup(): ReactNode
   payment(metods:any):ReactNode
   adress(): ReactNode
   name(): ReactNode
@@ -19,8 +19,20 @@ export interface IWrapper {
 export const FormWrapper = (formik: any,usecase:any): IWrapper => {
   const history = useHistory()
   const { stateForm } = usecase.data
-  const {selectPayment} = usecase.handlers
+  const { selectPayment, choicePayment } = usecase.handlers
+  
   return {
+    paymentPopup() {
+      return (
+        <FormFieldWrapper
+          placeholderIco={require("assets/i/card-red.svg").default}
+          placeholderValue="Оплата"
+          
+        >
+          <div className="adress_fild__address" onClick={choicePayment}>{stateForm.payment.value}</div>
+        </FormFieldWrapper>
+      )
+    },
     payment(paymentsMetod) {
       return (
           <FormFieldWrapper

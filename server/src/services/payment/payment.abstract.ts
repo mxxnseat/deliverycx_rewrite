@@ -1,5 +1,6 @@
 import { BadRequestException } from "@nestjs/common";
 import { OrderDTO } from "src/components/order/dto/order.dto";
+import { OrderEntity } from "src/components/order/entities/order.entity";
 
 export enum PaymentMethods {
     CASH = "CASH",
@@ -12,7 +13,7 @@ export abstract class IPaymentService {
         и вызывает метод для конекретного
         типа оплаты
     */
-    async route(body: OrderDTO, userId: UniqueId): Promise<RedirectURI> {
+    async route(body: OrderDTO, userId: UniqueId): Promise<any> {
         switch (body.paymentMethod) {
             case PaymentMethods.CARD:
                 return await this._byCard(body, userId);
@@ -24,5 +25,5 @@ export abstract class IPaymentService {
     }
 
     abstract _byCash(): null;
-    abstract _byCard(body: OrderDTO, userId: UniqueId): Promise<string>;
+    abstract _byCard(body: OrderDTO, userId: UniqueId): Promise<OrderEntity>;
 }

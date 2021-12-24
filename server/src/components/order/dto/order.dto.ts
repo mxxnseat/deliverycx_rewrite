@@ -1,6 +1,9 @@
 import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsPhoneNumber, IsObject } from "class-validator";
+import { IsPhoneNumber, IsObject, IsOptional } from "class-validator";
+import { IsCardCvv } from "src/common/decorators/cardCvv.decorator";
+import { IsCardExpires } from "src/common/decorators/cardExpires.decorator";
+import { IsCardNumber } from "src/common/decorators/cardNumber.decorator";
 import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 import { PaymentMethods } from "../../../services/payment/payment.abstract";
 
@@ -49,4 +52,32 @@ export class OrderDTO {
         enum: PaymentMethods
     })
     paymentMethod: PaymentMethods;
+
+    @ApiProperty({
+        example: "2200 0000 0000 0000",
+        examples: [
+            "2200 0000 0000 0000",
+            "4111 1111 1111 1111",
+            "2200000000000000",
+            "4111111111111111"
+        ]
+    })
+    @IsCardNumber("", { message: "Не верный формат карты" })
+    @IsOptional()
+    cardNumber?: string;
+
+    @ApiProperty({ example: 777 })
+    @IsCardCvv("", { message: "Не правильный cvv/csv код" })
+    @IsOptional()
+    cvv?: string;
+
+    @ApiProperty({
+        properties: {
+            year: { type: "number", example: 29 },
+            month: { type: "number", example: 12 }
+        }
+    })
+    @IsCardExpires("", { message: "Не верно указана дата" })
+    @IsOptional()
+    expires?: ExpiresType;
 }

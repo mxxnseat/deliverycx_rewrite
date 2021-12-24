@@ -3,6 +3,11 @@ type ImagePath = string;
 type Token = string;
 type RedirectURI = string | null;
 
+type ExpiresType = {
+    year: string;
+    month: string;
+};
+
 //Iiko responses
 interface OrderInfoIiko {
     address: {
@@ -23,4 +28,9 @@ interface OrderInfoIiko {
         hasProblem: boolean;
         problem: string;
     };
+}
+
+interface OrderCheckCreationResult {
+    problem: string;
+    resultState: ResultStateEnum;
 }

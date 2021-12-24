@@ -5,7 +5,8 @@ export class FormBuilderCart {
   static delivery(metods:ICartFormMetods) {
     return (builder:any):IWrapper[] => {
       return [
-        builder.payment(metods.paymentsMetod),
+        builder.paymentPopup(),
+        //builder.payment(metods.paymentsMetod),
         builder.adress(),
         builder.name(),
         builder.phone()

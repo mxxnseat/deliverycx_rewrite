@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { IPaymentService } from "./payment.abstract";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -10,6 +10,10 @@ import { IPaymentWebhookDto } from "../../components/order/dto/paymentWebhook.dt
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
 import { OrderDTO } from "src/components/order/dto/order.dto";
+import { OrganizationModel } from "src/database/models/organization.model";
+import { OrderEntity } from "src/components/order/entities/order.entity";
+import { PaymentError } from "./payment.error";
+import { CartEntity } from "src/components/cart/entities/cart.entity";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
@@ -21,87 +25,74 @@ export class PaymentService extends IPaymentService {
     }
 
     async captrurePayment(body: IPaymentWebhookDto) {
-        const checkout = new YooCheckout({
-            shopId: "866226",
-            secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
-        });
-
-        const capturePayload: ICapturePayment = {
-            amount: {
-                value: body.object.amount.value,
-                currency: body.object.amount.currency
-            }
-        };
-        const payment = await checkout.capturePayment(
-            body.object.id,
-            capturePayload,
-            body.object.id
-        );
-
-        const cart = await this.cartRepository.getAll(
-            body.object.metadata.userId
-        );
-
-        await this.orderUsecase.create(body.object.metadata.userId, cart, {
-            address: {
-                city: body.object.metadata.address_city,
-                street: body.object.metadata.address_street,
-                entrance: body.object.metadata.address_entrance,
-                flat: body.object.metadata.address_flat,
-                floor: body.object.metadata.address_floor,
-                home: body.object.metadata.address_home,
-                intercom: body.object.metadata.address_intercom
-            },
-            comment: body.object.metadata.comment,
-            name: body.object.metadata.name,
-            organization: body.object.metadata.organization,
-            phone: body.object.metadata.phone,
-            paymentMethod: body.object.metadata.paymentMethod
-        });
+        // const organization = await OrganizationModel.findById(
+        //     body.object.metadata.organization
+        // );
+        // const checkout = new YooCheckout({
+        //     shopId: organization.yopay.shopId,
+        //     secretKey: organization.yopay.token
+        // });
+        // const checkout = new YooCheckout({
+        //     shopId: "866226",
+        //     secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
+        // });
+        // const capturePayload: ICapturePayment = {
+        //     amount: {
+        //         value: body.object.amount.value,
+        //         currency: body.object.amount.currency
+        //     }
+        // };
+        // const payment = await checkout.capturePayment(
+        //     body.object.id,
+        //     capturePayload,
+        //     body.object.id
+        // );
     }
 
-    async _byCard(body: OrderDTO, userId: UniqueId): Promise<string> {
-        const checkout = new YooCheckout({
-            shopId: "866226",
-            secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
-        });
+    async _byCard(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
+        const organization = await OrganizationModel.findById(
+            body.organization
+        );
 
-        const { paymentMethod, ...orderInfo } = body;
-        const { address, ...rest } = orderInfo;
-        const metadata = {
-            ...rest,
-            userId,
-            address_city: address.city,
-            address_street: address.street,
-            address_home: address.home,
-            address_entrance: address.entrance,
-            address_flat: address.flat,
-            address_floor: address.floor,
-            address_intercom: address.intercom,
-            paymentMethod
-        };
+        if (!organization.yopay.isActive) {
+            throw new PaymentError("Заведение не поддерживает оплату картой");
+        }
+
+        const checkout = new YooCheckout({
+            shopId: organization.yopay.shopId,
+            secretKey: organization.yopay.token
+        });
 
         const createPayload: ICreatePayment = {
             amount: {
-                value: "50.00",
+                value: (await this.cartRepository.calc(userId)).toString(),
                 currency: "RUB"
             },
             payment_method_data: {
-                type: "bank_card"
+                type: "bank_card",
+                card: {
+                    cardholder: "unknown",
+                    csc: body.cvv,
+                    expiry_month: body.expires.month,
+                    expiry_year: body.expires.year,
+                    number: body.cardNumber
+                }
             },
-            capture: false as any,
+            capture: true as any,
             confirmation: {
                 type: "redirect",
-                return_url: "https://тест.хинкалыч.рф/order/success" // Set return url. Will be тест.хинкалыч.рф/order/success
-            },
-            metadata
+                return_url: "https://тест.хинкалыч.рф/order/success"
+            }
         };
 
         const payment = await checkout.createPayment(createPayload);
 
-        const redirectUrl = payment.confirmation.confirmation_url;
-
-        return redirectUrl;
+        if (payment.status === "succeeded") {
+            const orderResult = await this.orderUsecase.create(userId, body);
+            return orderResult;
+        } else {
+            throw new PaymentError("Оплата отменена");
+        }
     }
 
     _byCash(): null {
