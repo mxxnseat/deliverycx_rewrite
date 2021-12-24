@@ -22,10 +22,9 @@ export class ProductRepository implements IProductRepository {
     ) {}
 
     async getFavorites(userId: UniqueId) {
-        const result = await this.favoriteModel
+        const result = (await this.favoriteModel
             .findOne({ user: userId })
-            .populate("products");
-
+            .populate("products")) || { products: [] };
         return productMapper(
             result.products.map((product: any) => ({
                 ...product.toObject(),
