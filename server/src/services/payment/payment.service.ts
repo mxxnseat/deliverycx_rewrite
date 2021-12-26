@@ -67,18 +67,12 @@ export class PaymentService extends IPaymentService {
                 return_url: "https://тест.хинкалыч.рф/order/success"
             }
         };
-        try {
-            const payment = await checkout.createPayment(createPayload);
-            if (payment.status === "succeeded") {
-                // const orderResult = await this.orderUsecase.create(userId, body);
-                // return orderResult;
-
-                return {} as OrderEntity;
-            } else {
-                throw new PaymentError("Оплата отменена");
-            }
-        } catch (e) {
-            console.log(e);
+        const payment = await checkout.createPayment(createPayload);
+        if (payment.status === "succeeded") {
+            const orderResult = await this.orderUsecase.create(userId, body);
+            return orderResult;
+        } else {
+            throw new PaymentError("Оплата отменена");
         }
     }
 
