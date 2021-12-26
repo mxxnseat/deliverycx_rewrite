@@ -1,9 +1,10 @@
 import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsPhoneNumber, IsObject, IsOptional } from "class-validator";
+import { IsPhoneNumber, IsObject, IsOptional, IsEmail } from "class-validator";
 import { IsCardCvv } from "src/common/decorators/cardCvv.decorator";
 import { IsCardExpires } from "src/common/decorators/cardExpires.decorator";
 import { IsCardNumber } from "src/common/decorators/cardNumber.decorator";
+import { prepareYear } from "src/common/decorators/expiresYear.decorator";
 import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 import { PaymentMethods } from "../../../services/payment/payment.abstract";
 
@@ -79,5 +80,10 @@ export class OrderDTO {
     })
     @IsCardExpires("", { message: "Не верно указана дата" })
     @IsOptional()
+    @prepareYear()
     expires?: ExpiresType;
+
+    @ApiProperty()
+    @IsEmail({ message: "Не корректный e-mail" })
+    email?: string;
 }

@@ -25,6 +25,7 @@ export class ProductRepository implements IProductRepository {
         const result = (await this.favoriteModel
             .findOne({ user: userId })
             .populate("products")) || { products: [] };
+
         return productMapper(
             result.products.map((product: any) => ({
                 ...product.toObject(),

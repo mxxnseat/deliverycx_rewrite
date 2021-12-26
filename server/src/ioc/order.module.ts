@@ -14,6 +14,7 @@ import { DatabaseModule } from "src/modules/database.module";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { organizationProviders } from "src/components/organization/providers/organization.provider";
+import { MailService } from "src/services/mail/mail.service";
 
 @Module({
     imports: [DatabaseModule],
@@ -38,7 +39,8 @@ import { organizationProviders } from "src/components/organization/providers/org
             useClass: ValidationCount
         },
         ...cartProviders,
-        ...orderProviders
+        ...orderProviders,
+        MailService
     ]
 })
 export class OrderModule {}

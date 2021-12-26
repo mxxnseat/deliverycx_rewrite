@@ -13,40 +13,20 @@ import { OrderDTO } from "src/components/order/dto/order.dto";
 import { OrganizationModel } from "src/database/models/organization.model";
 import { OrderEntity } from "src/components/order/entities/order.entity";
 import { PaymentError } from "./payment.error";
-import { CartEntity } from "src/components/cart/entities/cart.entity";
+import { MailService } from "../mail/mail.service";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
     constructor(
         private readonly cartRepository: ICartRepository,
-        private readonly orderUsecase: OrderUsecase
+        private readonly orderUsecase: OrderUsecase,
+        private readonly mailService: MailService
     ) {
         super();
     }
 
     async captrurePayment(body: IPaymentWebhookDto) {
-        // const organization = await OrganizationModel.findById(
-        //     body.object.metadata.organization
-        // );
-        // const checkout = new YooCheckout({
-        //     shopId: organization.yopay.shopId,
-        //     secretKey: organization.yopay.token
-        // });
-        // const checkout = new YooCheckout({
-        //     shopId: "866226",
-        //     secretKey: "test_gFszEGngAoFqiWaJGd-YxRzAg5TPc2BkbB4vUO586jM"
-        // });
-        // const capturePayload: ICapturePayment = {
-        //     amount: {
-        //         value: body.object.amount.value,
-        //         currency: body.object.amount.currency
-        //     }
-        // };
-        // const payment = await checkout.capturePayment(
-        //     body.object.id,
-        //     capturePayload,
-        //     body.object.id
-        // );
+        this.mailService.sendMail(body.object.metadata.email);
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
@@ -78,20 +58,27 @@ export class PaymentService extends IPaymentService {
                     number: body.cardNumber
                 }
             },
+            metadata: {
+                email: body.email
+            },
             capture: true as any,
             confirmation: {
                 type: "redirect",
                 return_url: "https://тест.хинкалыч.рф/order/success"
             }
         };
+        try {
+            const payment = await checkout.createPayment(createPayload);
+            if (payment.status === "succeeded") {
+                // const orderResult = await this.orderUsecase.create(userId, body);
+                // return orderResult;
 
-        const payment = await checkout.createPayment(createPayload);
-
-        if (payment.status === "succeeded") {
-            const orderResult = await this.orderUsecase.create(userId, body);
-            return orderResult;
-        } else {
-            throw new PaymentError("Оплата отменена");
+                return {} as OrderEntity;
+            } else {
+                throw new PaymentError("Оплата отменена");
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
