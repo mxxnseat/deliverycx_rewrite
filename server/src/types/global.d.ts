@@ -2,6 +2,7 @@ type UniqueId = string;
 type ImagePath = string;
 type Token = string;
 type RedirectURI = string | null;
+type Email = string;
 
 type ExpiresType = {
     year: string;

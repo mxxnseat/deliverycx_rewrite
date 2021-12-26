@@ -24,7 +24,7 @@ export class WebhookController {
         @Res() response: Response
     ) {
         console.log(body.object.status + " - " + body.object.id);
-        if (body.object.status === "succeded") {
+        if (body.object.status === "succeeded") {
             await this.PaymentService.captrurePayment(body);
         }
 

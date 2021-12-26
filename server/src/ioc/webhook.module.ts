@@ -10,6 +10,7 @@ import { OrderRepository } from "src/components/order/repositores/base.repositor
 import { orderProviders } from "src/components/order/providers/order.provider";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
+import { MailService } from "src/services/mail/mail.service";
 
 @Module({
     imports: [DatabaseModule],
@@ -32,7 +33,8 @@ import { IikoService } from "src/services/iiko/iiko.service";
             useClass: IikoService
         },
         ...orderProviders,
-        OrderUsecase
+        OrderUsecase,
+        MailService
     ]
 })
 export class WebhookModule {}
