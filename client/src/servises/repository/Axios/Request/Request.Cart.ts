@@ -63,6 +63,10 @@ class RequestCart extends ApiSuper{
     return this.request<[]>('/cart/deleteAll')
   }
   @methods('post')
+  OrderCheckCart(body:any) {
+    return this.request<ReqCart.orderCreate>('/order/check')
+  }
+  @methods('post')
   OrderCart(body:any) {
     return this.request<ReqCart.orderCreate>('/order/create')
   }

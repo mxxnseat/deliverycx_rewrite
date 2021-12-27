@@ -9,6 +9,7 @@ import CartEntities from "domain/entities/CartEntities/Cart.entities";
 import { RequestCart } from "servises/repository/Axios/Request";
 import { RTKCart } from "servises/repository/RTK/RTKCart";
 import { AppDispatch, RootState } from "../createStore";
+import { actionPaymentAccsess, actionPaymentReady } from "./bankCardSlice";
 
 const cartAdapter = createEntityAdapter<IReqCart>({
     selectId: (product) => product.id
@@ -101,14 +102,19 @@ export const fetchOrderCart = createAsyncThunk(
     "cart/order",
     async (value: any, { dispatch, rejectWithValue }) => {
         try {
-            const request = await RequestCart.OrderCart(value);
-            return request.data.number;
+            const request = await RequestCart.OrderCheckCart(value);
+            if (request.data && request.status === 200) {
+                const order = await RequestCart.OrderCart(value);
+                dispatch(actionPaymentAccsess())
+                return order.data.number;
+            }
         } catch (error: any) {
             // Ошибка валидации по количеству
+            dispatch(actionPaymentReady(false))
             if (error.response.status === 422) {
                 dispatch(setErrors(error.response.data));
             } else {
-                return rejectWithValue(error.response.data);
+                return rejectWithValue(error.response.data)
             }
         }
     }
@@ -136,15 +142,15 @@ const cartSlice = createSlice({
             state.orderNumber = null
             state.orderError = {}
             state.address = ''
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchOrderCart.fulfilled, (state, action) => {
             state.orderNumber = action.payload;
         }),
-            builder.addCase(fetchOrderCart.rejected, (state) => {
+            builder.addCase(fetchOrderCart.rejected, (state,action) => {
                 state.orderError = {
-                    error: "что-то пошло не так",
+                    error: action.payload,
                     status: 500
                 };
             });

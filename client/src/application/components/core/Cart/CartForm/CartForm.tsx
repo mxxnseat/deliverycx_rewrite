@@ -18,6 +18,7 @@ import { useCartForm } from "domain/use-case/useCaseCart";
 import { FormBuilder } from "application/components/common/Forms";
 import CartModals from "../CartModals/CartModals";
 import React from "react";
+import { CartFormMetods } from "./CartMetods";
 
 
 type IProps = {
@@ -66,23 +67,30 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
   const [payment, setPayment] = useState(paymentMethods[0]);
   const [times, setTimes] = useState<object>(timesArray[0]);
   const useCaseForm = adapterComponentUseCase(useCartForm,paths)
-  const { stateForm } = useCaseForm.data
-  
+  const {paymentMetod,paymentOrder } = useCaseForm.data
+  const {paymentReady} = useCaseForm.status
   
   
   const formik = useFormik({
     initialValues,
     validationSchema: schema,
     onSubmit: (values, meta) => {
-      submitHandler<ISubmitData>(
-        {
-          ...values,
-          payment_method:stateForm.payment.id,
-          times,
-          city: city.name,
-        },
-        meta
-      );
+      
+      if (!paymentReady && paymentMetod.id === CartFormMetods.paymentsMetod[1].id) {
+        history.push(paths + '/card')
+      } else {
+        submitHandler<ISubmitData>(
+          {
+            ...values,
+            payment_method: paymentMetod.id,
+            paymentOrderCard:paymentOrder,
+            times,
+            city: city.name,
+          },
+          meta
+        );
+      }
+      
     },
   });
   const formWrapper = new FormBuilder(formik,useCaseForm);
@@ -117,8 +125,18 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
 
           {orderError.status === 500 && (
             <div className="server-error">
-              Что-то пошло не так. Для подтверждения Вашего заказа, пожалуйста
-              <b>нажмите кнопку «Заказать» еще раз.</b>
+              Что-то пошло не так
+              {
+                orderError.error.errors &&
+                Array.isArray(orderError.error.errors)
+                  ? orderError.error.errors.map((val: string) => {
+                    return (
+                      <li key={val}>{val}</li>
+                    )
+                  })
+                  : <li>{orderError.error.errors}</li>
+              }
+              
             </div>
           )}
 
@@ -132,7 +150,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
             <button
               type="submit"
               className="cart__order-btn btn"
-              disabled={formik.isSubmitting}
+              
             >
               Заказать
             </button>

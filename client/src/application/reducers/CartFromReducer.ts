@@ -1,24 +1,41 @@
+/* eslint-disable no-case-declarations */
 import { CartFormMetods } from "application/components/core/Cart/CartForm/CartMetods";
 import { ReducerAction } from ".";
 
 export const initialStateCartForm = {
-  payment:CartFormMetods.paymentsMetod[0],
+  paymentOrder:{
+    cardNumber:"",
+    cvv: "",
+    expires: {
+      year: 0,
+      month: 0
+    }
+  },
+  paymentReady:true
 };
 type typeinitialState = typeof initialStateCartForm
 
 export enum ReducerActionTypePoints {
-  selectPayment
+  selectPayment,
+  actionPaymentOrder
 }
 
 
 export function CartFormReducer(state: typeinitialState, action: ReducerAction<ReducerActionTypePoints>) {
   switch (action.type) {
     case ReducerActionTypePoints.selectPayment:
+      const paymentReady = action.payload.id === CartFormMetods.paymentsMetod[1].id ? false : true
+      console.log('red',paymentReady)
       return {
         ...state,
-        payment: action.payload
+        paymentReady
       };
-  
+    case ReducerActionTypePoints.actionPaymentOrder:
+      return {
+        ...state,
+        paymentOrder: action.payload,
+        paymentReady:true
+      };
     
     default:
       return state

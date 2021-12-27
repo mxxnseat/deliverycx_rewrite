@@ -4,7 +4,7 @@ export interface ICart{
   totalPrice: number
   address: string
   orderError: ICheckoutError
-  orderNumber:ICheckout
+  orderNumber: ICheckout
 }
 
 export interface ICheckout {
@@ -39,8 +39,4 @@ export interface IReqCart{
   productId: string,
   amount: number,
   price: number
-}
-export interface IPayment{
-  id: string,
-  value: string
 }
