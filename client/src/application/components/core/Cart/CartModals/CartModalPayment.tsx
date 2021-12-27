@@ -8,12 +8,12 @@ import { CartFormMetods } from "../CartForm/CartMetods";
 const CartModalPayment = () => {
   const history = useHistory()
   const useCaseForm = useContext(CartFormContext)
-  const { stateForm: { payment } } = useCaseForm.data
+  const { paymentMetod } = useCaseForm.data
   const { selectPayment } = useCaseForm.handlers
   const paymentMetods = CartFormMetods.paymentsMetod
 
   const activeIcons = (active:string) => {
-    return  cn("popupFixCart_box__list-item", { active_item: active === payment.id });
+    return  cn("popupFixCart_box__list-item", { active_item: active === paymentMetod.id });
   }
   
   

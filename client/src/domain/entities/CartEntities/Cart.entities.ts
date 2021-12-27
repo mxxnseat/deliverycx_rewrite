@@ -1,4 +1,5 @@
 import { ICart } from "@types"
+import { CartFormMetods } from "application/components/core/Cart/CartForm/CartMetods"
 import Entities from "../Entities"
 
 export type ICartEntities = ICart
@@ -17,7 +18,7 @@ class CartEntities extends Entities<ICartEntities>{
       totalPrice: this.totalPrice,
       address: this.address,
       orderError: this.orderError,
-      orderNumber:this.orderNumber
+      orderNumber: this.orderNumber
     }
   }
 

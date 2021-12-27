@@ -275,10 +275,7 @@
             }
         }
     }
-    .addnew_cart{
-        background-color: #EFEFEF;
-        padding: 10px 0;
-    }
+    
     .checkout_box {
         height: 100vh;
         background: url("../assets/img/starik.png") right bottom no-repeat;
@@ -474,11 +471,14 @@
             margin-bottom: 10px;
             font-family: sf-ui-bold;
             cursor: pointer;
+            img{
+                margin-right: 25px;
+            }
             span{
                 color:  #333333;
                 font-size: 17px;
                 font-weight: bold;
-                margin-left: 25px;
+             
             }
         }
         &__list{

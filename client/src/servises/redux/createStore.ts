@@ -16,6 +16,7 @@ import ShopSlice from './slice/shopSlice';
 import { CATEGORIES_API_REDUCER_KEY, RTKCategories } from 'servises/repository/RTK/RTKCategories';
 import cartSlice, { fetchAllCart } from './slice/cartSlice';
 import { CART_API_REDUCER_KEY, RTKCart } from 'servises/repository/RTK/RTKCart';
+import bankCardSlice from './slice/bankCardSlice';
 
 const history = createBrowserHistory()
 const persistConfig = {
@@ -29,7 +30,8 @@ const persistConfig = {
     CART_API_REDUCER_KEY,
     profileSlice.name,
     ShopSlice.name,
-    cartSlice.name
+    cartSlice.name,
+    bankCardSlice.name
   ],
   transforms: [
     createTransform(
@@ -58,8 +60,8 @@ const createRootReducer = combineReducers({
   [profileSlice.name]:profileSlice.reducer,
   [locationSlice.name]: locationSlice.reducer,
   [ShopSlice.name]: ShopSlice.reducer,
-  [cartSlice.name]:cartSlice.reducer
-  
+  [cartSlice.name]:cartSlice.reducer,
+  [bankCardSlice.name]:bankCardSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);

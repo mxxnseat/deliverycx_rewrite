@@ -7,6 +7,7 @@ import { ROUTE_APP } from 'application/contstans/route.const';
 import { ReactNode } from 'react';
 import FormSelect from "./FormSelect";
 import { IPayment } from "@types";
+import { CartFormMetods } from "application/components/core/Cart/CartForm/CartMetods";
 
 export interface IWrapper {
   paymentPopup(): ReactNode
@@ -18,18 +19,27 @@ export interface IWrapper {
 }
 export const FormWrapper = (formik: any,usecase:any): IWrapper => {
   const history = useHistory()
-  const { stateForm } = usecase.data
+  const { stateForm,paths,paymentMetod } = usecase.data
   const { selectPayment, choicePayment } = usecase.handlers
-  
   return {
     paymentPopup() {
+      
       return (
         <FormFieldWrapper
           placeholderIco={require("assets/i/card-red.svg").default}
           placeholderValue="Оплата"
-          
+          addfild="addfild"
         >
-          <div className="adress_fild__address" onClick={choicePayment}>{stateForm.payment.value}</div>
+          <div className="adress_fild__address" onClick={choicePayment}>{paymentMetod.value}</div>
+          {
+            //CartFormMetods.paymentsMetod[1].id === stateForm.payment.id
+            false && 
+            <div className="addnew_cart" onClick={() => history.push(paths + '/card') }>
+              <img src={require("assets/i/credit_card.png").default} />
+              <span>Добавить новую карту</span>
+            </div>
+          }
+          
         </FormFieldWrapper>
       )
     },
