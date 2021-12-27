@@ -101,7 +101,9 @@ export class OrderController {
         const result = await this.OrderUsecase.checkOrder(session.user, body);
 
         if (result !== ResultStateEnum.Success) {
-            throw new CannotDeliveryError("Доставка не может быть совершена");
+            throw new CannotDeliveryError(
+                `Доставка не может быть совершена по причине ${result}`
+            );
         }
 
         response.status(200).json("OK");
