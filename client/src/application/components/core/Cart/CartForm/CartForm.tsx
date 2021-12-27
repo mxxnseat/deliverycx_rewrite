@@ -127,6 +127,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
             <div className="server-error">
               Что-то пошло не так
               {
+                orderError.error.errors &&
                 Array.isArray(orderError.error.errors)
                   ? orderError.error.errors.map((val: string) => {
                     return (

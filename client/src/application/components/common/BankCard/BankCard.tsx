@@ -3,8 +3,10 @@ import { adapterComponentUseCase } from "adapters/adapterComponents";
 import { useCarBankCard } from "domain/use-case/useCaseBankCard";
 import InputMask from "react-input-mask";
 import { useRef } from "react";
+import { useHistory } from "react-router-dom";
 
 const BankCard = () => {
+    const history = useHistory()
     const useCaseBankCard = adapterComponentUseCase(useCarBankCard);
     const { inpNumbArr,inpDateArr,inpCvc,payOrderError } = useCaseBankCard.data;
     const { nextStep,handlersPayOrder } = useCaseBankCard.handlers;
@@ -13,10 +15,10 @@ const BankCard = () => {
     const dateStep = nextStep(inpDateArr,2);
 
     return (
-        <div className="popupFixCart">
+        <div className="popupFixCart popupToBottCart">
             <div className="popupFixCart_box">
                 <div className="popupFixCart_box__plash"></div>
-                <div className="popupFixCart_box__title">
+                <div className="popupFixCart_box__title" onClick={()=> history.goBack()}>
                     <img
                         src={require("assets/i/arrow_back.svg").default}
                         alt=""

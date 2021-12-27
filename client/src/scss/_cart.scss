@@ -1,3 +1,6 @@
+.cart__form{
+    position: relative;
+}
 .cart {
     min-height: 100vh;
     display: flex;
@@ -437,10 +440,7 @@
     background-color: transparent;
 }
 .popupFixCart{
-    position: fixed;
-    bottom: calc(14vh - 15px);
-    width: 100%;
-    max-width: 375px;
+    
     padding:0 35px 30px 35px;
     margin-left: -20px;
     background-color: #EFEFEF;
@@ -467,8 +467,8 @@
             border-radius: 50px;
         }
         &__title{
-            margin-top: 20px;
-            margin-bottom: 10px;
+            margin-top: 0px;
+            margin-bottom: 20px;
             font-family: sf-ui-bold;
             cursor: pointer;
             img{
@@ -523,6 +523,17 @@
         }
     }
 }
+.popupFixCart{
+    position: fixed;
+    bottom: calc(14vh - 15px);
+    width: 100%;
+    max-width: 375px;
+}
+.popupToBottCart{
+    position: absolute;
+    bottom: 0;
+    width: 360px;
+}
 @keyframes show {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -531,6 +542,9 @@
 @media only screen and (max-width: 560px) and (orientation: portrait) {
     .mapsPopup {
         bottom: 0;
+    }
+    .popupToBottCart{
+        width: 375px;
     }
 }
 @media screen and (max-width: 360px) {
