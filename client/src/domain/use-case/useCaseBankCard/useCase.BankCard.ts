@@ -22,7 +22,6 @@ export function useCarBankCard() {
   
   const useCaseForm = useContext(CartFormContext)
   
-
   const nextStep = (arr: Tref[], limit: number) => (e: any, index: number) => {
     const val = e.target.value
     if (val.length === limit && typeof val === 'string') {
@@ -56,13 +55,12 @@ export function useCarBankCard() {
     const date2 = validateDataCard(getDataCard(inpDateArr[1]), 2)
     const cvc = validateDataCard(getDataCard(inpCvc), 3)
     if (num && date1 && date2 && cvc) {
-      
       const pay = {
         cardNumber:num,
         cvv: cvc,
         expires: {
-          year: Number(date1),
-          month: Number(date2)
+          month: Number(date1),
+          year: Number(date2)
         },
         email:email
       }
@@ -72,7 +70,7 @@ export function useCarBankCard() {
       setPayOrderError(true)
     }
     
-  }, [payOrderError])
+  }, [payOrderError,email])
  
 
   this.data({
