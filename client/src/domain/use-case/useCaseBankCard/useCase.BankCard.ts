@@ -18,6 +18,7 @@ export function useCarBankCard() {
   const inpCvc = useRef<Tref>(null)
 
   const [payOrderError, setPayOrderError] = useState(false)
+  const [email, setEmail] = useState('')
   
   const useCaseForm = useContext(CartFormContext)
   
@@ -62,7 +63,8 @@ export function useCarBankCard() {
         expires: {
           year: Number(date1),
           month: Number(date2)
-        }
+        },
+        email:email
       }
       useCaseForm.handlers.handlPaymentOrder(pay)
       setPayOrderError(false)
@@ -81,7 +83,8 @@ export function useCarBankCard() {
   });
   this.handlers({
     nextStep,
-    handlersPayOrder
+    handlersPayOrder,
+    setEmail
   });
   this.status({});
   }

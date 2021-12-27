@@ -51,12 +51,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
     notCall: false,
   };
   //mocki array
-  const paymentMethods: any = [
-    {
-      id: "4",
-      value: "Наличными курьеру",
-    },
-  ];
+  
   const timesArray: object[] = [
     {
       id: "1",
@@ -64,12 +59,10 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
     },
   ];
 
-  const [payment, setPayment] = useState(paymentMethods[0]);
   const [times, setTimes] = useState<object>(timesArray[0]);
   const useCaseForm = adapterComponentUseCase(useCartForm,paths)
   const {paymentMetod,paymentOrder } = useCaseForm.data
   const {paymentReady} = useCaseForm.status
-  
   
   const formik = useFormik({
     initialValues,
