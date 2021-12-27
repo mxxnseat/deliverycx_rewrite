@@ -9,7 +9,7 @@ const BankCard = () => {
     const history = useHistory()
     const useCaseBankCard = adapterComponentUseCase(useCarBankCard);
     const { inpNumbArr,inpDateArr,inpCvc,payOrderError } = useCaseBankCard.data;
-    const { nextStep,handlersPayOrder } = useCaseBankCard.handlers;
+    const { nextStep,handlersPayOrder,setEmail } = useCaseBankCard.handlers;
     
     const numberStep = nextStep(inpNumbArr,4);
     const dateStep = nextStep(inpDateArr,2);
@@ -128,7 +128,7 @@ const BankCard = () => {
               <span>Эл. почта для чеков</span>
             </div>
             
-            <input type="email" className="bankCard_email" placeholder="Введите e-mail" />
+            <input type="email" className="bankCard_email" onChange={e => setEmail(e.target.value) } placeholder="Введите e-mail" />
             {
                 payOrderError &&
                 <div className="bankCard_error">
