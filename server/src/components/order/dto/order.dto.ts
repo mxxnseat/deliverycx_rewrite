@@ -78,9 +78,9 @@ export class OrderDTO {
             month: { type: "number", example: 12 }
         }
     })
+    @prepareYear()
     @IsCardExpires("", { message: "Не верно указана дата" })
     @IsOptional()
-    @prepareYear()
     expires?: ExpiresType;
 
     @ApiProperty({ required: false })

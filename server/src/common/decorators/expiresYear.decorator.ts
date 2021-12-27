@@ -4,7 +4,7 @@ export function prepareYear() {
         delete target[property];
         Object.defineProperty(target, property, {
             set: (nv: ExpiresType) => {
-                if (nv.year.length === 2) {
+                if (nv.year.toString().length === 2) {
                     nv.year = `20${nv.year}`;
                 }
                 v = {
