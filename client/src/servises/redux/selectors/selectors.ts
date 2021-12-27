@@ -18,7 +18,7 @@ const selectors:Iselectors = {
   city: (state) => state.location.city,
   profile: (state) => state.profile,
   cart: (state) => state.cart,
-  bankcard: (state) => state.bankcard 
+  bankcard: (state) => state.bankcard
   
 }
 export const adapterSelector = new AdapterSelector<Iselectors>(selectors)
