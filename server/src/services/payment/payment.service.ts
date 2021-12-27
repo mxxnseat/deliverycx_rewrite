@@ -26,7 +26,8 @@ export class PaymentService extends IPaymentService {
     }
 
     async captrurePayment(body: IPaymentWebhookDto) {
-        this.mailService.sendMail(body.object.metadata.email);
+        //LOGGER
+        // this.mailService.sendMail(body.object.metadata.email);
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
@@ -34,7 +35,7 @@ export class PaymentService extends IPaymentService {
             body.organization
         );
 
-        if (!organization.yopay.isActive) {
+        if (!organization.yopay?.isActive) {
             throw new PaymentError("Заведение не поддерживает оплату картой");
         }
 
@@ -43,11 +44,29 @@ export class PaymentService extends IPaymentService {
             secretKey: organization.yopay.token
         });
 
+        const amountValue = (await this.cartRepository.calc(userId)).toString();
+        const cart = await this.cartRepository.getAll(userId);
         const createPayload: ICreatePayment = {
             amount: {
-                value: (await this.cartRepository.calc(userId)).toString(),
+                value: amountValue,
                 currency: "RUB"
             },
+            receipt: {
+                customer: {
+                    email: body.email
+                },
+                items: cart.map((cartEl) => {
+                    return {
+                        description: cartEl.getProductName,
+                        quantity: cartEl.getAmount,
+                        amount: {
+                            value: cartEl.getPrice / cartEl.getAmount + ".00",
+                            currency: "RUB"
+                        },
+                        vat_code: cartEl.getAmount
+                    };
+                })
+            } as any,
             payment_method_data: {
                 type: "bank_card",
                 card: {
@@ -70,6 +89,7 @@ export class PaymentService extends IPaymentService {
         const payment = await checkout.createPayment(createPayload);
         if (payment.status === "succeeded") {
             const orderResult = await this.orderUsecase.create(userId, body);
+
             return orderResult;
         } else {
             throw new PaymentError("Оплата отменена");
