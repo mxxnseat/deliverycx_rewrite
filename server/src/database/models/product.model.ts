@@ -9,6 +9,7 @@ import {
 import { Types } from "mongoose";
 import { CategoryClass } from "./category.model";
 import { OrganizationClass } from "./organization.model";
+import { Decimal128 } from "bson";
 
 enum MeasureUnit {
     PIECE = "шт",
@@ -38,7 +39,7 @@ export class ProductClass {
     @prop()
     public additionalInfo!: string;
 
-    @prop()
+    @prop({ type: () => Decimal128 })
     public price!: number;
 
     @prop()
