@@ -83,7 +83,7 @@ export class OrderDTO {
     @prepareYear()
     expires?: ExpiresType;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     @IsEmail({ message: "Не корректный e-mail" })
     email?: string;
 }
