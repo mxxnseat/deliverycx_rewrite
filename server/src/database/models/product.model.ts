@@ -39,7 +39,7 @@ export class ProductClass {
     @prop()
     public additionalInfo!: string;
 
-    @prop({ type: () => Decimal128 })
+    @prop()
     public price!: number;
 
     @prop()
