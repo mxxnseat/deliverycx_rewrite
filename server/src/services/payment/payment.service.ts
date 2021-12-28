@@ -14,13 +14,14 @@ import { OrganizationModel } from "src/database/models/organization.model";
 import { OrderEntity } from "src/components/order/entities/order.entity";
 import { PaymentError } from "./payment.error";
 import { MailService } from "../mail/mail.service";
+import { IDeliveryService } from "../delivery/delivery.abstract";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
     constructor(
         private readonly cartRepository: ICartRepository,
         private readonly orderUsecase: OrderUsecase,
-        private readonly mailService: MailService
+        private readonly DeliveryService: IDeliveryService
     ) {
         super();
     }
@@ -44,28 +45,44 @@ export class PaymentService extends IPaymentService {
             secretKey: organization.yopay.token
         });
 
-        const amountValue = (await this.cartRepository.calc(userId)).toString();
+        const amountValue = await this.cartRepository.calc(userId);
+        const deliveryPrice = await this.DeliveryService.calculatingPrices(
+            userId
+        );
         const cart = await this.cartRepository.getAll(userId);
+
         const createPayload: ICreatePayment = {
             amount: {
-                value: amountValue,
+                value: deliveryPrice.totalPrice.toString() + ".00",
                 currency: "RUB"
             },
             receipt: {
                 customer: {
                     email: body.email
                 },
-                items: cart.map((cartEl) => {
-                    return {
-                        description: cartEl.getProductName,
-                        quantity: cartEl.getAmount,
+                items: [
+                    ...cart.map((cartEl, index) => {
+                        return {
+                            description: cartEl.getProductName,
+                            quantity: cartEl.getAmount + ".00",
+                            amount: {
+                                value:
+                                    cartEl.getPrice / cartEl.getAmount + ".00",
+                                currency: "RUB"
+                            },
+                            vat_code: "1"
+                        };
+                    }),
+                    {
+                        description: "Доставка",
+                        quantity: "1.00",
                         amount: {
-                            value: cartEl.getPrice / cartEl.getAmount + ".00",
+                            value: deliveryPrice.deliveryPrice + ".00",
                             currency: "RUB"
                         },
-                        vat_code: cartEl.getAmount
-                    };
-                })
+                        vat_code: "1"
+                    }
+                ]
             } as any,
             payment_method_data: {
                 type: "bank_card",
@@ -86,6 +103,7 @@ export class PaymentService extends IPaymentService {
                 return_url: "https://тест.хинкалыч.рф/order/success"
             }
         };
+
         const payment = await checkout.createPayment(createPayload);
         if (payment.status === "succeeded") {
             const orderResult = await this.orderUsecase.create(userId, body);
@@ -96,7 +114,9 @@ export class PaymentService extends IPaymentService {
         }
     }
 
-    _byCash(): null {
-        return null;
+    async _byCash(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
+        const result = await this.orderUsecase.create(userId, body);
+
+        return result;
     }
 }

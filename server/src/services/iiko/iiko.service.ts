@@ -4,6 +4,8 @@ import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { BadRequestException, Inject } from "@nestjs/common";
 import { OrganizationModel } from "../../database/models/organization.model";
+import { IDeliveryService } from "../delivery/delivery.abstract";
+import { ICheckResult, MessageResultStateEnum } from "./interfaces";
 
 export class IikoService implements IIiko {
     private async getToken() {
@@ -64,8 +66,6 @@ export class IikoService implements IIiko {
             }
         );
 
-        console.log(orderResponseInfo);
-
         if (orderResponseInfo.problem?.hasProblem)
             throw new BadRequestException(orderResponseInfo?.problem?.problem);
 
@@ -75,7 +75,10 @@ export class IikoService implements IIiko {
     /*
         check opportunity delivery
     */
-    async check(cart: Array<CartEntity>, orderInfo: OrderDTO) {
+    async check(
+        cart: Array<CartEntity>,
+        orderInfo: OrderDTO
+    ): Promise<ICheckResult> {
         const token = await this.getToken();
         const requestString = `${process.env.SERVICE_URL}/api/0/orders/checkCreate?access_token=${token}`;
 
@@ -114,6 +117,9 @@ export class IikoService implements IIiko {
             }
         );
 
-        return data.resultState;
+        return {
+            numState: data.resultState,
+            message: MessageResultStateEnum[`_${data.resultState}`]
+        };
     }
 }

@@ -1,22 +1,23 @@
+import { ErrorResponse } from "@a2seven/yoo-checkout";
 import {
     ArgumentsHost,
     Catch,
     ExceptionFilter,
     HttpException
 } from "@nestjs/common";
+import { AxiosError } from "axios";
 import { Request, Response } from "express";
 
-@Catch()
-export class InternalException implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
+@Catch(ErrorResponse)
+export class PaymentException implements ExceptionFilter {
+    catch(exception: AxiosError, host: ArgumentsHost) {
         const context = host.switchToHttp();
         const request = context.getRequest<Request>();
         const response = context.getResponse<Response>();
-        const status = exception.getStatus ? exception.getStatus() : 500;
 
-        response.status(status).json({
+        response.status(exception.response.status).json({
             path: request.path,
-            errors: exception?.message || "Уууупс что-то пошло не так"
+            errors: exception.response.data
         });
     }
 }

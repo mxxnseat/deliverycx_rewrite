@@ -1,6 +1,6 @@
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
-import { ResultStateEnum } from "./enum";
+import { ICheckResult, ResultStateEnum } from "./interfaces";
 
 export abstract class IIiko {
     abstract create: (
@@ -11,5 +11,5 @@ export abstract class IIiko {
     abstract check: (
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
-    ) => Promise<ResultStateEnum>;
+    ) => Promise<ICheckResult>;
 }

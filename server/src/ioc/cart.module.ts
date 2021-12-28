@@ -5,6 +5,8 @@ import { CartRepository } from "src/components/cart/repositories/base.repository
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { CartUsecase } from "src/components/cart/usecases/cart.usecase";
 import { DatabaseModule } from "src/modules/database.module";
+import { IDeliveryService } from "src/services/delivery/delivery.abstract";
+import { DeliveryService } from "src/services/delivery/delivery.service";
 
 @Module({
     imports: [DatabaseModule],
@@ -14,6 +16,10 @@ import { DatabaseModule } from "src/modules/database.module";
         {
             provide: ICartRepository,
             useClass: CartRepository
+        },
+        {
+            provide: IDeliveryService,
+            useClass: DeliveryService
         },
         ...cartProviders
     ]

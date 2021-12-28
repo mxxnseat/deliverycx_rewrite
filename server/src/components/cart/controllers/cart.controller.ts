@@ -50,7 +50,14 @@ export class CartController {
         schema: {
             properties: {
                 item: { type: "object", example: CartEntity },
-                totalPrice: { type: "number", example: 1200 }
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
             }
         }
     })
@@ -81,7 +88,14 @@ export class CartController {
                     type: "string",
                     example: "61b609abaabff8e544dfecee"
                 },
-                totalPrice: { type: "number", example: 1200 }
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
             }
         },
         description: "Возращает ID удаленного итема"
@@ -126,7 +140,14 @@ export class CartController {
         schema: {
             properties: {
                 item: { type: "object", example: CartEntity },
-                totalPrice: { type: "number", example: 1200 }
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
             }
         }
     })
@@ -152,7 +173,14 @@ export class CartController {
         schema: {
             properties: {
                 cart: { type: "array", example: [] },
-                totalPrice: { type: "number", example: 1200 }
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
             }
         },
         status: 200

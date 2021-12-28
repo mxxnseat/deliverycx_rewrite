@@ -24,7 +24,8 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentMethods } from "../../../services/payment/payment.abstract";
 import { ValidationCount } from "../services/validationCount/validationCount.service";
-import { ResultStateEnum } from "src/services/iiko/enum";
+import { ResultStateEnum } from "src/services/iiko/interfaces";
+import { PaymentException } from "src/filters/payment.filter";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -34,6 +35,7 @@ import { ResultStateEnum } from "src/services/iiko/enum";
 @ApiCookieAuth()
 @Controller("order")
 @UseFilters(new ValidationException())
+@UseFilters(new PaymentException())
 @UsePipes(
     new ValidationPipe({
         transform: true
@@ -65,13 +67,7 @@ export class OrderController {
             session.user
         );
 
-        if (paymentResult !== null) {
-            return response.status(200).json(paymentResult);
-        }
-
-        const result = await this.OrderUsecase.create(session.user, body);
-
-        response.status(200).json(result);
+        response.status(200).json(paymentResult);
     }
 
     @ApiResponse({
@@ -100,9 +96,9 @@ export class OrderController {
 
         const result = await this.OrderUsecase.checkOrder(session.user, body);
 
-        if (result !== ResultStateEnum.Success) {
+        if (result.numState !== ResultStateEnum.Success) {
             throw new CannotDeliveryError(
-                `Доставка не может быть совершена по причине ${result}`
+                `Доставка не может быть совершена по причине ${result.message}`
             );
         }
 

@@ -11,6 +11,8 @@ import { orderProviders } from "src/components/order/providers/order.provider";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { MailService } from "src/services/mail/mail.service";
+import { IDeliveryService } from "src/services/delivery/delivery.abstract";
+import { DeliveryService } from "src/services/delivery/delivery.service";
 
 @Module({
     imports: [DatabaseModule],
@@ -23,6 +25,10 @@ import { MailService } from "src/services/mail/mail.service";
         {
             provide: ICartRepository,
             useClass: CartRepository
+        },
+        {
+            provide: IDeliveryService,
+            useClass: DeliveryService
         },
         {
             provide: IOrderRepository,

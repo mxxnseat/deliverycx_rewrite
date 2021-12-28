@@ -1,27 +1,31 @@
 import { Injectable, Module, Inject } from "@nestjs/common";
+import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { ICartRepository } from "../repositories/interface.repository";
 
 @Injectable()
 export class CartUsecase {
-    constructor(private readonly CartRepository: ICartRepository) {}
+    constructor(
+        private readonly CartRepository: ICartRepository,
+        private readonly DeliveryService: IDeliveryService
+    ) {}
 
     async getAll(userId: UniqueId) {
         const result = await this.CartRepository.getAll(userId);
 
-        const totalPrice = await this.CartRepository.calc(userId);
+        const prices = await this.DeliveryService.calculatingPrices(userId);
         return {
             cart: result,
-            totalPrice
+            ...prices
         };
     }
 
     async add(userId: UniqueId, productId: UniqueId) {
         const result = await this.CartRepository.add(userId, productId);
+        const prices = await this.DeliveryService.calculatingPrices(userId);
 
-        const totalPrice = await this.CartRepository.calc(userId);
         return {
             item: result,
-            totalPrice
+            ...prices
         };
     }
 
@@ -33,11 +37,11 @@ export class CartUsecase {
 
     async removeOne(userId: UniqueId, cartId: UniqueId) {
         const result = await this.CartRepository.removeOne(userId, cartId);
+        const prices = await this.DeliveryService.calculatingPrices(userId);
 
-        const totalPrice = await this.CartRepository.calc(userId);
         return {
             deletedId: result,
-            totalPrice
+            ...prices
         };
     }
 
@@ -48,10 +52,11 @@ export class CartUsecase {
             value
         );
 
-        const totalPrice = await this.CartRepository.calc(userId);
+        const prices = await this.DeliveryService.calculatingPrices(userId);
+
         return {
             item: result,
-            totalPrice
+            ...prices
         };
     }
 }

@@ -15,12 +15,18 @@ import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { organizationProviders } from "src/components/organization/providers/organization.provider";
 import { MailService } from "src/services/mail/mail.service";
+import { DeliveryService } from "src/services/delivery/delivery.service";
+import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 
 @Module({
     imports: [DatabaseModule],
     controllers: [OrderController],
     providers: [
         PaymentService,
+        {
+            provide: IDeliveryService,
+            useClass: DeliveryService
+        },
         OrderUsecase,
         {
             provide: IOrderRepository,
@@ -38,9 +44,9 @@ import { MailService } from "src/services/mail/mail.service";
             provide: ValidationCount,
             useClass: ValidationCount
         },
+
         ...cartProviders,
-        ...orderProviders,
-        MailService
+        ...orderProviders
     ]
 })
 export class OrderModule {}
