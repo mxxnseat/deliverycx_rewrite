@@ -38,7 +38,7 @@ services:
         ports:
             - "5000:5000"
         volumes:
-          - "./server/logs:/usr/node/app/logs"
+          - "./server/pinologs:/usr/node/app/pinologs"
     redis:
         image: redis
         command:
