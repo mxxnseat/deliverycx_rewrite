@@ -22,6 +22,8 @@ import { ErrorsInterceptor } from "src/interceptors/errors.interceptor";
 import { LoggerModule } from "nestjs-pino";
 import * as fs from "fs";
 
+fs.mkdirSync(__dirname + "/../../logs");
+
 @Module({
     imports: [
         LoggerModule.forRoot({
@@ -32,9 +34,9 @@ import * as fs from "fs";
                     autoLogging: true,
                     prettyPrint: true
                 },
-                fs.createWriteStream("./info.log", {
+                fs.createWriteStream("./logs/info.log", {
                     encoding: "utf-8",
-                    flags: "a"
+                    flags: "a+"
                 })
             ]
         }),
