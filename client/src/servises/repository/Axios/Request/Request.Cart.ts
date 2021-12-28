@@ -8,18 +8,22 @@ namespace ReqCart{
   export type getAll = {
     cart: IReqCart[]
     totalPrice: number
+    deltaPrice:number
   }
   export type add = {
     item: IReqCart,
     totalPrice: number
+    deltaPrice:number
   }
   export type amount = {
     item: IReqCart
     totalPrice: number
+    deltaPrice:number
   }
   export type removeOne = {
     deletedId: string
     totalPrice: number
+    deltaPrice:number
   }
   export type orderCreate = {
     number:number

@@ -5,6 +5,7 @@ export interface ICart{
   address: string
   orderError: ICheckoutError
   orderNumber: ICheckout
+  deltaPrice:number
 }
 
 export interface ICheckout {

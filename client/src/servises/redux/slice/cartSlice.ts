@@ -24,9 +24,13 @@ export const fetchAllCart = createAsyncThunk(
     async (_, { dispatch, rejectWithValue }) => {
         try {
             const request = await RequestCart.allCart();
+            console.log(request);
             if (request.status == 200 && request.data) {
                 dispatch(addAllCart(request.data.cart));
-                dispatch(setTotalPrice(request.data.totalPrice));
+                dispatch(setTotalPrice({
+                    totalPrice: request.data.totalPrice,
+                    deltaPrice: request.data.deltaPrice,
+                }));
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -40,7 +44,10 @@ export const fetchAddToCart = createAsyncThunk(
             const request = await RequestCart.addToCart({ productId: id });
             if (request.status == 200 && request.data) {
                 dispatch(addCart(request.data.item));
-                dispatch(setTotalPrice(request.data.totalPrice));
+                dispatch(setTotalPrice({
+                    totalPrice: request.data.totalPrice,
+                    deltaPrice: request.data.deltaPrice,
+                }));
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -61,7 +68,10 @@ export const fetchChangeAmount = createAsyncThunk(
                         changes:request.data.item
                     })
                 );
-                dispatch(setTotalPrice(request.data.totalPrice));
+                dispatch(setTotalPrice({
+                    totalPrice: request.data.totalPrice,
+                    deltaPrice: request.data.deltaPrice,
+                }));
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -76,7 +86,10 @@ export const fetchRemoveCart = createAsyncThunk(
             const request = await RequestCart.removeCart({ cartId });
             if (request.status == 200 && cartId === request.data.deletedId) {
                 dispatch(removeCart(cartId));
-                dispatch(setTotalPrice(request.data.totalPrice));
+                dispatch(setTotalPrice({
+                    totalPrice: request.data.totalPrice,
+                    deltaPrice: request.data.deltaPrice,
+                }));
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -91,7 +104,10 @@ export const fetchDeleteCart = createAsyncThunk(
             const request = await RequestCart.deleteCart();
             if (request.status == 200) {
                 dispatch(deleteCart());
-                dispatch(setTotalPrice(0));
+                dispatch(setTotalPrice({
+                    totalPrice: 0,
+                    deltaPrice: 0,
+                }));
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -133,7 +149,8 @@ const cartSlice = createSlice({
             state.address = action.payload;
         },
         setTotalPrice: (state, action) => {
-            state.totalPrice = action.payload;
+            state.totalPrice = action.payload.totalPrice;
+            state.deltaPrice = action.payload.deltaPrice;
         },
         setErrors: (state, action) => {
             state.orderError = action.payload.errors;
