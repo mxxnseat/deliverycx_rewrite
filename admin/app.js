@@ -24,5 +24,5 @@ app.post("/update", (req,res)=>{
 
 
 app.listen(6000, ()=>{
-
+    console.log("start")
 })
