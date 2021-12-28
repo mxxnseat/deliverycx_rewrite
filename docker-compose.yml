@@ -37,6 +37,8 @@ services:
             - redis
         ports:
             - "5000:5000"
+        volumes:
+          - "./server/info.log:/usr/node/app"
     redis:
         image: redis
         command:
