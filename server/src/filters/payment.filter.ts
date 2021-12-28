@@ -3,7 +3,8 @@ import {
     ArgumentsHost,
     Catch,
     ExceptionFilter,
-    HttpException
+    HttpException,
+    Inject
 } from "@nestjs/common";
 import { AxiosError } from "axios";
 import { Request, Response } from "express";

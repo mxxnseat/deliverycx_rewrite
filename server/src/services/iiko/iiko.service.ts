@@ -6,6 +6,7 @@ import { BadRequestException, Inject } from "@nestjs/common";
 import { OrganizationModel } from "../../database/models/organization.model";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { ICheckResult, MessageResultStateEnum } from "./interfaces";
+import { CannotDeliveryError } from "src/components/order/errors/order.error";
 
 export class IikoService implements IIiko {
     private async getToken() {
@@ -67,7 +68,7 @@ export class IikoService implements IIiko {
         );
 
         if (orderResponseInfo.problem?.hasProblem)
-            throw new BadRequestException(orderResponseInfo?.problem?.problem);
+            throw new CannotDeliveryError(orderResponseInfo?.problem?.problem);
 
         return orderResponseInfo.number;
     }

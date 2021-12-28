@@ -9,7 +9,7 @@ export class DeliveryService implements IDeliveryService {
     private async deliveryPriceCalculating(price: number): Promise<number> {
         return price < 600 ? 150 : 0;
     }
-    private async cartPriceCalculating(userId: UniqueId) {
+    private async cartPriceCalculating(userId: UniqueId): Promise<number> {
         const totalPrice = await this.cartRepository.calc(userId);
 
         return totalPrice;

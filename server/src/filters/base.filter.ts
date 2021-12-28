@@ -12,7 +12,6 @@ export class BaseErrorsFilter implements ExceptionFilter {
     catch(exception: BaseError, host: ArgumentsHost) {
         const context = host.switchToHttp();
         const response = context.getResponse<Response>();
-
         response.status(exception.getStatus).json({
             errors: exception.getError
         });

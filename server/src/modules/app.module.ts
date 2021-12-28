@@ -1,5 +1,5 @@
 import { Inject, MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
-import { APP_FILTER } from "@nestjs/core";
+import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { ConfigModule } from "@nestjs/config";
 import { InternalException } from "src/filters/internal.filter";
 import { CartModule } from "src/ioc/cart.module";
@@ -18,9 +18,26 @@ import * as path from "path";
 import { createClient } from "redis";
 import { WebhookModule } from "src/ioc/webhook.module";
 import { CardModule } from "src/ioc/card.module";
+import { ErrorsInterceptor } from "src/interceptors/errors.interceptor";
+import { LoggerModule } from "nestjs-pino";
+import * as fs from "fs";
 
 @Module({
     imports: [
+        LoggerModule.forRoot({
+            pinoHttp: [
+                {
+                    name: "Error logs",
+                    level: "error",
+                    autoLogging: true,
+                    prettyPrint: true
+                },
+                fs.createWriteStream("./error.log", {
+                    encoding: "utf-8",
+                    flags: "a"
+                })
+            ]
+        }),
         ConfigModule.forRoot({
             envFilePath: path.resolve(
                 __dirname,
@@ -39,6 +56,10 @@ import { CardModule } from "src/ioc/card.module";
         CardModule
     ],
     providers: [
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ErrorsInterceptor
+        },
         {
             provide: APP_FILTER,
             useClass: InternalException
