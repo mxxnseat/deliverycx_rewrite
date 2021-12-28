@@ -15,13 +15,15 @@ import { OrderEntity } from "src/components/order/entities/order.entity";
 import { PaymentError } from "./payment.error";
 import { MailService } from "../mail/mail.service";
 import { IDeliveryService } from "../delivery/delivery.abstract";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
     constructor(
         private readonly cartRepository: ICartRepository,
         private readonly orderUsecase: OrderUsecase,
-        private readonly DeliveryService: IDeliveryService
+        private readonly DeliveryService: IDeliveryService,
+        @InjectPinoLogger() private readonly logger: PinoLogger
     ) {
         super();
     }
@@ -105,6 +107,9 @@ export class PaymentService extends IPaymentService {
         };
 
         const payment = await checkout.createPayment(createPayload);
+
+        this.logger.info(`${body.phone} ${JSON.stringify(payment)}`);
+
         if (payment.status === "succeeded") {
             const orderResult = await this.orderUsecase.create(userId, body);
 

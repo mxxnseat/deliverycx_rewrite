@@ -7,8 +7,11 @@ import { OrganizationModel } from "../../database/models/organization.model";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { ICheckResult, MessageResultStateEnum } from "./interfaces";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 
 export class IikoService implements IIiko {
+    constructor(@InjectPinoLogger() private readonly logger: PinoLogger) {}
+
     private async getToken() {
         try {
             const requestString = `${process.env.SERVICE_URL}/api/0/auth/access_token?user_id=${process.env.SERVICE_LOGIN}&user_secret=${process.env.SERVICE_PASSWORD}`;
@@ -65,6 +68,10 @@ export class IikoService implements IIiko {
                     comment: orderInfo.comment
                 }
             }
+        );
+
+        this.logger.info(
+            `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
 
         if (orderResponseInfo.problem?.hasProblem)

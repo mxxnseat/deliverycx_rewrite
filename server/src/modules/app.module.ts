@@ -27,12 +27,12 @@ import * as fs from "fs";
         LoggerModule.forRoot({
             pinoHttp: [
                 {
-                    name: "Error logs",
-                    level: "error",
+                    name: "INFO LOGS",
+                    level: "info",
                     autoLogging: true,
                     prettyPrint: true
                 },
-                fs.createWriteStream("./error.log", {
+                fs.createWriteStream("./info.log", {
                     encoding: "utf-8",
                     flags: "a"
                 })
