@@ -85,5 +85,6 @@ export class OrderDTO {
 
     @ApiProperty({ required: false })
     @IsEmail({ message: "Не корректный e-mail" })
+    @IsOptional()
     email?: string;
 }
