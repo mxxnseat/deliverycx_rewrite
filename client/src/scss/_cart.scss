@@ -207,7 +207,7 @@
         margin-top: 30px;
         line-height: 120%;
         color: $gray6;
-
+        
         &__banner {
             color: $white;
             background-color: $green;
@@ -216,7 +216,22 @@
             display: flex;
             justify-content: center;
             border-radius: 8px;
-
+            font-size: 12px;
+            .price{
+                font-weight: bold;
+                font-size: 15px;
+                font-size: $bold;
+            }
+        }
+        b{
+            padding: 0 4px;
+            font-size: $bold;
+            font-weight: 600;
+        }
+        .free-deliv{
+            font-weight: bold;
+            font-size: 15px;
+            font-size: $bold;
             &:before {
                 content: "";
                 background-image: url("../assets/i/delivery.svg");

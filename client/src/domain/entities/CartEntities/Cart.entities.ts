@@ -12,13 +12,15 @@ class CartEntities extends Entities<ICartEntities>{
   protected address = ''
   protected orderError = {}
   protected orderNumber = null
+  protected deltaPrice = 0
   constructor() {
     super()
     this.entities = {
       totalPrice: this.totalPrice,
       address: this.address,
       orderError: this.orderError,
-      orderNumber: this.orderNumber
+      orderNumber: this.orderNumber,
+      deltaPrice: this.deltaPrice
     }
   }
 
