@@ -22,6 +22,13 @@ import { ErrorsInterceptor } from "src/interceptors/errors.interceptor";
 import { LoggerModule } from "nestjs-pino";
 import * as fs from "fs";
 
+// КОСТЫЛЬ
+try {
+    fs.statSync(__dirname + "/../../pinologs");
+} catch (e) {
+    fs.mkdirSync(__dirname + "/../../pinologs");
+}
+
 @Module({
     imports: [
         LoggerModule.forRoot({
