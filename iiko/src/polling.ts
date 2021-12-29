@@ -221,7 +221,7 @@ class IikoService {
                                         additionalInfo: product.additionalInfo,
                                         price: product.price,
                                         tags: product.tags,
-                                        weight: product.price,
+                                        weight: product.weight,
                                         measureUnit: product.measureUnit,
                                         category: categoryId,
                                         id: product.id
