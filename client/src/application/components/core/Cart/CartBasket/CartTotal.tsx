@@ -3,7 +3,7 @@ import { adapterSelector } from 'servises/redux/selectors/selectors';
 const CartTotal = () => {
   const {totalPrice} = adapterSelector.useSelectors(selector => selector.cart)
   return (
-    <div className="cart__order-info">
+    <div className="cart__order-info"> 
             {
                 /*
                 <div className="cart__order__sale-wrap">

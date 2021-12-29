@@ -77,7 +77,8 @@ export const fetchChangeAmount = createAsyncThunk(
                 dispatch(
                     setTotalPrice({
                         totalPrice: request.data.totalPrice,
-                        deltaPrice: request.data.deltaPrice
+                        deltaPrice: request.data.deltaPrice,
+                        deliveryPrice: request.data.deliveryPrice
                     })
                 );
             }
