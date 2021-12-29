@@ -22,6 +22,7 @@ const CartLayout: FC<ICartLayout> = ({ children }) => {
           <CartList />
           <div className="container">
           <CartTotal />
+
           {children}
         </div>
         

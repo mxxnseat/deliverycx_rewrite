@@ -1,5 +1,5 @@
-function convertWeight(weight: number){
-    return weight*1000;
+function convertWeight(weight: number) {
+    return weight;
 }
 
 export default convertWeight;
