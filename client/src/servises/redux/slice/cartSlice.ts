@@ -27,10 +27,13 @@ export const fetchAllCart = createAsyncThunk(
             console.log(request);
             if (request.status == 200 && request.data) {
                 dispatch(addAllCart(request.data.cart));
-                dispatch(setTotalPrice({
-                    totalPrice: request.data.totalPrice,
-                    deltaPrice: request.data.deltaPrice,
-                }));
+                dispatch(
+                    setTotalPrice({
+                        totalPrice: request.data.totalPrice,
+                        deltaPrice: request.data.deltaPrice,
+                        deliveryPrice: request.data.deliveryPrice
+                    })
+                );
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -44,10 +47,13 @@ export const fetchAddToCart = createAsyncThunk(
             const request = await RequestCart.addToCart({ productId: id });
             if (request.status == 200 && request.data) {
                 dispatch(addCart(request.data.item));
-                dispatch(setTotalPrice({
-                    totalPrice: request.data.totalPrice,
-                    deltaPrice: request.data.deltaPrice,
-                }));
+                dispatch(
+                    setTotalPrice({
+                        totalPrice: request.data.totalPrice,
+                        deltaPrice: request.data.deltaPrice,
+                        deliveryPrice: request.data.deliveryPrice
+                    })
+                );
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -65,13 +71,15 @@ export const fetchChangeAmount = createAsyncThunk(
                 dispatch(
                     changeCart({
                         id: change.cartId,
-                        changes:request.data.item
+                        changes: request.data.item
                     })
                 );
-                dispatch(setTotalPrice({
-                    totalPrice: request.data.totalPrice,
-                    deltaPrice: request.data.deltaPrice,
-                }));
+                dispatch(
+                    setTotalPrice({
+                        totalPrice: request.data.totalPrice,
+                        deltaPrice: request.data.deltaPrice
+                    })
+                );
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -86,10 +94,13 @@ export const fetchRemoveCart = createAsyncThunk(
             const request = await RequestCart.removeCart({ cartId });
             if (request.status == 200 && cartId === request.data.deletedId) {
                 dispatch(removeCart(cartId));
-                dispatch(setTotalPrice({
-                    totalPrice: request.data.totalPrice,
-                    deltaPrice: request.data.deltaPrice,
-                }));
+                dispatch(
+                    setTotalPrice({
+                        totalPrice: request.data.totalPrice,
+                        deltaPrice: request.data.deltaPrice,
+                        deliveryPrice: request.data.deliveryPrice
+                    })
+                );
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -104,10 +115,12 @@ export const fetchDeleteCart = createAsyncThunk(
             const request = await RequestCart.deleteCart();
             if (request.status == 200) {
                 dispatch(deleteCart());
-                dispatch(setTotalPrice({
-                    totalPrice: 0,
-                    deltaPrice: 0,
-                }));
+                dispatch(
+                    setTotalPrice({
+                        totalPrice: 0,
+                        deltaPrice: 0
+                    })
+                );
             }
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -121,16 +134,16 @@ export const fetchOrderCart = createAsyncThunk(
             const request = await RequestCart.OrderCheckCart(value);
             if (request.data && request.status === 200) {
                 const order = await RequestCart.OrderCart(value);
-                dispatch(actionPaymentAccsess())
+                dispatch(actionPaymentAccsess());
                 return order.data.number;
             }
         } catch (error: any) {
             // Ошибка валидации по количеству
-            dispatch(actionPaymentReady(false))
+            dispatch(actionPaymentReady(false));
             if (error.response.status === 422) {
                 dispatch(setErrors(error.response.data));
             } else {
-                return rejectWithValue(error.response.data)
+                return rejectWithValue(error.response.data);
             }
         }
     }
@@ -151,21 +164,22 @@ const cartSlice = createSlice({
         setTotalPrice: (state, action) => {
             state.totalPrice = action.payload.totalPrice;
             state.deltaPrice = action.payload.deltaPrice;
+            state.deliveryPrice = action.payload.deliveryPrice;
         },
         setErrors: (state, action) => {
             state.orderError = action.payload.errors;
         },
-        accessOrder:(state) => {
-            state.orderNumber = null
-            state.orderError = {}
-            state.address = ''
-        },
+        accessOrder: (state) => {
+            state.orderNumber = null;
+            state.orderError = {};
+            state.address = "";
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchOrderCart.fulfilled, (state, action) => {
             state.orderNumber = action.payload;
         }),
-            builder.addCase(fetchOrderCart.rejected, (state,action) => {
+            builder.addCase(fetchOrderCart.rejected, (state, action) => {
                 state.orderError = {
                     error: action.payload,
                     status: 500

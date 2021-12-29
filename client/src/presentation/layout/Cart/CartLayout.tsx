@@ -5,6 +5,7 @@ import CartHeader from "presentation/viewModel/viewCart/CartHeader";
 import HeaderBack from "presentation/viewModel/viewHead/HeaderBack";
 import { FC, ReactNode } from "react";
 import { Route } from "react-router-dom";
+import CartDeliveryPrice from "application/components/core/Cart/CartBasket/CartDeliveryPrice";
 
 type ICartLayout = {
     children:ReactNode
@@ -21,6 +22,7 @@ const CartLayout: FC<ICartLayout> = ({ children }) => {
           </div>
           <CartList />
           <div className="container">
+            <CartDeliveryPrice />
           <CartTotal />
 
           {children}

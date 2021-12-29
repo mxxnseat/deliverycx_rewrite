@@ -1,4 +1,4 @@
-.cart__form{
+.cart__form {
     position: relative;
 }
 .cart {
@@ -175,6 +175,22 @@
                 font-size: 25px;
             }
         }
+        &__delivery {
+            &-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            &-title {
+                color: $gray3;
+                font-size: 11px;
+            }
+            &-sum {
+                color: $gray6;
+                font-family: $bold;
+                font-size: 13px;
+            }
+        }
     }
     &__order-info {
         margin: 16.5px 0;
@@ -207,7 +223,7 @@
         margin-top: 30px;
         line-height: 120%;
         color: $gray6;
-        
+
         &__banner {
             color: $white;
             background-color: $green;
@@ -217,18 +233,18 @@
             justify-content: center;
             border-radius: 8px;
             font-size: 12px;
-            .price{
+            .price {
                 font-weight: bold;
                 font-size: 15px;
                 font-size: $bold;
             }
         }
-        b{
+        b {
             padding: 0 4px;
             font-size: $bold;
             font-weight: 600;
         }
-        .free-deliv{
+        .free-deliv {
             font-weight: bold;
             font-size: 15px;
             font-size: $bold;
@@ -293,7 +309,7 @@
             }
         }
     }
-    
+
     .checkout_box {
         height: 100vh;
         background: url("../assets/img/starik.png") right bottom no-repeat;
@@ -454,22 +470,23 @@
     padding-top: 25px;
     background-color: transparent;
 }
-.popupFixCart{
-    
-    padding:0 35px 30px 35px;
+.popupFixCart {
+    padding: 0 35px 30px 35px;
     margin-left: -20px;
-    background-color: #EFEFEF;
+    background-color: #efefef;
     border-top-right-radius: 24px;
     border-top-left-radius: 24px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    box-shadow: -1.45153px -30.966px 60px rgba(0, 0, 0, 0.25), -0.559108px -11.9276px 19.1111px rgba(0, 0, 0, 0.151852), -0.118273px -2.52316px 4.88889px rgba(0, 0, 0, 0.0981481);
+    box-shadow: -1.45153px -30.966px 60px rgba(0, 0, 0, 0.25),
+        -0.559108px -11.9276px 19.1111px rgba(0, 0, 0, 0.151852),
+        -0.118273px -2.52316px 4.88889px rgba(0, 0, 0, 0.0981481);
     z-index: 999;
     animation: 0.2s show ease;
-    &_box{
+    &_box {
         position: relative;
         padding-top: 35px;
-        &__plash{
+        &__plash {
             position: absolute;
             top: 15px;
             left: 0;
@@ -477,59 +494,56 @@
             margin: 0 auto;
             width: 72px;
             height: 4px;
-            background: #CCCCCC;
+            background: #cccccc;
             opacity: 0.5;
             border-radius: 50px;
         }
-        &__title{
+        &__title {
             margin-top: 0px;
             margin-bottom: 20px;
             font-family: sf-ui-bold;
             cursor: pointer;
-            img{
+            img {
                 margin-right: 25px;
             }
-            span{
-                color:  #333333;
+            span {
+                color: #333333;
                 font-size: 17px;
                 font-weight: bold;
-             
             }
         }
-        &__list{
+        &__list {
             list-style: none;
             margin: 0;
             padding: 0;
-            
         }
-        &__list-item{
+        &__list-item {
             cursor: pointer;
             width: 100%;
             padding-top: 20px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #CCCCCC;
-            svg{
-                fill:#333333   
+            border-bottom: 1px solid #cccccc;
+            svg {
+                fill: #333333;
             }
-            &:last-child{
-                 border-bottom:none
-            } 
-        }
-        .active_item{
-            svg{
-               fill:#8D191D 
-            }
-            .popupFixCart_box_item__text{
-                color:#8D191D;
+            &:last-child {
+                border-bottom: none;
             }
         }
-        
-        
-        &_item__icon{
+        .active_item {
+            svg {
+                fill: #8d191d;
+            }
+            .popupFixCart_box_item__text {
+                color: #8d191d;
+            }
+        }
+
+        &_item__icon {
             display: inline-block;
             margin-right: 20px;
         }
-        &_item__text{
+        &_item__text {
             display: inline-block;
             font-family: sf-ui-bold;
             color: #333333;
@@ -538,28 +552,32 @@
         }
     }
 }
-.popupFixCart{
+.popupFixCart {
     position: fixed;
     bottom: calc(14vh - 15px);
     width: 100%;
     max-width: 375px;
 }
-.popupToBottCart{
+.popupToBottCart {
     position: absolute;
     bottom: 0;
     width: 360px;
-    padding:0 25px 30px 25px;
+    padding: 0 25px 30px 25px;
 }
 @keyframes show {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 
 @media only screen and (max-width: 560px) and (orientation: portrait) {
     .mapsPopup {
         bottom: 0;
     }
-    .popupToBottCart{
+    .popupToBottCart {
         width: 375px;
     }
 }

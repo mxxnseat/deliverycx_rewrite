@@ -1,19 +1,20 @@
-import { IProduct } from "@types"
+import { IProduct } from "@types";
 
-export interface ICart{
-  totalPrice: number
-  address: string
-  orderError: ICheckoutError
-  orderNumber: ICheckout
-  deltaPrice:number
+export interface ICart {
+    totalPrice: number;
+    address: string;
+    orderError: ICheckoutError;
+    orderNumber: ICheckout;
+    deliveryPrice: number;
+    deltaPrice: number;
 }
 
 export interface ICheckout {
-  number:number
+    number: number;
 }
 export interface ICheckoutError {
-  error: string,
-  status:number
+    error: string;
+    status: number;
 }
 export interface IInitialValues {
     comment: string;
@@ -25,19 +26,19 @@ export interface IInitialValues {
     entrance: string;
     floor: string;
     notCall: boolean;
-  }
-  export interface ISubmitData extends IInitialValues {
+}
+export interface ISubmitData extends IInitialValues {
     payment: any;
     // eslint-disable-next-line @typescript-eslint/ban-types
     times: object;
     city: string;
 }
-export interface IReqCart{
-  id: string,
-  productName: string,
-  productImage: string,
-  productTags: string[],
-  productId: string,
-  amount: number,
-  price: number
+export interface IReqCart {
+    id: string;
+    productName: string;
+    productImage: string;
+    productTags: string[];
+    productId: string;
+    amount: number;
+    price: number;
 }

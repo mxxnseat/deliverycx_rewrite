@@ -23,7 +23,7 @@ export class DeliveryService implements IDeliveryService {
 
         return {
             deliveryPrice,
-            totalPrice,
+            totalPrice: totalPrice + deliveryPrice,
             deltaPrice
         };
     }
