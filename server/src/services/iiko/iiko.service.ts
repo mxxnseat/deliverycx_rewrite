@@ -8,9 +8,17 @@ import { IDeliveryService } from "../delivery/delivery.abstract";
 import { ICheckResult, MessageResultStateEnum } from "./interfaces";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
+import { PaymentMethods } from "../payment/payment.abstract";
+import { Model } from "mongoose";
+import { ProductClass } from "src/database/models/product.model";
 
 export class IikoService implements IIiko {
-    constructor(@InjectPinoLogger() private readonly logger: PinoLogger) {}
+    constructor(
+        @InjectPinoLogger() private readonly logger: PinoLogger,
+        private readonly DeliveryService: IDeliveryService,
+        @Inject("PRODUCT_MODEL")
+        private readonly productModel: Model<ProductClass>
+    ) {}
 
     private async getToken() {
         try {
@@ -29,6 +37,7 @@ export class IikoService implements IIiko {
         and return number of order from iiko db
     */
     async create(
+        userId: UniqueId,
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
     ): Promise<string> {
@@ -38,6 +47,18 @@ export class IikoService implements IIiko {
         const organization = await OrganizationModel.findById(
             orderInfo.organization
         );
+
+        const { deliveryPrice, totalPrice } =
+            await this.DeliveryService.calculatingPrices(userId);
+
+        /*
+                Берем товар "доставка" для конкретной
+                организации.
+            */
+        const deliveryProduct = await this.productModel.findOne({
+            name: "Доставка",
+            organization: orderInfo.organization
+        });
 
         const { data: orderResponseInfo } = await axios.post<OrderInfoIiko>(
             requestString,
@@ -58,18 +79,25 @@ export class IikoService implements IIiko {
                         floor: orderInfo.address.floor,
                         doorphone: orderInfo.address.intercom
                     },
-                    items: cart.map((cartEl) => {
-                        return {
-                            id: cartEl.getProductId,
-                            name: cartEl.getProductName,
-                            amount: cartEl.getAmount
-                        };
-                    }),
+                    items: [
+                        ...cart.map((cartEl) => {
+                            return {
+                                id: cartEl.getProductId,
+                                name: cartEl.getProductName,
+                                amount: cartEl.getAmount
+                            };
+                        }),
+                        {
+                            id: deliveryProduct.id,
+                            name: deliveryProduct.name,
+                            amount: 1,
+                            price: deliveryPrice
+                        }
+                    ],
                     comment: orderInfo.comment
                 }
             }
         );
-
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );

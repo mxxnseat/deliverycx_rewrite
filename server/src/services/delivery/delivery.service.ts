@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IDeliveryPrices, IDeliveryService } from "./delivery.abstract";
 

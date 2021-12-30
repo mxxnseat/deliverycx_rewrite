@@ -3,7 +3,6 @@ config({
     path: __dirname + "/../.development.env"
 });
 process.chdir(`${__dirname}/../..`);
-console.log(process.env, __dirname);
 import axios from "axios";
 import { Types, Document } from "mongoose";
 

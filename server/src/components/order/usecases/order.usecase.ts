@@ -19,7 +19,11 @@ export class OrderUsecase {
     async create(userId: UniqueId, orderInfo: OrderDTO) {
         const cart = await this.cartRepository.getAll(userId);
 
-        const orderNumber = await this.orderService.create(cart, orderInfo);
+        const orderNumber = await this.orderService.create(
+            userId,
+            cart,
+            orderInfo
+        );
 
         const deliveryPrice = await this.DeliveryService.calculatingPrices(
             userId

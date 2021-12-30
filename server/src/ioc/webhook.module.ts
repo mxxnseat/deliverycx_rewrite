@@ -13,6 +13,7 @@ import { IikoService } from "src/services/iiko/iiko.service";
 import { MailService } from "src/services/mail/mail.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { DeliveryService } from "src/services/delivery/delivery.service";
+import { productProviders } from "src/components/product/providers/product.provider";
 
 @Module({
     imports: [DatabaseModule],
@@ -38,6 +39,7 @@ import { DeliveryService } from "src/services/delivery/delivery.service";
             provide: IIiko,
             useClass: IikoService
         },
+        ...productProviders,
         ...orderProviders,
         OrderUsecase,
         MailService

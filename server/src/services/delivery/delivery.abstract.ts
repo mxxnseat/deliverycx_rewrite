@@ -1,3 +1,5 @@
+import { CartEntity } from "src/components/cart/entities/cart.entity";
+
 export interface IDeliveryPrices {
     deliveryPrice: number;
     deltaPrice: number;

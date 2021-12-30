@@ -17,6 +17,7 @@ import { organizationProviders } from "src/components/organization/providers/org
 import { MailService } from "src/services/mail/mail.service";
 import { DeliveryService } from "src/services/delivery/delivery.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
+import { productProviders } from "src/components/product/providers/product.provider";
 
 @Module({
     imports: [DatabaseModule],
@@ -44,7 +45,7 @@ import { IDeliveryService } from "src/services/delivery/delivery.abstract";
             provide: ValidationCount,
             useClass: ValidationCount
         },
-
+        ...productProviders,
         ...cartProviders,
         ...orderProviders
     ]

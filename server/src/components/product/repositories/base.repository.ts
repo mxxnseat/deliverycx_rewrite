@@ -37,7 +37,10 @@ export class ProductRepository implements IProductRepository {
     async getAll(categoryId: UniqueId, userId: UniqueId): Promise<any> {
         const result = await this.productModel.aggregate([
             {
-                $match: { category: new Types.ObjectId(categoryId) }
+                $match: {
+                    category: new Types.ObjectId(categoryId),
+                    tags: { $nin: ["hidden"] }
+                }
             },
             {
                 $lookup: {
@@ -86,7 +89,8 @@ export class ProductRepository implements IProductRepository {
         const result = await this.productModel.aggregate([
             {
                 $match: {
-                    _id: new Types.ObjectId(productId)
+                    _id: new Types.ObjectId(productId),
+                    tags: { $nin: ["hidden"] }
                 }
             },
             {
@@ -154,7 +158,8 @@ export class ProductRepository implements IProductRepository {
             {
                 $match: {
                     organization: new Types.ObjectId(organizationId),
-                    name: { $regex: searchString, $options: "i" }
+                    name: { $regex: searchString, $options: "i" },
+                    tags: { $nin: ["hidden"] }
                 }
             },
             {

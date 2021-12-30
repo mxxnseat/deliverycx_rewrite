@@ -4,6 +4,7 @@ import { ICheckResult, ResultStateEnum } from "./interfaces";
 
 export abstract class IIiko {
     abstract create: (
+        userId: UniqueId,
         cart: Array<CartEntity>,
         customerInfo: OrderDTO
     ) => Promise<string>;
