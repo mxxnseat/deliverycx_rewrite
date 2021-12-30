@@ -177,15 +177,20 @@ const cartSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(fetchOrderCart.pending, (state) => {
+            state.loadingOrder = true;
+        }),
         builder.addCase(fetchOrderCart.fulfilled, (state, action) => {
             state.orderNumber = action.payload;
+            state.loadingOrder = false;
         }),
-            builder.addCase(fetchOrderCart.rejected, (state, action) => {
-                state.orderError = {
-                    error: action.payload,
-                    status: 500
-                };
-            });
+        builder.addCase(fetchOrderCart.rejected, (state, action) => {
+            state.orderError = {
+                error: action.payload,
+                status: 500
+            };
+            state.loadingOrder = false;
+        });
     }
 });
 export const {
