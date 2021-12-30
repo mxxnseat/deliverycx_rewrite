@@ -60,6 +60,24 @@ export class IikoService implements IIiko {
             organization: orderInfo.organization
         });
 
+        const requestOrderItems = [
+            ...cart.map((cartEl) => {
+                return {
+                    id: cartEl.getProductId,
+                    name: cartEl.getProductName,
+                    amount: cartEl.getAmount
+                };
+            }),
+            deliveryProduct
+                ? {
+                      id: deliveryProduct.id,
+                      name: deliveryProduct.name,
+                      amount: 1,
+                      price: deliveryPrice
+                  }
+                : undefined
+        ].filter(Boolean);
+
         const { data: orderResponseInfo } = await axios.post<OrderInfoIiko>(
             requestString,
             {
@@ -79,21 +97,7 @@ export class IikoService implements IIiko {
                         floor: orderInfo.address.floor,
                         doorphone: orderInfo.address.intercom
                     },
-                    items: [
-                        ...cart.map((cartEl) => {
-                            return {
-                                id: cartEl.getProductId,
-                                name: cartEl.getProductName,
-                                amount: cartEl.getAmount
-                            };
-                        }),
-                        {
-                            id: deliveryProduct.id,
-                            name: deliveryProduct.name,
-                            amount: 1,
-                            price: deliveryPrice
-                        }
-                    ],
+                    items: requestOrderItems,
                     comment: orderInfo.comment
                 }
             }
