@@ -16,7 +16,7 @@ const Categories = () => {
 
   const useCasePoints = adapterComponentUseCase(useCategories)
   const {categories,currentSlide,category } = useCasePoints.data
-  const {setCurrentSlide,handleSliderClick} = useCasePoints.handlers
+  const {handleSliderClick} = useCasePoints.handlers
   const { isFetching } = useCasePoints.status
   
     
@@ -26,7 +26,7 @@ const Categories = () => {
     <Slider
       className="categories"
       initialSlide={currentSlide}
-      afterChange={(index: number)=>setCurrentSlide(index)}
+      afterChange={(index: number)=>handleSliderClick(index,slider)}
       ref={slider}
       centerMode
       slidesToShow={5}
