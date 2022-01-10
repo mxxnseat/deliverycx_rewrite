@@ -5,7 +5,6 @@ import { OrderDTO } from "src/components/order/dto/order.dto";
 import { BadRequestException, Inject } from "@nestjs/common";
 import { OrganizationModel } from "../../database/models/organization.model";
 import { IDeliveryService } from "../delivery/delivery.abstract";
-import { ICheckResult, MessageResultStateEnum } from "./interfaces";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { PaymentMethods } from "../payment/payment.abstract";
@@ -118,7 +117,7 @@ export class IikoService implements IIiko {
     async check(
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
-    ): Promise<ICheckResult> {
+    ): Promise<iiko.ICheckResult> {
         const token = await this.getToken();
         const requestString = `${process.env.SERVICE_URL}/api/0/orders/checkCreate?access_token=${token}`;
 
@@ -159,7 +158,11 @@ export class IikoService implements IIiko {
 
         return {
             numState: data.resultState,
-            message: MessageResultStateEnum[`_${data.resultState}`]
+            message: iiko.MessageResultStateEnum[`_${data.resultState}`]
         };
+    }
+
+    async getStopList(body: iiko.IWebhookEvent) {
+        return {} as iiko.IStopListEntity;
     }
 }

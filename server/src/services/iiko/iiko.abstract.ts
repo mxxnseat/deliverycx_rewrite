@@ -1,6 +1,6 @@
+import { IWebHookEvent } from "@a2seven/yoo-checkout";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
-import { ICheckResult, ResultStateEnum } from "./interfaces";
 
 export abstract class IIiko {
     abstract create: (
@@ -12,5 +12,9 @@ export abstract class IIiko {
     abstract check: (
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
-    ) => Promise<ICheckResult>;
+    ) => Promise<iiko.ICheckResult>;
+
+    abstract getStopList: (
+        body: iiko.IWebhookEvent
+    ) => Promise<iiko.IStopListEntity>;
 }
