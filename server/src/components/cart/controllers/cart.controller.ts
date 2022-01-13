@@ -12,7 +12,7 @@ import {
     ValidationPipe
 } from "@nestjs/common";
 import { AuthGuard } from "src/guards/authorize.guard";
-import { cartDTO } from "../dto/add.dto";
+import { AddCartDTO } from "../dto/add.dto";
 import { ChangeAmountDTO } from "../dto/changeAmount.dto";
 import { RemoveOneDTO } from "../dto/removeOne.dto";
 import { CartUsecase } from "../usecases/cart.usecase";
@@ -23,6 +23,7 @@ import { ValidationException } from "src/filters/validation.filter";
 import { Types } from "mongoose";
 import { number } from "joi";
 import { Response } from "express";
+import { GetAllCartDTO } from "../dto/getAll.dto";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -43,7 +44,7 @@ export class CartController {
     constructor(private readonly cartUsecase: CartUsecase) {}
 
     @ApiBody({
-        type: cartDTO
+        type: AddCartDTO
     })
     @ApiResponse({
         status: 200,
@@ -64,15 +65,12 @@ export class CartController {
     @Post("add")
     async add(
         @Body()
-        addBody: cartDTO,
+        addBody: AddCartDTO,
         @Session()
         session: Record<string, string>,
         @Res() response: Response
     ) {
-        const result = await this.cartUsecase.add(
-            session.user,
-            addBody.productId
-        );
+        const result = await this.cartUsecase.add(session.user, addBody);
 
         response.status(200).json(result);
     }
@@ -110,7 +108,7 @@ export class CartController {
     ) {
         const result = await this.cartUsecase.removeOne(
             session.user,
-            removeBody.cartId
+            removeBody
         );
 
         response.status(200).json(result);
@@ -161,14 +159,16 @@ export class CartController {
     ) {
         const result = await this.cartUsecase.changeAmount(
             session.user,
-            changeAmountBody.cartId,
-            changeAmountBody.amount
+            changeAmountBody
         );
 
         response.status(200).json(result);
     }
 
     @Get("getAll")
+    @ApiBody({
+        type: GetAllCartDTO
+    })
     @ApiResponse({
         schema: {
             properties: {
@@ -188,9 +188,10 @@ export class CartController {
     async getAll(
         @Session()
         session: Record<string, string>,
-        @Res() response: Response
+        @Res() response: Response,
+        @Body() body: GetAllCartDTO
     ) {
-        const result = await this.cartUsecase.getAll(session.user);
+        const result = await this.cartUsecase.getAll(session.user, body);
 
         response.status(200).json(result);
     }

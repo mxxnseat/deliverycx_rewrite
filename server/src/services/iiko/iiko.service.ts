@@ -45,7 +45,10 @@ export class IikoService implements IIiko {
         );
 
         const { deliveryPrice, totalPrice } =
-            await this.DeliveryService.calculatingPrices(userId);
+            await this.DeliveryService.calculatingPrices(
+                userId,
+                orderInfo.orderType
+            );
 
         /*
             Берем товар "доставка" для конкретной

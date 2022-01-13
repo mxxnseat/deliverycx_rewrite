@@ -1,4 +1,5 @@
 import { CartEntity } from "src/components/cart/entities/cart.entity";
+import { OrderTypesEnum } from "../iiko/iiko.abstract";
 
 export interface IDeliveryPrices {
     deliveryPrice: number;
@@ -7,5 +8,8 @@ export interface IDeliveryPrices {
 }
 
 export abstract class IDeliveryService {
-    abstract calculatingPrices(userId: UniqueId): Promise<IDeliveryPrices>;
+    abstract calculatingPrices(
+        userId: UniqueId,
+        orderType: OrderTypesEnum
+    ): Promise<IDeliveryPrices>;
 }

@@ -1,13 +1,21 @@
 import { Injectable } from "@nestjs/common";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
+import { OrderTypesEnum } from "../iiko/iiko.abstract";
 import { IDeliveryPrices, IDeliveryService } from "./delivery.abstract";
 
 @Injectable()
 export class DeliveryService implements IDeliveryService {
     constructor(private readonly cartRepository: ICartRepository) {}
 
-    private async deliveryPriceCalculating(price: number): Promise<number> {
+    private async deliveryPriceCalculating(
+        price: number,
+        orderType: OrderTypesEnum
+    ): Promise<number> {
+        if (orderType === OrderTypesEnum.PICKUP) {
+            return 0;
+        }
+
         return price < 600 ? 150 : 0;
     }
     private async cartPriceCalculating(userId: UniqueId): Promise<number> {
@@ -16,9 +24,15 @@ export class DeliveryService implements IDeliveryService {
         return totalPrice;
     }
 
-    public async calculatingPrices(userId: UniqueId): Promise<IDeliveryPrices> {
+    public async calculatingPrices(
+        userId: UniqueId,
+        orderType: OrderTypesEnum
+    ): Promise<IDeliveryPrices> {
         const totalPrice = await this.cartPriceCalculating(userId);
-        const deliveryPrice = await this.deliveryPriceCalculating(totalPrice);
+        const deliveryPrice = await this.deliveryPriceCalculating(
+            totalPrice,
+            orderType
+        );
 
         const deltaPrice = 600 - totalPrice < 0 ? 0 : 600 - totalPrice;
 

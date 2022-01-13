@@ -25,7 +25,8 @@ export class OrderUsecase {
         );
 
         const deliveryPrice = await this.DeliveryService.calculatingPrices(
-            userId
+            userId,
+            orderInfo.orderType
         );
 
         await this.orderRepository.create(

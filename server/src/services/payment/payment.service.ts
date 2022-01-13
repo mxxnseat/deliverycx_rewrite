@@ -49,7 +49,8 @@ export class PaymentService extends IPaymentService {
 
         const amountValue = await this.cartRepository.calc(userId);
         const deliveryPrice = await this.DeliveryService.calculatingPrices(
-            userId
+            userId,
+            body.orderType
         );
         const cart = await this.cartRepository.getAll(userId);
 
