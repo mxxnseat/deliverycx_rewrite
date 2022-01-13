@@ -9,7 +9,7 @@ import { ICardRepository } from "./interface.repository";
 
 @Injectable()
 export class CardRepository
-    extends BaseRepository<CardClass, CardEntity>
+    extends BaseRepository<Array<CardClass>, Array<CardEntity>>
     implements ICardRepository
 {
     constructor(

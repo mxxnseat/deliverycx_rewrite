@@ -1,6 +1,7 @@
 import { IWebHookEvent } from "@a2seven/yoo-checkout";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
+import { FilterNoZeroBalanceType } from "src/components/stopList/entities/stopList.entity";
 
 export abstract class IIiko {
     abstract create: (
@@ -16,5 +17,5 @@ export abstract class IIiko {
 
     abstract getStopList: (
         body: iiko.IWebhookEvent
-    ) => Promise<iiko.IStopListEntity>;
+    ) => Promise<ReturnTypeAsync<FilterNoZeroBalanceType>>;
 }

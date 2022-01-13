@@ -10,13 +10,16 @@ import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { PaymentMethods } from "../payment/payment.abstract";
 import { Model } from "mongoose";
 import { ProductClass } from "src/database/models/product.model";
+import { StopListEntity } from "../../components/stopList/entities/stopList.entity";
+import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 
 export class IikoService implements IIiko {
     constructor(
         @InjectPinoLogger() private readonly logger: PinoLogger,
         private readonly DeliveryService: IDeliveryService,
         @Inject("PRODUCT_MODEL")
-        private readonly productModel: Model<ProductClass>
+        private readonly productModel: Model<ProductClass>,
+        private readonly StopListUsecase: StopListUsecase
     ) {}
 
     private async getToken() {
@@ -162,7 +165,14 @@ export class IikoService implements IIiko {
         };
     }
 
+    /*
+        get stop-list and sending to the client
+        by websocket.
+        save stop-list to the stopList collection
+    */
     async getStopList(body: iiko.IWebhookEvent) {
-        return {} as iiko.IStopListEntity;
+        const token = await this.getToken();
+        const queryString = `${process.env.SERVICE_URL}/api/0/stopLists/getDeliveryStopList?access_token=${token}&organization=${body.organizationId}`;
+        const { data } = await axios.get<iiko.IStopListBody>(queryString);
     }
 }

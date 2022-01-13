@@ -10,7 +10,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class OrganizationRepository
-    extends BaseRepository<OrganizationClass, OrganizationEntity>
+    extends BaseRepository<Array<OrganizationClass>, Array<OrganizationEntity>>
     implements IOrganizationRepository
 {
     constructor() {

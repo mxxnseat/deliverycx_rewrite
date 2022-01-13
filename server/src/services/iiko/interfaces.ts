@@ -34,33 +34,17 @@ namespace iiko {
         eventInfo: any;
     }
 
-    interface IStopListItem {
+    export interface IStopListItem {
         productId: UniqueId;
         balance: number;
     }
 
-    interface IStopListItems {
+    export interface IStopListItems {
         organizationId: UniqueId;
         items: Array<IStopListItem>;
     }
 
     export interface IStopListBody {
         stopList: Array<IStopListItems>;
-    }
-
-    export interface IStopListEntity {
-        organization: UniqueId;
-        stopList: Array<IStopListItems>;
-    }
-
-    export class StopListEntity implements IStopListEntity {
-        constructor(
-            public organization: UniqueId,
-            public stopList: Array<IStopListItems>
-        ) {}
-
-        public filterNoZeroBalance() {
-            console.log("SOME LOGIC");
-        }
     }
 }

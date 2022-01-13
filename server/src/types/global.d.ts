@@ -1,3 +1,10 @@
+//util types
+type ReturnTypeAsync<T extends (...args) => any> = T extends (
+    ...args
+) => Promise<infer R>
+    ? R
+    : any;
+
 type UniqueId = string;
 type ImagePath = string;
 type Token = string;

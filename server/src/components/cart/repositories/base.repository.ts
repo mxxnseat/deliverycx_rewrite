@@ -7,7 +7,7 @@ import { ICartRepository } from "./interface.repository";
 import { Types } from "mongoose";
 
 export class CartRepository
-    extends BaseRepository<CartClass, CartEntity>
+    extends BaseRepository<Array<CartClass>, Array<CartEntity>>
     implements ICartRepository
 {
     constructor() {
