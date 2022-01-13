@@ -11,6 +11,8 @@ import MapSuggestComponent from "application/components/common/Maps/MapSuggest";
 import { push } from 'connected-react-router';
 import { ROUTE_APP } from "application/contstans/route.const";
 import { useHistory } from "react-router-dom";
+import { adapterComponentUseCase } from 'adapters/adapterComponents';
+import { useCartMap } from "domain/use-case/useCaseCart";
 
 
 const placeMarkOption = {
@@ -21,50 +23,12 @@ const placeMarkOption = {
 }
 
 const CartYmap = () => {
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const { cords } = useSelector((state: RootState) => state.location.point);
   const city = useSelector((state: RootState) => state.location.point.city);
-  const selectAdress = useSelector((state: RootState) => state.cart.address);
-  const [cord, setCord] = useState([]);
-  const [myPosition, setMyPosition] = useState<number[]>([]);
-  const [stateMap, setStateMap] = useState<number[]>([])
-  const [valueMap, setValueMap] = useState<string>('')
-  const [disclaimer, setDisclaimer] = useState(false)
 
-  useEffect(() => {
-    getGeoLoc();
-    //selectAdress && setMyPosition(stateMap)
-  }, []);
+  const usecaseCartMap = adapterComponentUseCase(useCartMap)
+  const { stateReduceMap,mapstate } = usecaseCartMap.data
+  const { onMapTyping,getGeoLoc,onMapClick,hendleMapPopup } = usecaseCartMap.handlers
   
-  const mapstate = useMemo(() => {
-    return ({ center: stateMap, zoom: 17 })
-  }, [stateMap,])
-
-  const onMapClick = (e: any) => {
-    const cords = e.get("coords");
-    setCord(cords);
-    setDisclaimer(false)
-    axios.get<IGeoCodeResponse>(
-        `https://geocode-maps.yandex.ru/1.x/?geocode=${cords.reverse()}&format=json&apikey=f5bd494f-4a11-4375-be30-1d2d48d88e93`
-    ).then(({ data }) => {
-      
-      dispatch(setAdress(data.response.GeoObjectCollection.featureMember[0].GeoObject.name))
-      setValueMap(data.response.GeoObjectCollection.featureMember[0].GeoObject.name)
-    })
-  }
-  const getGeoLoc = () => {
-    getGeoLocation()?.then((res: any) => {
-      
-        setStateMap([...res]);
-        setMyPosition([...res]);
-    })
-      .catch((e: unknown) => {
-        
-            setStateMap([cords[0], cords[1]]);
-            setMyPosition([cords[0], cords[1]]);
-        });
-  }
   const SuggestComponent = useMemo(() => {
     return withYMaps(MapSuggestComponent, true, [
         "SuggestView",
@@ -72,13 +36,7 @@ const CartYmap = () => {
         "coordSystem.geo"
     ]);
   }, []);
-  const hendleMapPopup = () => {
-    if ((valueMap || selectAdress) && !disclaimer) {
-      history.push(ROUTE_APP.CART.CART_DELIVERY)
-      
-      setValueMap('')
-    }
-  }
+  
   
   
   
@@ -90,7 +48,7 @@ const CartYmap = () => {
             >
                 <Map style={{position: "absolute", width:"100%", height: "100%"}} modules={['geocode']} onClick={onMapClick} state={mapstate} defaultState={
                     {
-                        center: myPosition,
+                        center: stateReduceMap.myPosition,
                         zoom: 17,
                         controls: [],
                         scrollZoom: false,
@@ -106,14 +64,14 @@ const CartYmap = () => {
                                         <img src={require("assets/i/mark-red.svg").default} alt="Телефон заведения" />
                                         
                                         {
-                                            valueMap
-                                                ? <div className="mapsPopup__value" onClick={() => setValueMap('')}>{valueMap}</div>
-                                                : <SuggestComponent handl={setStateMap} cord={setCord} disc={setDisclaimer}  />
+                                            stateReduceMap.valueMap
+                                                ? <div className="mapsPopup__value" onClick={() => onMapTyping().setValueMap("")}>{stateReduceMap.valueMap}</div>
+                                                : <SuggestComponent dispatchMap={onMapTyping}  />
                                         }
                                     
                                     </div>
                                     {
-                                        disclaimer && <div className="disclaimer">Не точный адрес, в ведите дом</div>
+                                        stateReduceMap.disclaimer && <div className="disclaimer">Не точный адрес, в ведите дом</div>
                                     }
                                 </div>
 
@@ -128,7 +86,7 @@ const CartYmap = () => {
 
                     <Placemark
                         options={placeMarkOption}
-                        geometry={cord}
+                        geometry={stateReduceMap.cord}
                     />
                     
                         
@@ -136,7 +94,7 @@ const CartYmap = () => {
       </YMaps>
       {
 
-      (city || valueMap) && 
+      (city || stateReduceMap.valueMap) && 
       <div className="mapsPopup">
           <div className="container">
               <div className="mapsPopup__button btn" onClick={hendleMapPopup}>Заказать доставку</div>

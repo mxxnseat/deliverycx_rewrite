@@ -9,7 +9,7 @@ import { setAdress } from "servises/redux/slice/cartSlice";
 
 declare var ymaps: any;
 
-const MapSuggestComponent = ({ handl, cord, disc }: any) => {
+const MapSuggestComponent = ({dispatchMap}: any) => {
   const dispatch = useDispatch()
   const name = useSelector((state: RootState) => state.location.point.city);
   const getAddress = useSelector((state: RootState) => state.cart.address);
@@ -20,11 +20,12 @@ const MapSuggestComponent = ({ handl, cord, disc }: any) => {
         const getObj = res.geoObjects.get(0);
         const validAdress: string = getObj?.properties.get('metaDataProperty.GeocoderMetaData.precision');
         const cords = [...getObj.geometry._coordinates]
-        handl(cords)
+        
+        dispatchMap().setStateMap(cords)
         
         if (validAdress === 'exact') {
-          cord(cords)
-          disc(false)
+          
+          dispatchMap().setExactCord(cords)
           axios.get<IGeoCodeResponse>(
             `https://geocode-maps.yandex.ru/1.x/?geocode=${cords.reverse()}&format=json&apikey=f5bd494f-4a11-4375-be30-1d2d48d88e93`
           ).then(({ data }) => {
@@ -37,7 +38,8 @@ const MapSuggestComponent = ({ handl, cord, disc }: any) => {
           //formik.setFieldValue("address", request);
         }
         if (validAdress === 'street') {
-          disc(true)
+         
+          dispatchMap().setDisclaimer(true)
         }
       })
       .catch((e: unknown) => console.log(e))

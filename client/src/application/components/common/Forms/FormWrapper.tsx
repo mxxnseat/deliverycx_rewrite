@@ -68,13 +68,9 @@ export const FormWrapper = (formik: any,usecase:any): IWrapper => {
           error={formik.errors.deliv && formik.touched.deliv ? true : false}
           errorValue={formik.errors.deliv}
         >
-          <Field
-            className="form__field-wrapper__input"
-            name="name"
-            placeholder="Ваше имя"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          />
+          <div className="adress_fild__address" onClick={() => history.push("/cart/delivery/pop")}>
+            доставка
+          </div>
         </FormFieldWrapper>
       )
     },
@@ -179,4 +175,5 @@ export const FormWrapper = (formik: any,usecase:any): IWrapper => {
     },
   };
 };
+
 
