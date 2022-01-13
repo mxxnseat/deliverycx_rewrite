@@ -47,4 +47,37 @@ namespace iiko {
     export interface IStopListBody {
         stopList: Array<IStopListItems>;
     }
+
+    interface INestedAddressBody {
+        city: string;
+        street: string;
+        home: number;
+        apartament: number;
+        doorphone: number;
+        entrance: number;
+        floor: number;
+    }
+    interface INestedItemsBody {
+        id: UniqueId;
+        name: string;
+        amount: number;
+        price?: number;
+    }
+    interface INestedOrderBody {
+        phone: string;
+        address: INestedAddressBody;
+        items: Array<INestedItemsBody>;
+        comment: string;
+        orderTypeId: string;
+        isSelfService: "true" | "false";
+    }
+
+    export interface IOrderBody {
+        organization: UniqueId;
+        customer: {
+            name: string;
+            phone: string;
+        };
+        order: INestedOrderBody;
+    }
 }

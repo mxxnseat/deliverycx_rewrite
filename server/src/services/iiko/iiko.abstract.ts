@@ -3,6 +3,11 @@ import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { FilterNoZeroBalanceType } from "src/components/stopList/entities/stopList.entity";
 
+export enum OrderTypesEnum {
+    PICKUP = "PICKUP",
+    COURIER = "COURIER"
+}
+
 export abstract class IIiko {
     abstract create: (
         userId: UniqueId,
@@ -11,6 +16,7 @@ export abstract class IIiko {
     ) => Promise<string>;
 
     abstract check: (
+        userId: UniqueId,
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
     ) => Promise<iiko.ICheckResult>;

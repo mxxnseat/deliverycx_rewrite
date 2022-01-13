@@ -22,9 +22,11 @@ import { StopListUsecase } from "src/components/stopList/usecases/stopList.useca
 import { stopListProviders } from "src/components/stopList/providers/stopList.provider";
 import { IStopListRepository } from "src/components/stopList/repositories/interface.repository";
 import { stopListRepository } from "src/components/stopList/repositories/base.repository";
+import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
+import { IikoModule } from "src/modules/iiko.module";
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, IikoModule],
     controllers: [OrderController],
     providers: [
         PaymentService,
@@ -53,14 +55,9 @@ import { stopListRepository } from "src/components/stopList/repositories/base.re
             provide: StopListUsecase,
             useClass: StopListUsecase
         },
-        {
-            provide: IStopListRepository,
-            useClass: stopListRepository
-        },
         ...productProviders,
         ...cartProviders,
-        ...orderProviders,
-        ...stopListProviders
+        ...orderProviders
     ]
 })
 export class OrderModule {}
