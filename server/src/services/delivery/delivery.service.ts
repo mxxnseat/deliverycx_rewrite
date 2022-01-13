@@ -33,8 +33,11 @@ export class DeliveryService implements IDeliveryService {
             totalPrice,
             orderType
         );
+        let deltaPrice = 0;
 
-        const deltaPrice = 600 - totalPrice < 0 ? 0 : 600 - totalPrice;
+        if (orderType === OrderTypesEnum.COURIER) {
+            deltaPrice = 600 - totalPrice < 0 ? 0 : 600 - totalPrice;
+        }
 
         return {
             deliveryPrice,
