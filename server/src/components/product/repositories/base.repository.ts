@@ -22,13 +22,38 @@ export class ProductRepository implements IProductRepository {
     ) {}
 
     async getFavorites(userId: UniqueId) {
-        const result = (await this.favoriteModel
-            .findOne({ user: userId })
-            .populate("products")) || { products: [] };
+        const result = (
+            await this.favoriteModel.aggregate([
+                {
+                    $match: { user: new Types.ObjectId(userId) }
+                },
+                {
+                    $lookup: {
+                        from: "products",
+                        as: "products",
+                        let: { favoriteProducts: "$products" },
+                        pipeline: [
+                            // {
+                            //     $addFields: {
+                            //         t: "$$favoriteProducts"
+                            //     }
+                            // }
+                            {
+                                $match: {
+                                    $expr: {
+                                        $in: ["$_id", "$$favoriteProducts"]
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ])
+        )[0] || { products: [] };
 
         return productMapper(
             result.products.map((product: any) => ({
-                ...product.toObject(),
+                ...product,
                 isFav: true
             })) as (ProductClass & { isFav: boolean })[]
         );
@@ -40,6 +65,36 @@ export class ProductRepository implements IProductRepository {
                 $match: {
                     category: new Types.ObjectId(categoryId),
                     tags: { $nin: ["hidden"] }
+                }
+            },
+            {
+                $lookup: {
+                    from: "stoplists",
+                    as: "stoplist",
+                    let: { productGUID: "$id", organization: "$organization" },
+                    pipeline: [
+                        {
+                            $addFields: {
+                                isInStopList: {
+                                    $cond: [
+                                        {
+                                            $in: [
+                                                "$$productGUID",
+                                                "$stoplist.product"
+                                            ]
+                                        },
+                                        true,
+                                        false
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $match: {
+                    "stoplist.0.isInStopList": false
                 }
             },
             {
@@ -91,6 +146,36 @@ export class ProductRepository implements IProductRepository {
                 $match: {
                     _id: new Types.ObjectId(productId),
                     tags: { $nin: ["hidden"] }
+                }
+            },
+            {
+                $lookup: {
+                    from: "stoplists",
+                    as: "stoplist",
+                    let: { productGUID: "$id", organization: "$organization" },
+                    pipeline: [
+                        {
+                            $addFields: {
+                                isInStopList: {
+                                    $cond: [
+                                        {
+                                            $in: [
+                                                "$$productGUID",
+                                                "$stoplist.product"
+                                            ]
+                                        },
+                                        true,
+                                        false
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $match: {
+                    "stoplist.0.isInStopList": false
                 }
             },
             {
@@ -160,6 +245,36 @@ export class ProductRepository implements IProductRepository {
                     organization: new Types.ObjectId(organizationId),
                     name: { $regex: searchString, $options: "i" },
                     tags: { $nin: ["hidden"] }
+                }
+            },
+            {
+                $lookup: {
+                    from: "stoplists",
+                    as: "stoplist",
+                    let: { productGUID: "$id", organization: "$organization" },
+                    pipeline: [
+                        {
+                            $addFields: {
+                                isInStopList: {
+                                    $cond: [
+                                        {
+                                            $in: [
+                                                "$$productGUID",
+                                                "$stoplist.product"
+                                            ]
+                                        },
+                                        true,
+                                        false
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $match: {
+                    "stoplist.0.isInStopList": false
                 }
             },
             {

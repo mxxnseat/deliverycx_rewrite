@@ -19,7 +19,7 @@ export class StopListEntity implements IStopListEntity {
     public filterNoZeroBalance() {
         return {
             organization: this.organization,
-            stopList: this.stopList
+            stopList: this.stopList.filter((el) => el.balance === 0)
         };
     }
 }
