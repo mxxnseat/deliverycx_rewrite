@@ -13,6 +13,7 @@ export class InternalException implements ExceptionFilter {
         const request = context.getRequest<Request>();
         const response = context.getResponse<Response>();
         const status = exception.getStatus ? exception.getStatus() : 500;
+
         response.status(status).json({
             path: request.path,
             errors: exception?.message || "Уууупс что-то пошло не так"

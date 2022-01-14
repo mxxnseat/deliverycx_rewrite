@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { IIiko } from "src/services/iiko/iiko.abstract";
@@ -26,7 +25,8 @@ export class OrderUsecase {
         );
 
         const deliveryPrice = await this.DeliveryService.calculatingPrices(
-            userId
+            userId,
+            orderInfo.orderType
         );
 
         await this.orderRepository.create(
@@ -43,7 +43,7 @@ export class OrderUsecase {
     async checkOrder(userId, orderInfo: OrderDTO) {
         const cart = await this.cartRepository.getAll(userId);
 
-        const result = await this.orderService.check(cart, orderInfo);
+        const result = await this.orderService.check(userId, cart, orderInfo);
 
         return result;
     }

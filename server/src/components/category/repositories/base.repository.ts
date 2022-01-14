@@ -11,7 +11,7 @@ import { Inject, Injectable } from "@nestjs/common";
 
 @Injectable()
 export class CategoryRepository
-    extends BaseRepository<CategoryClass, CategoryEntity>
+    extends BaseRepository<Array<CategoryClass>, Array<CategoryEntity>>
     implements ICategoryRepository
 {
     constructor(

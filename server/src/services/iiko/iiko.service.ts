@@ -1,60 +1,59 @@
-import { IIiko } from "./iiko.abstract";
-import axios from "axios";
+import { IIiko, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
-import { BadRequestException, Inject } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { OrganizationModel } from "../../database/models/organization.model";
 import { IDeliveryService } from "../delivery/delivery.abstract";
-import { ICheckResult, MessageResultStateEnum } from "./interfaces";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
-import { PaymentMethods } from "../payment/payment.abstract";
 import { Model } from "mongoose";
 import { ProductClass } from "src/database/models/product.model";
+import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
+import { IIkoAxios } from "./iiko.axios";
 
 export class IikoService implements IIiko {
     constructor(
         @InjectPinoLogger() private readonly logger: PinoLogger,
+
         private readonly DeliveryService: IDeliveryService,
+
         @Inject("PRODUCT_MODEL")
-        private readonly productModel: Model<ProductClass>
+        private readonly productModel: Model<ProductClass>,
+
+        private readonly StopListUsecase: StopListUsecase,
+
+        @Inject("AXIOS")
+        private readonly axios: IIkoAxios
     ) {}
 
-    private async getToken() {
-        try {
-            const requestString = `${process.env.SERVICE_URL}/api/0/auth/access_token?user_id=${process.env.SERVICE_LOGIN}&user_secret=${process.env.SERVICE_PASSWORD}`;
-
-            const { data: token } = await axios.get<Token>(requestString);
-
-            return token;
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    /*
-        this method send http request to iiko biz api
-        and return number of order from iiko db
-    */
-    async create(
-        userId: UniqueId,
+    /*-----------------| createOrderBody |-----------------------*/
+    private async createOrderBody(
+        orderInfo: OrderDTO,
         cart: Array<CartEntity>,
-        orderInfo: OrderDTO
-    ): Promise<string> {
-        const token = await this.getToken();
-
-        const requestString = `${process.env.SERVICE_URL}/api/0/orders/add?access_token=${token}`;
+        userId: UniqueId
+    ) {
         const organization = await OrganizationModel.findById(
             orderInfo.organization
         );
 
+        /*
+            Получение айдишнка типа заказа
+        */
+        const orderTypeId = await this.getOrderTypesId(
+            orderInfo.organization,
+            orderInfo.orderType
+        );
+
         const { deliveryPrice, totalPrice } =
-            await this.DeliveryService.calculatingPrices(userId);
+            await this.DeliveryService.calculatingPrices(
+                userId,
+                orderInfo.orderType
+            );
 
         /*
-                Берем товар "доставка" для конкретной
-                организации.
-            */
+            Берем товар "доставка" для конкретной
+            организации.
+        */
         const deliveryProduct = await this.productModel.findOne({
             name: "Доставка",
             organization: orderInfo.organization
@@ -78,30 +77,68 @@ export class IikoService implements IIiko {
                 : undefined
         ].filter(Boolean);
 
-        const { data: orderResponseInfo } = await axios.post<OrderInfoIiko>(
-            requestString,
-            {
-                organization: organization.id,
-                customer: {
-                    name: orderInfo.name,
-                    phone: orderInfo.phone
+        const result = {
+            organization: organization.id,
+            customer: {
+                name: orderInfo.name,
+                phone: orderInfo.phone
+            },
+            order: {
+                phone: orderInfo.phone,
+                address: {
+                    city: orderInfo.address.city,
+                    street: orderInfo.address.street,
+                    home: orderInfo.address.home,
+                    apartament: orderInfo.address.flat,
+                    entrance: orderInfo.address.entrance,
+                    floor: orderInfo.address.floor,
+                    doorphone: orderInfo.address.intercom
                 },
-                order: {
-                    phone: orderInfo.phone,
-                    address: {
-                        city: orderInfo.address.city,
-                        street: orderInfo.address.street,
-                        home: orderInfo.address.home,
-                        apartament: orderInfo.address.flat,
-                        entrance: orderInfo.address.entrance,
-                        floor: orderInfo.address.floor,
-                        doorphone: orderInfo.address.intercom
-                    },
-                    items: requestOrderItems,
-                    comment: orderInfo.comment
-                }
+                items: requestOrderItems,
+                comment: orderInfo.comment,
+                orderTypeId: orderTypeId,
+                isSelfService: (orderInfo.orderType === OrderTypesEnum.PICKUP
+                    ? "true"
+                    : "false") as "true" | "false"
             }
+        };
+
+        return result;
+    }
+
+    /*-----------------| getOrderTypesId |-----------------------*/
+    private async getOrderTypesId(
+        organizationId: UniqueId,
+        orderType: OrderTypesEnum
+    ) {
+        const organizationGUID = await OrganizationModel.findById(
+            organizationId,
+            { id: 1 }
         );
+
+        const data = await this.axios.orderTypes(organizationGUID.id);
+
+        const result = data.items.find((orderTypeEl) => {
+            return orderTypeEl.orderServiceType.includes(orderType);
+        });
+
+        return result.id;
+    }
+
+    /*-----------------|      create     |-----------------------*/
+    /*
+        this method send http request to iiko biz api
+        and return number of order from iiko db
+    */
+    async create(
+        userId: UniqueId,
+        cart: Array<CartEntity>,
+        orderInfo: OrderDTO
+    ): Promise<string> {
+        const orderBody = await this.createOrderBody(orderInfo, cart, userId);
+
+        const orderResponseInfo = await this.axios.orderCreate(orderBody);
+
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
@@ -112,54 +149,36 @@ export class IikoService implements IIiko {
         return orderResponseInfo.number;
     }
 
+    /*-----------------|       check      |-----------------------*/
     /*
         check opportunity delivery
     */
     async check(
+        userId: UniqueId,
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
-    ): Promise<ICheckResult> {
-        const token = await this.getToken();
-        const requestString = `${process.env.SERVICE_URL}/api/0/orders/checkCreate?access_token=${token}`;
-
-        const organization = await OrganizationModel.findById(
-            orderInfo.organization
+    ): Promise<iiko.ICheckResult> {
+        const orderCheckBody = await this.createOrderBody(
+            orderInfo,
+            cart,
+            userId
         );
 
-        const { data } = await axios.post<OrderCheckCreationResult>(
-            requestString,
-            {
-                organization: organization.id,
-                customer: {
-                    name: orderInfo.name,
-                    phone: orderInfo.phone
-                },
-                order: {
-                    phone: orderInfo.phone,
-                    address: {
-                        city: orderInfo.address.city,
-                        street: orderInfo.address.street,
-                        home: orderInfo.address.home,
-                        apartament: orderInfo.address.flat,
-                        entrance: orderInfo.address.entrance,
-                        floor: orderInfo.address.floor,
-                        doorphone: orderInfo.address.intercom
-                    },
-                    items: cart.map((cartEl) => {
-                        return {
-                            id: cartEl.getProductId,
-                            name: cartEl.getProductName,
-                            amount: cartEl.getAmount
-                        };
-                    }),
-                    comment: orderInfo.comment
-                }
-            }
-        );
+        const data = await this.axios.checkOrder(orderCheckBody);
 
         return {
             numState: data.resultState,
-            message: MessageResultStateEnum[`_${data.resultState}`]
+            message: iiko.MessageResultStateEnum[`_${data.resultState}`]
         };
+    }
+
+    /*-----------------|    getStopList    |-----------------------*/
+    /*
+        get stop-list and sending to the client
+        by websocket.
+        save stop-list to the stopList collection
+    */
+    async getStopList(body: iiko.IWebhookEvent) {
+        const data = await this.axios.stopList(body.organizationId);
     }
 }

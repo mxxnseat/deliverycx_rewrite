@@ -18,9 +18,15 @@ import { MailService } from "src/services/mail/mail.service";
 import { DeliveryService } from "src/services/delivery/delivery.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { productProviders } from "src/components/product/providers/product.provider";
+import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
+import { stopListProviders } from "src/components/stopList/providers/stopList.provider";
+import { IStopListRepository } from "src/components/stopList/repositories/interface.repository";
+import { stopListRepository } from "src/components/stopList/repositories/base.repository";
+import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
+import { IikoModule } from "src/modules/iiko.module";
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, IikoModule],
     controllers: [OrderController],
     providers: [
         PaymentService,
@@ -44,6 +50,10 @@ import { productProviders } from "src/components/product/providers/product.provi
         {
             provide: ValidationCount,
             useClass: ValidationCount
+        },
+        {
+            provide: StopListUsecase,
+            useClass: StopListUsecase
         },
         ...productProviders,
         ...cartProviders,

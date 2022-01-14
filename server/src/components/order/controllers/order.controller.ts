@@ -24,7 +24,6 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentMethods } from "../../../services/payment/payment.abstract";
 import { ValidationCount } from "../services/validationCount/validationCount.service";
-import { ResultStateEnum } from "src/services/iiko/interfaces";
 import { PaymentException } from "src/filters/payment.filter";
 
 @ApiTags("Order endpoints")
@@ -96,7 +95,7 @@ export class OrderController {
 
         const result = await this.OrderUsecase.checkOrder(session.user, body);
 
-        if (result.numState !== ResultStateEnum.Success) {
+        if (result.numState !== iiko.ResultStateEnum.Success) {
             throw new CannotDeliveryError(
                 `Доставка не может быть совершена по причине ${result.message}`
             );

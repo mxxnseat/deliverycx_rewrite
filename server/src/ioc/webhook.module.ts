@@ -14,9 +14,11 @@ import { MailService } from "src/services/mail/mail.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { DeliveryService } from "src/services/delivery/delivery.service";
 import { productProviders } from "src/components/product/providers/product.provider";
+import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
+import { IikoModule } from "src/modules/iiko.module";
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, IikoModule],
     controllers: [WebhookController],
     providers: [
         {
@@ -38,6 +40,10 @@ import { productProviders } from "src/components/product/providers/product.provi
         {
             provide: IIiko,
             useClass: IikoService
+        },
+        {
+            provide: StopListUsecase,
+            useClass: StopListUsecase
         },
         ...productProviders,
         ...orderProviders,

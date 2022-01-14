@@ -6,6 +6,7 @@ import { IsCardExpires } from "src/common/decorators/cardExpires.decorator";
 import { IsCardNumber } from "src/common/decorators/cardNumber.decorator";
 import { prepareYear } from "src/common/decorators/expiresYear.decorator";
 import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
+import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 import { PaymentMethods } from "../../../services/payment/payment.abstract";
 
 export class OrderDTO {
@@ -37,6 +38,11 @@ export class OrderDTO {
         entrance: number;
         floor: number;
     };
+
+    @ApiProperty({
+        enum: ["COURIER", "PICKUP"]
+    })
+    orderType: OrderTypesEnum;
 
     @ApiProperty()
     @IsPhoneNumber("RU", {

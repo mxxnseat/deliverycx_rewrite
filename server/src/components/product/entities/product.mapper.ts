@@ -4,7 +4,7 @@ import { ProductEntity } from "./product.entity";
 import { CategoryClass } from "../../../database/models/category.model";
 
 export const productMapper: Mapper<
-    ProductClass & { isFav: boolean },
+    Array<ProductClass & { isFav: boolean }>,
     Array<ProductEntity>
 > = (p) => {
     return p.map((product) => {

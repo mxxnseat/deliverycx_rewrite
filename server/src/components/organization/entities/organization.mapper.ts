@@ -4,7 +4,7 @@ import { OrganizationEntity } from "./organization.entity";
 import { OrganizationClass } from "../../../database/models/organization.model";
 
 export const organizationMapper: Mapper<
-    OrganizationClass,
+    Array<OrganizationClass>,
     Array<OrganizationEntity>
 > = (p) => {
     return p.map((organization) => {
