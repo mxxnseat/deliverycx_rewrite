@@ -33,16 +33,64 @@ export class ProductRepository implements IProductRepository {
                         as: "products",
                         let: { favoriteProducts: "$products" },
                         pipeline: [
-                            // {
-                            //     $addFields: {
-                            //         t: "$$favoriteProducts"
-                            //     }
-                            // }
                             {
                                 $match: {
                                     $expr: {
                                         $in: ["$_id", "$$favoriteProducts"]
                                     }
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "stoplists",
+                                    as: "stoplist",
+                                    let: {
+                                        productGUID: "$id",
+                                        organization: "$organization"
+                                    },
+                                    pipeline: [
+                                        {
+                                            $addFields: {
+                                                isInStopList: {
+                                                    $cond: [
+                                                        {
+                                                            $in: [
+                                                                "$$productGUID",
+                                                                "$stoplist.product"
+                                                            ]
+                                                        },
+                                                        true,
+                                                        false
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        {
+                                            $replaceRoot: {
+                                                newRoot: {
+                                                    isInStopList:
+                                                        "$isInStopList"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                $set: {
+                                    stoplist: "$stoplist.isInStopList"
+                                }
+                            },
+                            {
+                                $match: {
+                                    $or: [
+                                        {
+                                            stoplist: false
+                                        },
+                                        {
+                                            stoplist: { $size: 0 }
+                                        }
+                                    ]
                                 }
                             }
                         ]
@@ -50,6 +98,8 @@ export class ProductRepository implements IProductRepository {
                 }
             ])
         )[0] || { products: [] };
+
+        console.log(result.products[1]);
 
         return productMapper(
             result.products.map((product: any) => ({
@@ -88,13 +138,30 @@ export class ProductRepository implements IProductRepository {
                                     ]
                                 }
                             }
+                        },
+                        {
+                            $replaceRoot: {
+                                newRoot: { isInStopList: "$isInStopList" }
+                            }
                         }
                     ]
                 }
             },
             {
+                $set: {
+                    stoplist: "$stoplist.isInStopList"
+                }
+            },
+            {
                 $match: {
-                    "stoplist.0.isInStopList": false
+                    $or: [
+                        {
+                            stoplist: false
+                        },
+                        {
+                            stoplist: { $size: 0 }
+                        }
+                    ]
                 }
             },
             {
@@ -169,13 +236,30 @@ export class ProductRepository implements IProductRepository {
                                     ]
                                 }
                             }
+                        },
+                        {
+                            $replaceRoot: {
+                                newRoot: { isInStopList: "$isInStopList" }
+                            }
                         }
                     ]
                 }
             },
             {
+                $set: {
+                    stoplist: "$stoplist.isInStopList"
+                }
+            },
+            {
                 $match: {
-                    "stoplist.0.isInStopList": false
+                    $or: [
+                        {
+                            stoplist: false
+                        },
+                        {
+                            stoplist: { $size: 0 }
+                        }
+                    ]
                 }
             },
             {
@@ -268,13 +352,30 @@ export class ProductRepository implements IProductRepository {
                                     ]
                                 }
                             }
+                        },
+                        {
+                            $replaceRoot: {
+                                newRoot: { isInStopList: "$isInStopList" }
+                            }
                         }
                     ]
                 }
             },
             {
+                $set: {
+                    stoplist: "$stoplist.isInStopList"
+                }
+            },
+            {
                 $match: {
-                    "stoplist.0.isInStopList": false
+                    $or: [
+                        {
+                            stoplist: false
+                        },
+                        {
+                            stoplist: { $size: 0 }
+                        }
+                    ]
                 }
             },
             {
