@@ -1,10 +1,10 @@
-import { CART_CHOICE } from "application/contstans/cart.const";
 import cn from "classnames";
 import { FC, useCallback } from "react";
 import { useDispatch } from 'react-redux';
-import { setOrderType } from "servises/redux/slice/cartSlice";
+import { fetchAllCart, setOrderType } from "servises/redux/slice/cartSlice";
 import { useSelector } from 'react-redux';
 import { RootState } from 'servises/redux/createStore';
+import { CART_CHOICE } from "application/contstans/cart.const";
 
 const CartChoise: FC = () => { 
     const dispatch = useDispatch()
@@ -17,6 +17,7 @@ const CartChoise: FC = () => {
     
     const handlerChoice = useCallback((choise:string) => {
         dispatch(setOrderType(choise))
+        dispatch(fetchAllCart())
     },[activeChoice])
 
     return (

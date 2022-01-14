@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { ICart, IReqCart } from "@types";
+import encodeQueryData from "application/helpers/encodeQuery";
+import { string } from "yup";
 import { ApiSuper, methods, token } from "../AxiosApi";
 
 // получаем
@@ -32,22 +34,25 @@ namespace ReqCart {
 }
 // передаем
 namespace ResCart {
+    export type orderType = {
+        orderType:string
+    }
     export type add = {
         productId: string;
-    };
+    } & orderType;
     export type amount = {
         amount: number;
         cartId: string;
-    };
+    } & orderType;
     export type removeOne = {
         cartId: string;
-    };
+    } & orderType;
 }
 
 class RequestCart extends ApiSuper {
     @methods("get")
-    allCart() {
-        return this.request<ReqCart.getAll>("/cart/getAll");
+    allCart(query: ResCart.orderType) {
+        return this.request<ReqCart.getAll>("/cart/getAll?" + encodeQueryData(query));
     }
     @methods("post")
     addToCart(body: ResCart.add) {

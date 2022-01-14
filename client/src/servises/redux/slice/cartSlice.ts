@@ -19,12 +19,18 @@ export const cartSelector = cartAdapter.getSelectors(
     (state: RootState) => state.cart
 );
 
+const helperOrderType = (getState: any) : {orderType:string} => {
+    const state = getState() as RootState
+    return {orderType:state.cart.orderType}
+}
+
 export const fetchAllCart = createAsyncThunk(
     "cart/getAll",
-    async (_, { dispatch, rejectWithValue }) => {
+    async (_, { dispatch, getState,rejectWithValue }) => {
         try {
-            const request = await RequestCart.allCart();
-            console.log(request);
+            
+            const request = await RequestCart.allCart(helperOrderType(getState));
+            
             if (request.status == 200 && request.data) {
                 dispatch(addAllCart(request.data.cart));
                 dispatch(
@@ -44,8 +50,8 @@ export const fetchAddToCart = createAsyncThunk(
     "cart/add",
     async (id: string, { dispatch, getState,rejectWithValue }) => {
         try {
-            
-            const request = await RequestCart.addToCart({ productId: id });
+            const state = getState() as RootState
+            const request = await RequestCart.addToCart({ productId: id,...helperOrderType(getState) });
             if (request.status == 200 && request.data) {
                 dispatch(addCart(request.data.item));
                 dispatch(
@@ -66,8 +72,9 @@ export const fetchChangeAmount = createAsyncThunk(
     "cart/amount",
     async (change: any, { dispatch, getState,rejectWithValue }) => {
         try {
-            const request = await RequestCart.changeAmount(change);
-            console.log(getState());
+            const state = getState() as RootState
+            const request = await RequestCart.changeAmount({...change,...helperOrderType(getState)});
+            
             if (request.status == 200) {
                 dispatch(
                     changeCart({
@@ -91,9 +98,9 @@ export const fetchChangeAmount = createAsyncThunk(
 
 export const fetchRemoveCart = createAsyncThunk(
     "cart/removeOne",
-    async (cartId: string, { dispatch, rejectWithValue }) => {
+    async (cartId: string, { dispatch,getState, rejectWithValue }) => {
         try {
-            const request = await RequestCart.removeCart({ cartId });
+            const request = await RequestCart.removeCart({ cartId,...helperOrderType(getState) });
             if (request.status == 200 && cartId === request.data.deletedId) {
                 dispatch(removeCart(cartId));
                 dispatch(

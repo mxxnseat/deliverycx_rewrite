@@ -27,6 +27,7 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
                 entrance: values.entrance,
                 floor: values.floor
             },
+            orderType:values.orderType,
             phone: values.phone,
             comment: values.comment,
             paymentMethod: values.payment_method,

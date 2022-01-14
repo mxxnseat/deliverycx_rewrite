@@ -3,7 +3,7 @@ import { adapterSelector } from "servises/redux/selectors/selectors";
 
 const CartDeliveryPrice: FC = ()=>{
     const {deliveryPrice} = adapterSelector.useSelectors(selector => selector.cart)
-    console.log(deliveryPrice);
+
     return (
         <div className="cart__order-info">
             <div className="cart__order__delivery-wrap"> 
