@@ -37,7 +37,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
     (state: RootState) => state.profile
   );
   const { city } = useSelector((state: RootState) => state.location.point);
-  const {address:selectAddress,orderError,orderNumber} = useSelector((state: RootState) => state.cart);
+  const {address:selectAddress,orderError,orderNumber,loadingOrder} = useSelector((state: RootState) => state.cart);
   const errors:any = []
   const initialValues: IInitialValues = {
     comment: "",
@@ -143,7 +143,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
             <button
               type="submit"
               className="cart__order-btn btn"
-              
+              disabled={loadingOrder}
             >
               Заказать
             </button>

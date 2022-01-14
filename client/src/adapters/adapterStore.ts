@@ -24,7 +24,7 @@ export class AdapterSelector<T>{
   useSelectors<R>(calback:TcalbackSelector<T,R>):R {
     return useSelector(calback(this.selectors))
   }
-  createSelectors<R>(calback: TcalbackSelector<T,R>,deep:Tdeep<R>):R {
+  createSelectors<R>(calback: TcalbackSelector<T,R>,deep:Tdeep<R>): keyof R {
     const create = createSelector(
       calback(this.selectors),
       deep

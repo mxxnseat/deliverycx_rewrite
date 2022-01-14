@@ -7,6 +7,7 @@ export interface ICart {
     orderNumber: ICheckout;
     deliveryPrice: number;
     deltaPrice: number;
+    orderType:string
 }
 
 export interface ICheckout {

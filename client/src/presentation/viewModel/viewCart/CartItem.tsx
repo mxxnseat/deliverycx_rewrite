@@ -22,7 +22,7 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
   const [error, setError] = useState<null | string>(null);
 
   const debouncedChangeHandler = useMemo(() => debounce(({ id, count }: any) =>
-    dispatch(fetchChangeAmount({ amount:count,cartId:id })), 200), [product.amount]) 
+    dispatch(fetchChangeAmount({ amount:count,cartId:id,orderType: "PICKUP" })), 200), [product.amount]) 
   const removeHandler = ()=>{
       dispatch(fetchRemoveCart(product.id));
   }
