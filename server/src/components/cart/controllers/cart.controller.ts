@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Post,
+    Query,
     Res,
     Session,
     UseFilters,
@@ -189,9 +190,10 @@ export class CartController {
         @Session()
         session: Record<string, string>,
         @Res() response: Response,
-        @Body() body: GetAllCartDTO
+        @Query() query: GetAllCartDTO
     ) {
-        const result = await this.cartUsecase.getAll(session.user, body);
+        console.log(query);
+        const result = await this.cartUsecase.getAll(session.user, query);
 
         response.status(200).json(result);
     }
