@@ -42,8 +42,9 @@ export const fetchAllCart = createAsyncThunk(
 );
 export const fetchAddToCart = createAsyncThunk(
     "cart/add",
-    async (id: string, { dispatch, rejectWithValue }) => {
+    async (id: string, { dispatch, getState,rejectWithValue }) => {
         try {
+            
             const request = await RequestCart.addToCart({ productId: id });
             if (request.status == 200 && request.data) {
                 dispatch(addCart(request.data.item));
@@ -63,10 +64,10 @@ export const fetchAddToCart = createAsyncThunk(
 
 export const fetchChangeAmount = createAsyncThunk(
     "cart/amount",
-    async (change: any, { dispatch, rejectWithValue }) => {
+    async (change: any, { dispatch, getState,rejectWithValue }) => {
         try {
             const request = await RequestCart.changeAmount(change);
-            console.log(request, change);
+            console.log(getState());
             if (request.status == 200) {
                 dispatch(
                     changeCart({
@@ -170,6 +171,9 @@ const cartSlice = createSlice({
         setErrors: (state, action) => {
             state.orderError = action.payload.errors;
         },
+        setOrderType:(state, action) => {
+            state.orderType = action.payload;
+        },
         accessOrder: (state) => {
             state.orderNumber = null;
             state.orderError = {};
@@ -202,6 +206,7 @@ export const {
     setAdress,
     setTotalPrice,
     setErrors,
-    accessOrder
+    accessOrder,
+    setOrderType
 } = cartSlice.actions;
 export default cartSlice;
