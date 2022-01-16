@@ -19,6 +19,7 @@ import { FormBuilder } from "application/components/common/Forms";
 import CartModals from "../CartModals/CartModals";
 import React from "react";
 import { CartFormMetods } from "./CartMetods";
+import { CART_CHOICE } from "application/contstans/cart.const";
 
 
 type IProps = {
@@ -66,7 +67,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
   
   const formik = useFormik({
     initialValues,
-    validationSchema: schema,
+    validationSchema: schema(orderType),
     onSubmit: (values, meta) => {
       
       if (!paymentReady && paymentMetod.id === CartFormMetods.paymentsMetod[1].id) {
@@ -94,12 +95,15 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
     dispatch(fetchDeleteCart()) 
   }, 400);
 
-  useEffect(() => {
-    selectAddress && formik.setFieldValue("address", selectAddress)
-  },[])
+  
   useEffect(() => {
     orderNumber && history.push(ROUTE_APP.CART.CART_ORDER)
-  },[orderNumber])
+    if (selectAddress && orderType === CART_CHOICE.COURIER) {
+      formik.setFieldValue("address", selectAddress)
+    } else if (orderType === CART_CHOICE.PICKUP) {
+      formik.setFieldValue("address", "")
+    }
+  },[orderNumber,orderType])
 
   return (
     <FormikProvider value={formik}>

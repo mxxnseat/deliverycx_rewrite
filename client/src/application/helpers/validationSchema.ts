@@ -1,3 +1,4 @@
+import { CART_CHOICE } from "application/contstans/cart.const";
 import * as yup from "yup";
 // import debounce from 'lodash.debounce';
 // import axios from "axios";
@@ -47,20 +48,36 @@ import * as yup from "yup";
 // const debounceCheckAddress = debounce(checkAddress, 200);
 
 
-const schema = yup.object().shape({
-    name: yup
-        .string()
-        .required('Поле обязательно для заполнения'),
-    address: yup
-        .string()
-        .required('Поле обязательно для заполнения'),
-    phone: yup
-        .string()
-        .trim()
-        .matches(/^(\+7)(\s(\d){3}){2}(\s(\d){2}){2}/, {
-            message: "Не верный формат телефона"
-        })
-        .required('Поле обязательно для заполнения')
-});
+const schema = (ordertype: string) => {
+    const shems = {
+        name: yup
+            .string()
+            .required('Поле обязательно для заполнения'),
+        address: yup
+            .string()
+            .required('Поле обязательно для заполнения'),
+        phone: yup
+            .string()
+            .trim()
+            .matches(/^(\+7)(\s(\d){3}){2}(\s(\d){2}){2}/, {
+                message: "Не верный формат телефона"
+            })
+            .required('Поле обязательно для заполнения')
+    }
+    
+    if (ordertype === CART_CHOICE.COURIER) {
+       return yup.object().shape({
+            name: shems.name,
+            address:shems.address,
+            phone:shems.phone
+        });
+    } else if (ordertype === CART_CHOICE.PICKUP) {
+        return yup.object().shape({
+            name: shems.name,
+            phone:shems.phone
+        });
+    }
+    
+}
 
 export default schema;
