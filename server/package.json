@@ -27,7 +27,9 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/mongoose": "^9.0.1",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/platform-socket.io": "^8.2.5",
     "@nestjs/swagger": "^5.1.5",
+    "@nestjs/websockets": "^8.2.5",
     "@typegoose/typegoose": "^9.2.0",
     "@types/axios": "^0.14.0",
     "@types/joi": "^17.2.3",
@@ -50,6 +52,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "socket.io": "^4.4.1",
     "swagger-ui-express": "^4.2.0",
     "uuid": "^8.3.2"
   },

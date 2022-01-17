@@ -6,15 +6,14 @@ import {
     Ref
 } from "@typegoose/typegoose";
 import { OrganizationClass } from "./organization.model";
-import { ProductClass } from "./product.model";
 
 class NestedStopListClass {
     @prop({ type: String })
-    public product: Ref<ProductClass>;
+    public product: UniqueId;
     @prop({ type: Number })
     public balance: number;
 
-    constructor(product: ProductClass, balance: number) {
+    constructor(product: UniqueId, balance: number) {
         this.product = product;
         this.balance = balance;
     }
@@ -29,7 +28,7 @@ export class StopListClass {
     organization: Ref<OrganizationClass, UniqueId>;
 
     @prop({ type: NestedStopListClass })
-    stopList: NestedStopListClass[];
+    stoplist: NestedStopListClass[];
 }
 
 export const StopListSchema = buildSchema(StopListClass);

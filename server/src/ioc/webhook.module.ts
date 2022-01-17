@@ -14,8 +14,8 @@ import { MailService } from "src/services/mail/mail.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { DeliveryService } from "src/services/delivery/delivery.service";
 import { productProviders } from "src/components/product/providers/product.provider";
-import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { IikoModule } from "src/modules/iiko.module";
+import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 
 @Module({
     imports: [DatabaseModule, IikoModule],
@@ -41,10 +41,7 @@ import { IikoModule } from "src/modules/iiko.module";
             provide: IIiko,
             useClass: IikoService
         },
-        {
-            provide: StopListUsecase,
-            useClass: StopListUsecase
-        },
+        IikoWebsocketGateway,
         ...productProviders,
         ...orderProviders,
         OrderUsecase,

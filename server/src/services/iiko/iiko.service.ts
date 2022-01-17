@@ -2,28 +2,34 @@ import { IIiko, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
-import { OrganizationModel } from "../../database/models/organization.model";
+import {
+    OrganizationClass,
+    OrganizationModel
+} from "../../database/models/organization.model";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Model } from "mongoose";
 import { ProductClass } from "src/database/models/product.model";
-import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { IIkoAxios } from "./iiko.axios";
+import { IStopListRepository } from "src/components/stopList/repositories/interface.repository";
 
 export class IikoService implements IIiko {
     constructor(
         @InjectPinoLogger() private readonly logger: PinoLogger,
 
-        private readonly DeliveryService: IDeliveryService,
-
         @Inject("PRODUCT_MODEL")
         private readonly productModel: Model<ProductClass>,
 
-        private readonly StopListUsecase: StopListUsecase,
+        @Inject("IIKO_AXIOS")
+        private readonly axios: IIkoAxios,
 
-        @Inject("AXIOS")
-        private readonly axios: IIkoAxios
+        @Inject("ORGANIZATION_MODEL")
+        private readonly OrganizationModel: Model<OrganizationClass>,
+
+        private readonly DeliveryService: IDeliveryService,
+
+        private readonly StopListRepository: IStopListRepository
     ) {}
 
     /*-----------------| createOrderBody |-----------------------*/
@@ -180,5 +186,22 @@ export class IikoService implements IIiko {
     */
     async getStopList(body: iiko.IWebhookEvent) {
         const data = await this.axios.stopList(body.organizationId);
+        const stopList = data.stopList
+            .map((stopListArrayItem) => stopListArrayItem.items)
+            .flat();
+
+        const organization = await this.OrganizationModel.findOne(
+            {
+                id: body.organizationId
+            },
+            { _id: 1 }
+        );
+
+        await this.StopListRepository.update(organization._id, stopList);
+        const stopListEntity = await this.StopListRepository.getAll(
+            organization._id
+        );
+        console.log(stopListEntity);
+        return stopListEntity;
     }
 }

@@ -13,12 +13,14 @@ import { YooWebhookGuard } from "src/guards/yooWebhook.guard";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { IikoWebhookGuard } from "src/guards/iikoWebhook.guard";
 import { IIiko } from "src/services/iiko/iiko.abstract";
+import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 
 @Controller("webhook")
 export class WebhookController {
     constructor(
         private readonly PaymentService: PaymentService,
-        private readonly IikoService: IIiko
+        private readonly IikoService: IIiko,
+        private readonly IikoStopListGateway: IikoWebsocketGateway
     ) {}
 
     @Post("yoo")
@@ -37,10 +39,14 @@ export class WebhookController {
 
     @Post("iiko")
     @UseGuards(IikoWebhookGuard)
-    async iikowebhook(@Body() body: iiko.IWebhookEvent) {
+    async iikowebhook(
+        @Body() body: iiko.IWebhookEvent,
+        @Res() response: Response
+    ) {
         console.log("Iiko send data from webhook");
+        const stopListEntity = await this.IikoService.getStopList(body);
 
-        this.IikoService.getStopList(body);
+        this.IikoStopListGateway.sendStopListToClient(stopListEntity);
 
         response.status(200).json({});
     }
