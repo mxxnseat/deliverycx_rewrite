@@ -1,3 +1,4 @@
+import { ApiTags } from "@nestjs/swagger";
 import {
     WebSocketGateway,
     WebSocketServer,
@@ -9,6 +10,7 @@ import { Server } from "socket.io";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
 
 @WebSocketGateway(9870, { namespace: "iiko" })
+@ApiTags("Websockets")
 export class IikoWebsocketGateway implements OnGatewayInit {
     @WebSocketServer()
     server: Server;
