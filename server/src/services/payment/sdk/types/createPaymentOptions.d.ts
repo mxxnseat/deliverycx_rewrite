@@ -40,5 +40,5 @@ export interface ICreatePaymentOptions {
     LMI_PAYER_EMAIL?: string;
     LMI_EXPIRES?: string;
     json?: 1;
-    LMI_SHOPPINGCART: ILmiShoppingCart;
+    // LMI_SHOPPINGCART: ILmiShoppingCart;
 }

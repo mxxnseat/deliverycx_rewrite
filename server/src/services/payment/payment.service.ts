@@ -16,14 +16,16 @@ import { PaymentError } from "./payment.error";
 import { MailService } from "../mail/mail.service";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
+import { PayMaster } from "./sdk/core/paymaster";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
     constructor(
+        @InjectPinoLogger() private readonly logger: PinoLogger,
+
         private readonly cartRepository: ICartRepository,
         private readonly orderUsecase: OrderUsecase,
-        private readonly DeliveryService: IDeliveryService,
-        @InjectPinoLogger() private readonly logger: PinoLogger
+        private readonly DeliveryService: IDeliveryService
     ) {
         super();
     }
@@ -33,91 +35,84 @@ export class PaymentService extends IPaymentService {
         // this.mailService.sendMail(body.object.metadata.email);
     }
 
-    async _byCard(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
-        const organization = await OrganizationModel.findById(
-            body.organization
-        );
-
-        if (!organization.yopay?.isActive) {
-            throw new PaymentError("Заведение не поддерживает оплату картой");
-        }
-
-        const checkout = new YooCheckout({
-            shopId: organization.yopay.shopId,
-            secretKey: organization.yopay.token
-        });
-
-        const amountValue = await this.cartRepository.calc(userId);
-        const deliveryPrice = await this.DeliveryService.calculatingPrices(
-            userId,
-            body.orderType
-        );
-        const cart = await this.cartRepository.getAll(userId);
-
-        const createPayload: ICreatePayment = {
-            amount: {
-                value: deliveryPrice.totalPrice.toString() + ".00",
-                currency: "RUB"
-            },
-            receipt: {
-                customer: {
-                    email: body.email
-                },
-                items: [
-                    ...cart.map((cartEl, index) => {
-                        return {
-                            description: cartEl.getProductName,
-                            quantity: cartEl.getAmount + ".00",
-                            amount: {
-                                value:
-                                    cartEl.getPrice / cartEl.getAmount + ".00",
-                                currency: "RUB"
-                            },
-                            vat_code: "1"
-                        };
-                    }),
-                    {
-                        description: "Доставка",
-                        quantity: "1.00",
-                        amount: {
-                            value: deliveryPrice.deliveryPrice + ".00",
-                            currency: "RUB"
-                        },
-                        vat_code: "1"
-                    }
-                ]
-            } as any,
-            payment_method_data: {
-                type: "bank_card",
-                card: {
-                    cardholder: "unknown",
-                    csc: body.cvv,
-                    expiry_month: body.expires.month,
-                    expiry_year: body.expires.year,
-                    number: body.cardNumber
-                }
-            },
-            metadata: {
-                email: body.email
-            },
-            capture: true as any,
-            confirmation: {
-                type: "redirect",
-                return_url: "https://тест.хинкалыч.рф/order/success"
-            }
-        };
-
-        const payment = await checkout.createPayment(createPayload);
-
-        this.logger.info(`${body.phone} ${JSON.stringify(payment)}`);
-
-        if (payment.status === "succeeded") {
-            const orderResult = await this.orderUsecase.create(userId, body);
-
-            return orderResult;
-        } else {
-            throw new PaymentError("Оплата отменена");
-        }
+    async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
+        const payMaster = new PayMaster();
+        // const organization = await OrganizationModel.findById(
+        //     body.organization
+        // );
+        // if (!organization.yopay?.isActive) {
+        //     throw new PaymentError("Заведение не поддерживает оплату картой");
+        // }
+        // const checkout = new YooCheckout({
+        //     shopId: organization.yopay.shopId,
+        //     secretKey: organization.yopay.token
+        // });
+        // const amountValue = await this.cartRepository.calc(userId);
+        // const deliveryPrice = await this.DeliveryService.calculatingPrices(
+        //     userId,
+        //     body.orderType
+        // );
+        // const cart = await this.cartRepository.getAll(userId);
+        // const createPayload: ICreatePayment = {
+        //     amount: {
+        //         value: deliveryPrice.totalPrice.toString() + ".00",
+        //         currency: "RUB"
+        //     },
+        //     receipt: {
+        //         customer: {
+        //             email: body.email
+        //         },
+        //         items: [
+        //             ...cart.map((cartEl, index) => {
+        //                 return {
+        //                     description: cartEl.getProductName,
+        //                     quantity: cartEl.getAmount + ".00",
+        //                     amount: {
+        //                         value:
+        //                             cartEl.getPrice / cartEl.getAmount + ".00",
+        //                         currency: "RUB"
+        //                     },
+        //                     vat_code: "1"
+        //                 };
+        //             }),
+        //             {
+        //                 description: "Доставка",
+        //                 quantity: "1.00",
+        //                 amount: {
+        //                     value: deliveryPrice.deliveryPrice + ".00",
+        //                     currency: "RUB"
+        //                 },
+        //                 vat_code: "1"
+        //             }
+        //         ]
+        //     } as any,
+        //     payment_method_data: {
+        //         type: "bank_card",
+        //         card: {
+        //             cardholder: "unknown",
+        //             csc: body.cvv,
+        //             expiry_month: body.expires.month,
+        //             expiry_year: body.expires.year,
+        //             number: body.cardNumber
+        //         }
+        //     },
+        //     metadata: {
+        //         email: body.email
+        //     },
+        //     capture: true as any,
+        //     confirmation: {
+        //         type: "redirect",
+        //         return_url: "https://тест.хинкалыч.рф/order/success"
+        //     }
+        // };
+        // const payment = await checkout.createPayment(createPayload);
+        // this.logger.info(`${body.phone} ${JSON.stringify(payment)}`);
+        // if (payment.status === "succeeded") {
+        const orderResult = await this.orderUsecase.create(userId, body);
+        //     return orderResult;
+        // } else {
+        //     throw new PaymentError("Оплата отменена");
+        // }
     }
 
     async _byCash(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
