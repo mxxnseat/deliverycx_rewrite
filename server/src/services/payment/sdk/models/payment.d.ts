@@ -12,5 +12,5 @@ export declare class SuccessPayment extends PaymentResult {
 }
 
 export declare class ErrorPayment extends PaymentResult {
-    suberrorcode: ;
+    // suberrorcode: ;
 }
