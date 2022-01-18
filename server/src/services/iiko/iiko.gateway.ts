@@ -9,7 +9,7 @@ import {
 import { Server } from "socket.io";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
 
-@WebSocketGateway(9870, { namespace: "iiko" })
+@WebSocketGateway(+process.env.WEBSOCKET_PORT, { namespace: "iiko" })
 @ApiTags("Websockets")
 export class IikoWebsocketGateway implements OnGatewayInit {
     @WebSocketServer()
