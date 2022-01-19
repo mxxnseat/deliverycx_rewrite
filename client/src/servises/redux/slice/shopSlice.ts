@@ -20,5 +20,5 @@ const ShopSlice = createSlice({
       
   },
 })
-export const { setCategories} = ShopSlice.actions
+export const { setCategories,setStopList} = ShopSlice.actions
 export default ShopSlice

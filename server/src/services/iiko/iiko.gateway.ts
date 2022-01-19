@@ -9,9 +9,9 @@ import {
 import { Server } from "socket.io";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
 
-@WebSocketGateway(+process.env.WEBSOCKET_PORT, {
+@WebSocketGateway(5500, {
     namespace: "iiko",
-    cors: process.env.CLIENT_PATH
+    cors: 'http://localhost:5500'
 })
 @ApiTags("Websockets")
 export class IikoWebsocketGateway implements OnGatewayInit {
@@ -19,7 +19,7 @@ export class IikoWebsocketGateway implements OnGatewayInit {
     server: Server;
 
     afterInit(server: Server) {
-        console.log("Socket initialized");
+        console.log("Socket initialized"); 
     }
 
     async sendStopListToClient(data: StopListEntity) {

@@ -1,38 +1,27 @@
-import { IProduct } from "@types"
+import { IProduct, IStopList } from "@types"
+import { adapterComponentUseCase } from "adapters/adapterComponents";
 import convertWeight from "application/helpers/convertWeight";
-import { FC, useEffect, useRef } from "react"
+import { useCaseShopItem } from "domain/use-case/useCaseShop";
+import { FC, useEffect, useRef, useState } from "react"
 import { useHistory } from "react-router-dom";
 import AddToCart from "../../../../presentation/viewModel/viewShop/AddToCart";
 import AddToFavorites from "../../../../presentation/viewModel/viewShop/AddToFavorites";
 
-const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, categoryImage, measureUnit, weight, description, image, isFav }) => {
-    const history = useHistory();
-    const cardRef = useRef<HTMLDivElement>(null);
-    
-    const clickHandler = (e: any) => {
-        if ((e.target as HTMLButtonElement).type !== 'submit') {
-            history.push(`/shop/product/${id}`)
-            
-            localStorage.setItem("prod", cardRef.current?.dataset.id as string)
-        }
-    }
+type IProps = {
+    products:IProduct<{ image: string }>
+}
 
-    useEffect(() => {
-        const id = localStorage.getItem('prod')
-        new Promise((resolve, reject) => {
-            if (cardRef.current?.dataset.id == id) {
-                resolve(cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
-            } else {
-                id && reject()
-            }
-        })
-            .then(() => localStorage.removeItem('prod'))
-            .catch(() => localStorage.removeItem('prod'))
-        
-    },[])
+const ShopProductItem: FC<IProps> = ({ products }) => {
+    const { id, name, price, categoryImage, measureUnit, weight, description, image, isFav } = products
+    
+    const useCasePoints = adapterComponentUseCase(useCaseShopItem,id);
+    const { cardRef,disableItem } = useCasePoints.data;
+    const { clickItemHandler } = useCasePoints.handlers;
+    
+    
 
     return (
-        <div ref={cardRef} className="product__item" data-id={id} onClick={clickHandler}>
+        <div ref={cardRef} className="product__item" data-id={id} onClick={(e)=> clickItemHandler(e,id)}>
             <div className="product__item__img-wrap">
                 <img src={image} alt={name} />
             </div>
@@ -47,6 +36,7 @@ const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, catego
                 </div>
                 <div className="product__item__description">
                     {description}
+                    
                 </div>
 
                 <div className="row product__item__options justify-between">
@@ -54,7 +44,7 @@ const ShopProductItem:FC<IProduct<{image: string}>> = ({ id, name, price, catego
                         <div className="product__item__measure">{measureUnit === "порц" ? `${convertWeight(weight)} г` : "1 шт"}</div>
                         <div className="product__item__price">{price} ₽</div>
                     </div>
- 
+                    {disableItem && "dizzz"}
                     <AddToCart id={id} _class={"add-to-cart"} groupImage={categoryImage} />
                 </div>
             </div>
