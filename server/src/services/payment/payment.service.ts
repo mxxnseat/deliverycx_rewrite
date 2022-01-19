@@ -17,6 +17,13 @@ import { MailService } from "../mail/mail.service";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { PayMaster } from "./sdk/core/paymaster";
+import {
+    CreatePaymentOptionsTypeWithoutMerchantId,
+    ICreatePaymentOptions
+} from "./sdk/types";
+import * as md5 from "crypto-js/md5";
+import * as Base64 from "crypto-js/enc-base64";
+import axios from "axios";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
@@ -36,7 +43,43 @@ export class PaymentService extends IPaymentService {
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
-        const payMaster = new PayMaster();
+        try {
+            const payMaster = new PayMaster(
+                "08121225-02f2-46dc-aff0-efd1a73ff7f1"
+            );
+            const { totalPrice } = await this.DeliveryService.calculatingPrices(
+                userId,
+                body.orderType
+            );
+
+            const authhash = md5(
+                `08121225-02f2-46dc-aff0-efd1a73ff7f1 ${2}.00 RUB test`
+            ).toString();
+
+            // добавляется обязательный параметр authhash
+            //  содержащий подпись запроса. Необходимо использовать тип подписи (sha1\sha256\md5)
+            //  указанный в настройках сайта в ЛК. При запуске платежа в подписи участвуют параметры
+            //   LMI_MERCHANT_ID, LMI_PAYMENT_AMOUNT (с отделением дробной части через точку и обязательными двумя знаками после точки),
+            // LMI_CURRENCY, SecretKey (значение настраивается в личном кабинете).
+
+            // console.log(authhash, authhash.toString());
+            const options: CreatePaymentOptionsTypeWithoutMerchantId = {
+                json: 1,
+                LMI_CURRENCY: "RUB",
+                LMI_SIM_MODE: 0,
+                LMI_PAYMENT_AMOUNT: "2.00",
+                LMI_PAYMENT_METHOD: "WebMoney",
+                SecretKey: "test",
+
+                LMI_PAYER_EMAIL: body.email,
+                authhash
+            } as any;
+            const response = await payMaster.createPayment(options);
+            console.log(response);
+        } catch (e) {
+            console.log(e);
+        }
+
         // const organization = await OrganizationModel.findById(
         //     body.organization
         // );
@@ -47,11 +90,7 @@ export class PaymentService extends IPaymentService {
         //     shopId: organization.yopay.shopId,
         //     secretKey: organization.yopay.token
         // });
-        // const amountValue = await this.cartRepository.calc(userId);
-        // const deliveryPrice = await this.DeliveryService.calculatingPrices(
-        //     userId,
-        //     body.orderType
-        // );
+
         // const cart = await this.cartRepository.getAll(userId);
         // const createPayload: ICreatePayment = {
         //     amount: {
@@ -108,7 +147,7 @@ export class PaymentService extends IPaymentService {
         // const payment = await checkout.createPayment(createPayload);
         // this.logger.info(`${body.phone} ${JSON.stringify(payment)}`);
         // if (payment.status === "succeeded") {
-        const orderResult = await this.orderUsecase.create(userId, body);
+        // const orderResult = await this.orderUsecase.create(userId, body);
         //     return orderResult;
         // } else {
         //     throw new PaymentError("Оплата отменена");
