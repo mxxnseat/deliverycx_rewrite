@@ -20,10 +20,11 @@ export interface ILmiShoppingCart_items {
 
 export interface ICreatePaymentOptions {
     LMI_MERCHANT_ID: string;
-    LMI_PAYMENT_AMOUNT: number;
+    LMI_PAYMENT_AMOUNT: string;
     LMI_CURRENCY: string;
     LMI_PAYMENT_METHOD: string;
     LMI_PAYMENT_METHOD: string;
+    authhash: string;
 
     LMI_PAYMENT_NO?: string;
     LMI_PAYMENT_DESC?: string;
@@ -40,5 +41,9 @@ export interface ICreatePaymentOptions {
     LMI_PAYER_EMAIL?: string;
     LMI_EXPIRES?: string;
     json?: 1;
-    LMI_SHOPPINGCART: ILmiShoppingCart;
+    // LMI_SHOPPINGCART: ILmiShoppingCart;
 }
+export type CreatePaymentOptionsTypeWithoutMerchantId = Omit<
+    ICreatePaymentOptions,
+    "LMI_MERCHANT_ID"
+>;

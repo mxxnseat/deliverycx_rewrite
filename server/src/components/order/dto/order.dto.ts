@@ -69,7 +69,7 @@ export class OrderDTO {
             "4111111111111111"
         ]
     })
-    @IsCardNumber("", { message: "Не верный формат карты" })
+    // @IsCardNumber("", { message: "Не верный формат карты" })
     @IsOptional()
     cardNumber?: string;
 

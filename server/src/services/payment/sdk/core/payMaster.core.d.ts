@@ -1,8 +1,6 @@
 import { ICreatePaymentOptions } from "../types";
-import {} from "../models";
+import { PaymentResponseType } from "../models";
 
-declare class PayMaster {
-    constructor() {}
-
-    createPayment(options: ICreatePaymentOptions): Promise<Payment>;
+export interface IPayMaster {
+    createPayment(options: ICreatePaymentOptions): Promise<PaymentResponseType>;
 }
