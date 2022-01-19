@@ -23,17 +23,11 @@ export class StopListRepository
         organization: UniqueId,
         stopListArray: Array<iiko.IStopListItem>
     ): Promise<void> {
-        console.log(stopListArray);
         await this.StopListModel.updateOne(
             { organization },
             {
                 $set: {
-                    stoplist: stopListArray.map((el) => {
-                        return {
-                            ...el,
-                            product: el.productId
-                        };
-                    })
+                    stoplist: stopListArray
                 }
             },
             { upsert: true }
