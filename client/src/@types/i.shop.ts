@@ -23,3 +23,11 @@ export interface IResponseProductCard {
     product: IProduct;
     group: ICategory;
 }
+export interface IStopList{
+    organization: string,
+    stopList: TStopListItems[]
+}
+export type TStopListItems = {
+    balance: number,
+    productId:string
+}

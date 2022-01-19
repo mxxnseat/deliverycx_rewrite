@@ -40,7 +40,7 @@ const ShopSearch:FC<IProps> = ({close}) => {
                     <div className="product__list">
                         {(isSuccess && products) && (
                             products.length
-                            ? products.map((item:IProduct) => <ShopProductItem key={item.id} {...item} />)
+                            ? products.map((item:IProduct) => <ShopProductItem key={item.id} products={item}/>)
                             : ""
                            
                         )}
