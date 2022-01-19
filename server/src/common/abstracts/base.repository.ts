@@ -5,7 +5,9 @@ export abstract class BaseRepository<ModelClass, ReturnValue> {
     constructor(
         private readonly model: Model<any>,
 
-        private readonly mapper: Mapper<ModelClass, ReturnValue>,
+        private readonly mapper:
+            | Mapper<ModelClass, ReturnValue>
+            | Mapper<ModelClass, Promise<ReturnValue>>,
 
         private readonly field: string,
 

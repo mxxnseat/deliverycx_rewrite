@@ -1,3 +1,5 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export type FilterNoZeroBalanceType = () => Omit<
     IStopListEntity,
     "filterNoZeroBalance"
@@ -11,10 +13,27 @@ export interface IStopListEntity {
 }
 
 export class StopListEntity implements IStopListEntity {
-    constructor(
-        public readonly organization: UniqueId,
-        public stopList: Array<iiko.IStopListItem>
-    ) {}
+    @ApiProperty({
+        type: "string"
+    })
+    public readonly organization: UniqueId;
+
+    @ApiProperty({
+        type: "array",
+        items: {
+            type: "object",
+            properties: {
+                productId: { type: "string" },
+                balance: { type: "number" }
+            }
+        }
+    })
+    public stopList: Array<iiko.IStopListItem>;
+
+    constructor(organization: UniqueId, stopList: Array<iiko.IStopListItem>) {
+        this.organization = organization;
+        this.stopList = stopList;
+    }
 
     public filterNoZeroBalance() {
         return {

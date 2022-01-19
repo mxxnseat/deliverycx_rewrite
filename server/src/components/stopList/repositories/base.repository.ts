@@ -8,7 +8,7 @@ import { stopListMapper } from "../entities/stopList.mapper";
 import { IStopListRepository } from "./interface.repository";
 
 @Injectable()
-export class stopListRepository
+export class StopListRepository
     extends BaseRepository<StopListClass, StopListEntity>
     implements IStopListRepository
 {
@@ -16,16 +16,27 @@ export class stopListRepository
         @Inject("STOP_LIST_MODEL")
         private readonly StopListModel: Model<StopListClass>
     ) {
-        super(StopListModel, stopListMapper, "stopList.product");
+        super(StopListModel, stopListMapper, "organization");
     }
 
-    async deleteSome(
-        organization: string,
-        stopListArray: Array<iiko.IStopListItem>
-    ): Promise<void> {}
-
     async update(
-        organization: string,
+        organization: UniqueId,
         stopListArray: Array<iiko.IStopListItem>
-    ): Promise<void> {}
+    ): Promise<void> {
+        console.log(stopListArray);
+        await this.StopListModel.updateOne(
+            { organization },
+            {
+                $set: {
+                    stoplist: stopListArray.map((el) => {
+                        return {
+                            ...el,
+                            product: el.productId
+                        };
+                    })
+                }
+            },
+            { upsert: true }
+        );
+    }
 }

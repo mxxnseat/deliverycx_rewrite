@@ -66,7 +66,7 @@ export class IIkoAxios {
 
     public async stopList(organization: UniqueId) {
         const token = await this.token();
-        const { data } = await this.axios.post<iiko.IStopListBody>(
+        const { data } = await this.axios.get<iiko.IStopListBody>(
             `/api/0/stopLists/getDeliveryStopList?access_token=${token}&organization=${organization}`
         );
 
@@ -76,7 +76,7 @@ export class IIkoAxios {
 
 export const iikoAxiosProviders = [
     {
-        provide: "AXIOS",
+        provide: "IIKO_AXIOS",
         useFactory: () => new IIkoAxios()
     }
 ];
