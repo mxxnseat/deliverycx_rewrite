@@ -1,4 +1,4 @@
-import { STATUSES, ERROR_CODES } from "../types";
+import { STATUSES, ERROR_CODES, IMessage } from "../types";
 
 export declare class PaymentResult {
     result: STATUSES;
