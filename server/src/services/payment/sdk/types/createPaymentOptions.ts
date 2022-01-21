@@ -1,6 +1,6 @@
 import { HTTP_METHODS } from ".";
 
-import { VAT, AGENT_TYPES, PAYMENT_TYPES } from ".";
+import { VATS, AGENT_TYPES, PAYMENT_TYPES, SUBJECT_TYPES } from ".";
 
 export interface ILmiShoppingCart {
     ITEMS: Array<ILmiShoppingCart_items>;
@@ -12,7 +12,7 @@ export interface ILmiShoppingCart_items {
     NAME: string;
     QTY: string;
     PRICE: number;
-    TAX: VAT;
+    TAX: VATS;
     AGENT?: ILmiShoppingCart_items_agent;
     METHOD?: PAYMENT_TYPES;
     SUBJECT?: SUBJECT_TYPES;
@@ -22,7 +22,6 @@ export interface ICreatePaymentOptions {
     LMI_MERCHANT_ID: string;
     LMI_PAYMENT_AMOUNT: string;
     LMI_CURRENCY: string;
-    LMI_PAYMENT_METHOD: string;
     LMI_PAYMENT_METHOD: string;
     authhash: string;
 
