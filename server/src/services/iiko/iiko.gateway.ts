@@ -11,7 +11,7 @@ import { StopListEntity } from "src/components/stopList/entities/stopList.entity
 
 @WebSocketGateway(5500, {
     namespace: "iiko",
-    cors: process.env.CLIENT_PATH
+    cors: "*"
 })
 @ApiTags("Websockets")
 export class IikoWebsocketGateway implements OnGatewayInit {

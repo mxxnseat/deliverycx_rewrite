@@ -5,12 +5,15 @@ import { useDispatch } from 'react-redux';
 import { setStopList } from "servises/redux/slice/shopSlice";
 import { IStopList } from "@types";
 import { fetchRefreshCart } from "servises/redux/slice/cartSlice";
+import config from "config.json";
+
+console.log(config);
 
 const App = (): JSX.Element => {
   const dispatch = useDispatch()
   
   useEffect(() => {
-    SocketSingle.newsocket(process.env.REACT_APP_STOPLIST as string)
+    SocketSingle.newsocket(config.REACT_APP_STOPLIST as string)
       .subscribers<IStopList>('stoplist_event', (data: IStopList | null, error: boolean) => {
         if (!error) {
           dispatch(setStopList(data))
