@@ -30,9 +30,32 @@ export const fetchAllCart = createAsyncThunk(
         try {
             
             const request = await RequestCart.allCart(helperOrderType(getState));
-            
+              
             if (request.status == 200 && request.data) {
                 dispatch(addAllCart(request.data.cart));
+                dispatch(
+                    setTotalPrice({
+                        totalPrice: request.data.totalPrice,
+                        deltaPrice: request.data.deltaPrice,
+                        deliveryPrice: request.data.deliveryPrice
+                    })
+                );
+            }
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+export const fetchRefreshCart = createAsyncThunk(
+    "cart/refresh",
+    async (_, { dispatch, getState,rejectWithValue }) => {
+        try {
+            
+            const request = await RequestCart.allCart(helperOrderType(getState));
+            
+            
+            if (request.status == 200 && request.data) {
+                dispatch(refreshCart(request.data.cart));
                 dispatch(
                     setTotalPrice({
                         totalPrice: request.data.totalPrice,
@@ -162,9 +185,10 @@ const cartSlice = createSlice({
     name: "cart",
     initialState: cartAdapter.getInitialState(CartEntities.getEntities),
     reducers: {
-        addAllCart: cartAdapter.addMany,
+        addAllCart: cartAdapter.upsertMany,
         addCart: cartAdapter.setOne,
         changeCart: cartAdapter.updateOne,
+        refreshCart: cartAdapter.setAll,
         removeCart: cartAdapter.removeOne,
         deleteCart: cartAdapter.removeAll,
         setAdress: (state, action) => {
@@ -208,6 +232,7 @@ export const {
     addAllCart,
     addCart,
     changeCart,
+    refreshCart,
     removeCart,
     deleteCart,
     setAdress,
