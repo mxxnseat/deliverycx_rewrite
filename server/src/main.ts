@@ -21,14 +21,12 @@ async function bootstrap() {
 
     const options = {};
 
-    const express_inst: express.Express = express();
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-        httpsOptions: options
-    });
+    // const express_inst: express.Express = express();
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     app.set("trust proxy", true);
     app.enableCors({
-        origin: [process.env.CLIENT_PATH, "https://yoomoney.ru"],
+        origin: [process.env.CLIENT_PATH],
 
         credentials: true
     });

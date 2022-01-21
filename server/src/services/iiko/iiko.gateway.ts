@@ -9,9 +9,9 @@ import {
 import { Server } from "socket.io";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
 
-@WebSocketGateway(+process.env.WEBSOCKET_PORT, {
+@WebSocketGateway(5500, {
     namespace: "iiko",
-    cors: process.env.CLIENT_PATH
+    cors: "*"
 })
 @ApiTags("Websockets")
 export class IikoWebsocketGateway implements OnGatewayInit {

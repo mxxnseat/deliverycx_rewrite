@@ -5,3 +5,4 @@ redis
 mongo
 certbot
 nginx
+client/**/config.*

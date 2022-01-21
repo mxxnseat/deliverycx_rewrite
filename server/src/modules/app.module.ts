@@ -21,7 +21,6 @@ import { CardModule } from "src/ioc/card.module";
 import { ErrorsInterceptor } from "src/interceptors/errors.interceptor";
 import { LoggerModule } from "nestjs-pino";
 import * as fs from "fs";
-import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 
 // КОСТЫЛЬ
 try {
