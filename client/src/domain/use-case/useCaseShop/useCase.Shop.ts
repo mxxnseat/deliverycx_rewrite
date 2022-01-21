@@ -39,7 +39,9 @@ export function useCaseShopItem(id:string) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [disableItem, setDisableItem] = useState(false)
   
-  const clickItemHandler = (e: any,id:string) => {
+  const clickItemHandler = (e: any, id: string) => {
+      if(disableItem) return
+      
       if ((e.target as HTMLButtonElement).type !== 'submit') {
           history.push(`/shop/product/${id}`)
           
