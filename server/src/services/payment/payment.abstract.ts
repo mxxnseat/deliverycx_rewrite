@@ -16,7 +16,7 @@ export abstract class IPaymentService {
     async route(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
         switch (body.paymentMethod) {
             case PaymentMethods.CARD:
-                await this._byCard(body, userId);
+                return await this._byCard(body, userId);
             case PaymentMethods.CASH:
                 return await this._byCash(body, userId);
             default:
@@ -25,5 +25,5 @@ export abstract class IPaymentService {
     }
 
     abstract _byCash(body: OrderDTO, userId: UniqueId): Promise<OrderEntity>;
-    abstract _byCard(body: OrderDTO, userId: UniqueId): Promise<void>;
+    abstract _byCard(body: OrderDTO, userId: UniqueId): Promise<any>;
 }

@@ -7,6 +7,7 @@ import { OrganizationEntity } from "../entities/organization.entity";
 import { organizationMapper } from "../entities/organization.mapper";
 import { IOrganizationRepository } from "./interface.repository";
 import { Injectable } from "@nestjs/common";
+import { CityClass } from "src/database/models/city.model";
 
 @Injectable()
 export class OrganizationRepository
@@ -15,5 +16,23 @@ export class OrganizationRepository
 {
     constructor() {
         super(OrganizationModel, organizationMapper, "city", "city");
+    }
+
+    async getOneByGUID(id: UniqueId): Promise<OrganizationEntity> {
+        const organizationDoc = await OrganizationModel.findOne({ id });
+        const organizationEntity = new OrganizationEntity(
+            organizationDoc._id,
+            `${organizationDoc.address.street}, ${organizationDoc.address.home}`,
+            (organizationDoc.city as CityClass)?.name,
+            [
+                organizationDoc.address.latitude,
+                organizationDoc.address.longitude
+            ],
+            organizationDoc.phone,
+            organizationDoc.workTime,
+            !!organizationDoc.yopay?.isActive
+        );
+
+        return organizationEntity;
     }
 }

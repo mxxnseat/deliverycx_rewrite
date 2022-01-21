@@ -124,4 +124,10 @@ export class CartRepository
 
         return calcResult[0] ? calcResult[0].totalPrice : 0;
     }
+
+    async removeSome(removeItems: Array<UniqueId>) {
+        const result = await CartModel.deleteMany({
+            product: { $in: removeItems }
+        });
+    }
 }

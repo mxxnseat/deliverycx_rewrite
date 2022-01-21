@@ -13,6 +13,9 @@ import { Model } from "mongoose";
 import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
 import { IStopListRepository } from "src/components/stopList/repositories/interface.repository";
+import { ICartRepository } from "src/components/cart/repositories/interface.repository";
+import { userInfo } from "os";
+import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 
 export class IikoService implements IIiko {
     constructor(
@@ -24,12 +27,9 @@ export class IikoService implements IIiko {
         @Inject("IIKO_AXIOS")
         private readonly axios: IIkoAxios,
 
-        @Inject("ORGANIZATION_MODEL")
-        private readonly OrganizationModel: Model<OrganizationClass>,
-
         private readonly DeliveryService: IDeliveryService,
 
-        private readonly StopListRepository: IStopListRepository
+        private readonly StopListUsecase: StopListUsecase
     ) {}
 
     /*-----------------| createOrderBody |-----------------------*/
@@ -190,18 +190,18 @@ export class IikoService implements IIiko {
             .map((stopListArrayItem) => stopListArrayItem.items)
             .flat();
 
-        const organization = await this.OrganizationModel.findOne(
-            {
-                id: body.organizationId
-            },
-            { _id: 1 }
+        const stopListArray = stopList.map((el) => {
+            return {
+                ...el,
+                product: el.productId
+            };
+        });
+
+        const stopListEntity = await this.StopListUsecase.stopListEventAction(
+            body.organizationId,
+            stopListArray
         );
 
-        await this.StopListRepository.update(organization._id, stopList);
-        const stopListEntity = await this.StopListRepository.getAll(
-            organization._id
-        );
-        console.log(stopListEntity);
         return stopListEntity;
     }
 }
