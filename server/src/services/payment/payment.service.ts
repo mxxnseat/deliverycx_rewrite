@@ -9,9 +9,6 @@ import { OrderEntity } from "src/components/order/entities/order.entity";
 import { PaymentError } from "./payment.error";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
-import { PayMaster } from "./sdk/core/paymaster";
-import axios from "axios";
-import { PaymentUrlResponse } from "./sdk/models";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
