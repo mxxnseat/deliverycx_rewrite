@@ -1,6 +1,7 @@
 import { ICreatePaymentOptions } from "../types";
-import { PaymentResponseType } from "../models";
+import { PaymentUrlResponse } from "../models";
 
 export interface IPayMaster {
-    createPayment(options: ICreatePaymentOptions): Promise<PaymentResponseType>;
+    // createPayment(options: ICreatePaymentOptions): Promise<PaymentResponseType>;
+    getPaymentUrl(): Promise<PaymentUrlResponse>;
 }
