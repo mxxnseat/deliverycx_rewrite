@@ -9,7 +9,7 @@ import {
 import { Server } from "socket.io";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
 
-@WebSocketGateway(5500, {
+@WebSocketGateway({
     namespace: "iiko",
     cors: "*"
 })
