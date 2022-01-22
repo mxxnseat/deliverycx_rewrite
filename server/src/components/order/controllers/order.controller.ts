@@ -1,5 +1,4 @@
-/// <reference path="../../../services/iiko/interfaces.ts" />
-
+import { iiko } from "src/services/iiko/interfaces";
 import {
     Body,
     Controller,
@@ -88,6 +87,8 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
+        console.log(iiko.ResultStateEnum.Success);
+
         const cart = await this.CartRepository.getAll(session.user);
         if (!cart.length) {
             throw new EmptyCartError();

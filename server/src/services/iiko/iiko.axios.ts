@@ -1,5 +1,4 @@
-/// <reference path="interfaces.ts" />
-
+import { iiko } from "src/services/iiko/interfaces";
 import { Injectable } from "@nestjs/common";
 import axios, { AxiosInstance } from "axios";
 import { IikoError } from "./iiko.error";

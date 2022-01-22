@@ -1,4 +1,4 @@
-namespace iiko {
+export namespace iiko {
     export enum ResultStateEnum {
         Success = 0,
         RejectByMinSum = 1,

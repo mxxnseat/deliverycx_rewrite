@@ -1,5 +1,4 @@
-/// <reference path="interfaces.ts" />
-
+import { iiko } from "src/services/iiko/interfaces";
 import { IWebHookEvent } from "@a2seven/yoo-checkout";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";

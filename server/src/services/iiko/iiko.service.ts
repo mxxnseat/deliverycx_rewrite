@@ -1,5 +1,4 @@
-/// <reference path="interfaces.ts" />
-
+import { iiko } from "src/services/iiko/interfaces";
 import { IIiko, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
