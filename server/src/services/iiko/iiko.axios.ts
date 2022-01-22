@@ -1,4 +1,4 @@
-/// <reference path="interfaces.ts">
+/// <reference path="interfaces.ts" />
 
 import { Injectable } from "@nestjs/common";
 import axios, { AxiosInstance } from "axios";
