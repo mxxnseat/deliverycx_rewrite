@@ -1,3 +1,5 @@
+import { iiko } from "src/services/iiko/interfaces";
+
 import { Inject, Injectable } from "@nestjs/common";
 import { Model } from "mongoose";
 import { BaseRepository } from "src/common/abstracts/base.repository";

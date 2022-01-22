@@ -1,3 +1,5 @@
+import { iiko } from "src/services/iiko/interfaces";
+
 import { Inject, Injectable } from "@nestjs/common";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";

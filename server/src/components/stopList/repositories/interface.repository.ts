@@ -1,4 +1,5 @@
 import { StopListEntity } from "../entities/stopList.entity";
+import { iiko } from "src/services/iiko/interfaces";
 
 export abstract class IStopListRepository {
     abstract update(

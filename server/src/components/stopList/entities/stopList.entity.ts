@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { iiko } from "src/services/iiko/interfaces";
 
 export type FilterNoZeroBalanceType = () => Omit<
     IStopListEntity,
