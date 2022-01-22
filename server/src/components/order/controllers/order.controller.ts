@@ -1,3 +1,5 @@
+/// <reference path="../../../services/iiko/interfaces.ts">
+
 import {
     Body,
     Controller,
