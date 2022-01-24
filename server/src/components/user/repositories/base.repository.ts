@@ -8,7 +8,7 @@ import { IUpdateProps } from "../interfaces/update.interface";
 @Injectable()
 export class UserRepository implements IUserRepository {
     constructor(
-        @Inject("USER_MODEL")
+        @Inject("User")
         private readonly userModel: Model<UserClass>
     ) {}
 

@@ -8,7 +8,7 @@ import { FavoriteEntity } from "../entities/favorite.entity";
 @Injectable()
 export class FavoriteRepository implements IFavoriteRepository {
     constructor(
-        @Inject("FAVORITE_MODEL")
+        @Inject("Favorite")
         private readonly favoriteModel: Model<FavoriteClass>
     ) {}
 

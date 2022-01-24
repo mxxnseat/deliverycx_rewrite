@@ -9,6 +9,7 @@ import { OrderEntity } from "src/components/order/entities/order.entity";
 import { PaymentError } from "./payment.error";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
+import { PayMaster } from "./sdk/core/paymaster";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
@@ -28,25 +29,25 @@ export class PaymentService extends IPaymentService {
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
-        const organization = await OrganizationModel.findById(
-            body.organization
-        );
+        // const organization = await OrganizationModel.findById(
+        //     body.organization
+        // );
 
-        if (!organization.yopay?.isActive) {
-            throw new PaymentError("Заведение не поддерживает оплату картой");
-        }
-
-        // try {
-        //     const payMaster = new PayMaster(
-        //         "08121225-02f2-46dc-aff0-efd1a73ff7f1"
-        //     );
-
-        //     const data = await payMaster.getPaymentUrl();
-
-        //     return data;
-        // } catch (e) {
-        //     console.log(e.response.data);
+        // if (!organization.yopay?.isActive) {
+        //     throw new PaymentError("Заведение не поддерживает оплату картой");
         // }
+
+        try {
+            const payMaster = new PayMaster(
+                "08121225-02f2-46dc-aff0-efd1a73ff7f1"
+            );
+
+            const data = await payMaster.getPaymentUrl();
+
+            return data;
+        } catch (e) {
+            console.log(e.response.data);
+        }
     }
 
     async _byCash(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {

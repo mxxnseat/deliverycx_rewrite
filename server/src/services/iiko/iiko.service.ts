@@ -22,7 +22,7 @@ export class IikoService implements IIiko {
     constructor(
         @InjectPinoLogger() private readonly logger: PinoLogger,
 
-        @Inject("PRODUCT_MODEL")
+        @Inject("Product")
         private readonly productModel: Model<ProductClass>,
 
         @Inject("IIKO_AXIOS")

@@ -15,7 +15,7 @@ export class StopListRepository
     implements IStopListRepository
 {
     constructor(
-        @Inject("STOP_LIST_MODEL")
+        @Inject("StopList")
         private readonly StopListModel: Model<StopListClass>
     ) {
         super(StopListModel, stopListMapper, "organization");

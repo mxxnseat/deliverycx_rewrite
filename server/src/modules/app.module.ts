@@ -21,6 +21,7 @@ import { CardModule } from "src/ioc/card.module";
 import { ErrorsInterceptor } from "src/interceptors/errors.interceptor";
 import { LoggerModule } from "nestjs-pino";
 import * as fs from "fs";
+import { MongooseModule } from "@nestjs/mongoose";
 
 // КОСТЫЛЬ
 try {
@@ -31,6 +32,15 @@ try {
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: path.resolve(
+                __dirname,
+                `../../.${process.env.NODE_ENV}.env`
+            )
+        }),
+        MongooseModule.forRoot(process.env.CONNECTION, {
+            connectionName: "DatabaseConnection"
+        }),
         LoggerModule.forRoot({
             pinoHttp: [
                 {
@@ -45,12 +55,7 @@ try {
                 })
             ]
         }),
-        ConfigModule.forRoot({
-            envFilePath: path.resolve(
-                __dirname,
-                `../../.${process.env.NODE_ENV}.env`
-            )
-        }),
+
         ProductModule,
         CategoryModule,
         CityModule,

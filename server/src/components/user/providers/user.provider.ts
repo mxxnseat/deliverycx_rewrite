@@ -1,11 +1,12 @@
-import { Connection } from "mongoose";
-import { UserSchema } from "../../../database/models/user.model";
+import { getConnectionToken } from "@nestjs/mongoose";
+import { Connection, connect } from "mongoose";
+import { UserModel, UserSchema } from "../../../database/models/user.model";
 
 export const userProviders = [
     {
-        provide: "USER_MODEL",
+        provide: "User",
         useFactory: (connection: Connection) =>
-            connection.model("user", UserSchema),
-        inject: ["DATABASE_CONNECTION"]
+            connection.model("User", UserSchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

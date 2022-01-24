@@ -1,11 +1,12 @@
+import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
 import { StopListSchema } from "src/database/models/stopList.model";
 
 export const stopListProviders = [
     {
-        provide: "STOP_LIST_MODEL",
+        provide: "StopList",
         useFactory: (connection: Connection) =>
-            connection.model("stopList", StopListSchema),
-        inject: ["DATABASE_CONNECTION"]
+            connection.model("StopList", StopListSchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

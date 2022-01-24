@@ -1,21 +1,25 @@
 import { BaseRepository } from "../../../common/abstracts/base.repository";
-import { CartClass, CartModel } from "../../../database/models/cart.model";
+import { CartClass } from "../../../database/models/cart.model";
 import { ProductClass } from "../../../database/models/product.model";
 import { CartEntity } from "../entities/cart.entity";
 import { cartMapper } from "../entities/cart.mapper";
 import { ICartRepository } from "./interface.repository";
-import { Types } from "mongoose";
+import { Model, Types } from "mongoose";
+import { Inject } from "@nestjs/common";
 
 export class CartRepository
     extends BaseRepository<Array<CartClass>, Array<CartEntity>>
     implements ICartRepository
 {
-    constructor() {
+    constructor(
+        @Inject("Cart")
+        private readonly CartModel: Model<CartClass>
+    ) {
         super(CartModel, cartMapper, "user", "product");
     }
 
     async add(userId: UniqueId, productId: UniqueId) {
-        const result = await CartModel.findOneAndUpdate(
+        const result = await this.CartModel.findOneAndUpdate(
             {
                 user: userId,
                 product: productId
@@ -45,7 +49,7 @@ export class CartRepository
     }
 
     async removeAll(userId: UniqueId) {
-        await CartModel.deleteMany({
+        await this.CartModel.deleteMany({
             user: userId
         });
 
@@ -53,7 +57,7 @@ export class CartRepository
     }
 
     async removeOne(userId: UniqueId, cartId: UniqueId) {
-        await CartModel.deleteOne({
+        await this.CartModel.deleteOne({
             user: userId,
             _id: cartId
         });
@@ -62,7 +66,7 @@ export class CartRepository
     }
 
     async changeAmount(userId: UniqueId, cartId: UniqueId, value: number) {
-        const result = await CartModel.findOneAndUpdate(
+        const result = await this.CartModel.findOneAndUpdate(
             {
                 user: userId,
                 _id: cartId
@@ -89,7 +93,7 @@ export class CartRepository
     }
 
     async calc(userId: UniqueId) {
-        const calcResult = await CartModel.aggregate([
+        const calcResult = await this.CartModel.aggregate([
             {
                 $match: {
                     user: new Types.ObjectId(userId)
@@ -126,7 +130,7 @@ export class CartRepository
     }
 
     async removeSome(removeItems: Array<UniqueId>) {
-        const result = await CartModel.deleteMany({
+        const result = await this.CartModel.deleteMany({
             product: { $in: removeItems }
         });
     }

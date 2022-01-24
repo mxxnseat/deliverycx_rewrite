@@ -9,7 +9,6 @@ import { IOrderRepository } from "src/components/order/repositores/interface.rep
 import { PaymentService } from "src/services/payment/payment.service";
 import { ValidationCount } from "src/components/order/services/validationCount/validationCount.service";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
-import { DatabaseModule } from "src/modules/database.module";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { DeliveryService } from "src/services/delivery/delivery.service";
@@ -18,7 +17,7 @@ import { productProviders } from "src/components/product/providers/product.provi
 import { IikoModule } from "src/modules/iiko.module";
 
 @Module({
-    imports: [DatabaseModule, IikoModule],
+    imports: [IikoModule],
     controllers: [OrderController],
     providers: [
         PaymentService,

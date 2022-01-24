@@ -21,7 +21,6 @@ export abstract class BaseRepository<ModelClass, ReturnValue> {
             })
             .sort({ order: 1 })
             .populate(this.populateField));
-
         return this.mapper(result);
     }
 }
