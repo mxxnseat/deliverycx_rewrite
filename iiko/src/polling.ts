@@ -150,6 +150,7 @@ class IikoService {
 
                         // console.log(data.groups);
 
+                        await CategoryModel.deleteMany({ organization: _id });
                         const categories = await Promise.all(
                             data.groups.map(async (category) => {
                                 if (category.description !== "HIDDEN") {
