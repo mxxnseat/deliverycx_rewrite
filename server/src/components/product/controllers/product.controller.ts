@@ -75,7 +75,6 @@ export class ProductController {
         @Res() response: Response,
         @Session() session: Record<string, string>
     ) {
-        console.log(session);
         const products = await this.productUsecase.search(
             query.searchString,
             query.organizationId,

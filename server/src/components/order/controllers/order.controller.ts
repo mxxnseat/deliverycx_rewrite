@@ -18,12 +18,10 @@ import { OrderUsecase } from "../usecases/order.usecase";
 import { OrderDTO } from "../dto/order.dto";
 import { ValidationException } from "src/filters/validation.filter";
 import { OrderEntity } from "../entities/order.entity";
-import { BaseErrorsFilter } from "src/filters/base.filter";
 import { CannotDeliveryError, EmptyCartError } from "../errors/order.error";
 import { BaseError } from "src/common/errors/base.error";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
-import { PaymentMethods } from "../../../services/payment/payment.abstract";
 import { ValidationCount } from "../services/validationCount/validationCount.service";
 import { PaymentException } from "src/filters/payment.filter";
 
@@ -87,8 +85,6 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-        console.log(iiko.ResultStateEnum.Success);
-
         const cart = await this.CartRepository.getAll(session.user);
         if (!cart.length) {
             throw new EmptyCartError();

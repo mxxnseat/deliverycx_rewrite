@@ -4,7 +4,8 @@ import {
     Body,
     Res,
     UseGuards,
-    UseFilters
+    UseFilters,
+    Inject
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -21,8 +22,10 @@ import { StopListEntity } from "src/components/stopList/entities/stopList.entity
 @Controller("webhook")
 export class WebhookController {
     constructor(
-        private readonly PaymentService: PaymentService,
+        @Inject("IIiko")
         private readonly IikoService: IIiko,
+
+        private readonly PaymentService: PaymentService,
         private readonly IikoStopListGateway: IikoWebsocketGateway
     ) {}
 

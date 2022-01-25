@@ -30,7 +30,9 @@ describe("User Module", () => {
         app = moduleRef.createNestApplication();
         app.use(
             session({
-                secret: "test"
+                secret: "test",
+                saveUninitialized: false,
+                resave: false
             })
         );
         await app.init();
@@ -48,9 +50,10 @@ describe("User Module", () => {
                     done();
                 });
         });
+    });
 
-        afterAll(async () => {
-            await mongoConnection.stop();
-        });
+    afterAll(async () => {
+        await mongoConnection.stop();
+        await app.close();
     });
 });

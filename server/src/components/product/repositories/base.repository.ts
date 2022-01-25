@@ -155,7 +155,7 @@ export class ProductRepository implements IProductRepository {
         )[0];
 
         return new ProductEntity(
-            productPopulate?.id,
+            productPopulate?._id,
             productPopulate?.name,
             productPopulate?.description,
             productPopulate?.additionalInfo,

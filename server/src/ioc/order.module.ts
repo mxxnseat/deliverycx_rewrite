@@ -31,7 +31,7 @@ import { IikoModule } from "src/modules/iiko.module";
             useClass: OrderRepository
         },
         {
-            provide: IIiko,
+            provide: "IIiko",
             useClass: IikoService
         },
         {

@@ -58,7 +58,7 @@ export function createPipeline(match: object, userId: UniqueId): Array<any> {
                 pipeline: [
                     {
                         $match: {
-                            user: new Types.ObjectId(userId),
+                            user: userId || new Types.ObjectId(userId),
                             $expr: { $in: ["$$productId", "$products"] }
                         }
                     }

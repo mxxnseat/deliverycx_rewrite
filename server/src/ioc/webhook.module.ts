@@ -37,7 +37,7 @@ import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
             useClass: OrderRepository
         },
         {
-            provide: IIiko,
+            provide: "IIiko",
             useClass: IikoService
         },
         IikoWebsocketGateway,
