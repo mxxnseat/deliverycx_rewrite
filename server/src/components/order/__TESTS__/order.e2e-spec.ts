@@ -1,4 +1,5 @@
 import { INestApplication } from "@nestjs/common";
+import { APP_FILTER } from "@nestjs/core";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Test } from "@nestjs/testing";
 import { MongoMemoryServer } from "mongodb-memory-server";
@@ -12,11 +13,13 @@ import { CartClass } from "src/database/models/cart.model";
 import { OrganizationClass } from "src/database/models/organization.model";
 import { ProductClass } from "src/database/models/product.model";
 import { UserClass } from "src/database/models/user.model";
+import { BaseErrorsFilter } from "src/filters/base.filter";
 import { OrderModule } from "src/ioc/order.module";
-import { IIiko } from "src/services/iiko/iiko.abstract";
+import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { PaymentMethods } from "src/services/payment/payment.abstract";
 import * as request from "supertest";
+import { OrderUsecase } from "../usecases/order.usecase";
 import {
     cartStub,
     productsStub,
@@ -30,6 +33,7 @@ describe("Order Module", () => {
     let app: INestApplication;
     let mongo: MongoMemoryServer;
     let iikoService: IikoService;
+    let orderUsecase: OrderUsecase;
 
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -43,20 +47,28 @@ describe("Order Module", () => {
                         };
                     }
                 }),
-                LoggerModule.forRoot({}),
+                LoggerModule.forRoot({
+                    pinoHttp: {
+                        enabled: false
+                    }
+                }),
                 OrderModule
             ],
             providers: [
                 ...cartProviders,
                 ...productProviders,
                 ...userProviders,
-                ...organizationProviders
+                ...organizationProviders,
+                {
+                    provide: APP_FILTER,
+                    useClass: BaseErrorsFilter
+                }
             ]
         }).compile();
 
         iikoService = moduleRef.get<IikoService>("IIiko");
+        orderUsecase = moduleRef.get<OrderUsecase>(OrderUsecase);
 
-        console.log(iikoService.create);
         const cartModel = moduleRef.get<Model<CartClass>>("Cart");
         const userModel = moduleRef.get<Model<UserClass>>("User");
         const productModel = moduleRef.get<Model<ProductClass>>("Product");
@@ -87,7 +99,10 @@ describe("Order Module", () => {
 
     describe("Order Tests", () => {
         it("should return order number", (done) => {
-            jest.spyOn<any, "create">(IikoService, "create");
+            jest.spyOn<any, "create">(iikoService, "create").mockImplementation(
+                () => 777
+            );
+
             const sendData = {
                 organization: organizationId,
                 name: "TestOrderUser",
@@ -114,6 +129,34 @@ describe("Order Module", () => {
                 .catch((e) => {
                     done(e);
                 });
-        }, 20000);
+        });
+
+        it("should return validation error", (done) => {
+            jest.spyOn(orderUsecase, "checkOrder");
+
+            const sendData = {
+                organization: organizationId,
+                name: "TestOrderUser",
+                address: {
+                    city: "Симферополь",
+                    street: "улица Турецкая",
+                    home: 15
+                },
+                phone: "+79786517145",
+                paymentMethod: PaymentMethods.CASH,
+                orderType: OrderTypesEnum.COURIER,
+                comment: "This is a test order from test env",
+                email: "test@tt.com"
+            };
+
+            request(app.getHttpServer())
+                .post("/order/check")
+                .send(sendData)
+                .expect(422)
+                .then((res) => {
+                    expect(orderUsecase.checkOrder).not.toHaveBeenCalled();
+                    done();
+                });
+        });
     });
 });
