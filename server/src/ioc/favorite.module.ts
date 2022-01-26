@@ -4,10 +4,8 @@ import { favoriteProviders } from "src/components/favorites/providers/favorite.p
 import { FavoriteRepository } from "src/components/favorites/repositories/base.repository";
 import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
 import { FavoriteUsecase } from "src/components/favorites/usecases/favorite.usecase";
-import { DatabaseModule } from "src/modules/database.module";
 
 @Module({
-    imports: [DatabaseModule],
     controllers: [FavoriteController],
     providers: [
         FavoriteUsecase,

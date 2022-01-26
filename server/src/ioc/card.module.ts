@@ -4,10 +4,8 @@ import { cardProviders } from "src/components/card/providers/card.provider";
 import { CardRepository } from "src/components/card/repositories/base.repository";
 import { ICardRepository } from "src/components/card/repositories/interface.repository";
 import { CardUsecase } from "src/components/card/usecases/card.usecase";
-import { DatabaseModule } from "src/modules/database.module";
 
 @Module({
-    imports: [DatabaseModule],
     controllers: [CardController],
     providers: [
         CardUsecase,

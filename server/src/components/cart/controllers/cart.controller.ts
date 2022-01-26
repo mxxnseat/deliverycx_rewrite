@@ -21,8 +21,6 @@ import { ApiBody, ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { CartEntity } from "../entities/cart.entity";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { ValidationException } from "src/filters/validation.filter";
-import { Types } from "mongoose";
-import { number } from "joi";
 import { Response } from "express";
 import { GetAllCartDTO } from "../dto/getAll.dto";
 

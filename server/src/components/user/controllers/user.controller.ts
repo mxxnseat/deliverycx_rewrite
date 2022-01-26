@@ -8,7 +8,6 @@ import {
     Session
 } from "@nestjs/common";
 import { Request, response, Response } from "express";
-import { GenerateUsernameService } from "../services/guestUsername.service";
 import { UserUsecase } from "../usecases/user.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "../entities/user.entity";
@@ -17,10 +16,7 @@ import { UpdateDTO } from "../dto/update.dto";
 @ApiTags("User endpoints")
 @Controller("user")
 export class UserController {
-    constructor(
-        private readonly userUsecase: UserUsecase,
-        private readonly generateUsernameService: GenerateUsernameService
-    ) {}
+    constructor(private readonly userUsecase: UserUsecase) {}
 
     @Post("create")
     @ApiResponse({
@@ -31,25 +27,23 @@ export class UserController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-        if (session.user) {
-            const user = await this.userUsecase.getUser(session.user);
+        let user: UserEntity;
 
-            let result = user;
+        if (session.user) {
+            user = await this.userUsecase.getUser(session.user);
 
             if (!user.check()) {
-                const username = await this.generateUsernameService.generate();
-                result = await this.userUsecase.create(username);
-                session.user = result.getId;
+                user = await this.userUsecase.createGuest();
+                session.user = user.getId;
             }
 
-            return response.status(200).json(result);
+            return response.status(200).json(user);
         }
 
-        const username = await this.generateUsernameService.generate();
-        const result = await this.userUsecase.create(username);
-        session.user = result.getId;
+        user = await this.userUsecase.createGuest();
+        session.user = user.getId;
 
-        response.status(200).json(result);
+        response.status(200).json(user);
     }
 
     @Patch("update")

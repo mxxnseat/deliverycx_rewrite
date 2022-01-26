@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { PaymentService } from "src/services/payment/payment.service";
 import { WebhookController } from "src/components/webhook/controllers/webhook.controller";
-import { DatabaseModule } from "src/modules/database.module";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { CartRepository } from "src/components/cart/repositories/base.repository";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
@@ -18,7 +17,7 @@ import { IikoModule } from "src/modules/iiko.module";
 import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 
 @Module({
-    imports: [DatabaseModule, IikoModule],
+    imports: [IikoModule],
     controllers: [WebhookController],
     providers: [
         {
@@ -38,7 +37,7 @@ import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
             useClass: OrderRepository
         },
         {
-            provide: IIiko,
+            provide: "IIiko",
             useClass: IikoService
         },
         IikoWebsocketGateway,

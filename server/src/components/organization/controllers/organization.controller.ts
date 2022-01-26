@@ -22,7 +22,6 @@ export class OrganizationController {
         @Req() request: Request
     ) {
         const result = await this.organizationUsecase.getAll(query.cityId);
-
         response.status(HttpStatus.OK).json(result);
     }
 }

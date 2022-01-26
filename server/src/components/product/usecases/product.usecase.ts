@@ -9,7 +9,6 @@ export class ProductUsecase {
 
     async getOne(productId: UniqueId, userId: UniqueId) {
         const result = await this.productRepository.getOne(productId, userId);
-
         if (!result.getId) {
             throw new NotFoundError(`Товар с ID ${productId} не найден`);
         }

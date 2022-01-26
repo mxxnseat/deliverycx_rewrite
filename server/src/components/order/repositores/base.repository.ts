@@ -8,7 +8,7 @@ import { IOrderRepository } from "./interface.repository";
 @Injectable()
 export class OrderRepository implements IOrderRepository {
     constructor(
-        @Inject("ORDER_MODEL")
+        @Inject("Order")
         private readonly orderModel: Model<OrderClass>
     ) {}
 

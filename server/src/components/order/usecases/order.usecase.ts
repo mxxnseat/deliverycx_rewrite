@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { IIiko } from "src/services/iiko/iiko.abstract";
@@ -9,8 +9,11 @@ import { IOrderRepository } from "../repositores/interface.repository";
 @Injectable()
 export class OrderUsecase {
     constructor(
-        private readonly orderRepository: IOrderRepository,
+        @Inject("IIiko")
         private readonly orderService: IIiko,
+
+        private readonly orderRepository: IOrderRepository,
+
         private readonly cartRepository: ICartRepository,
         private readonly DeliveryService: IDeliveryService
     ) {}

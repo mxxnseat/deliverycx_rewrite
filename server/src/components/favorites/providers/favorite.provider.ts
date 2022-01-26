@@ -1,11 +1,15 @@
-import { FavoriteSchema } from "src/database/models/favorite.model";
+import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
+import {
+    FavoriteModel,
+    FavoriteSchema
+} from "src/database/models/favorite.model";
 
 export const favoriteProviders = [
     {
-        inject: ["DATABASE_CONNECTION"],
+        provide: "Favorite",
         useFactory: (connection: Connection) =>
-            connection.model("favorite", FavoriteSchema),
-        provide: "FAVORITE_MODEL"
+            connection.model("Favorite", FavoriteSchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];
