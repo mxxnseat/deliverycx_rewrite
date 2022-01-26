@@ -10,8 +10,6 @@ import { BaseError } from "src/common/errors/base.error";
 @Catch(BaseError)
 export class BaseErrorsFilter implements ExceptionFilter {
     catch(exception: BaseError, host: ArgumentsHost) {
-        console.log(exception);
-
         const context = host.switchToHttp();
         const response = context.getResponse<Response>();
 

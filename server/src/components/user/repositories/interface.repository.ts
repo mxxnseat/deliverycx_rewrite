@@ -1,4 +1,5 @@
 import { UserEntity } from "../entities/user.entity";
+import { IUpdateProps } from "../interfaces/update.interface";
 
 export abstract class IUserRepository {
     abstract create(
@@ -8,4 +9,9 @@ export abstract class IUserRepository {
     ): Promise<UserEntity>;
 
     abstract getUser(userId: UniqueId): Promise<UserEntity>;
+
+    abstract updateUser(
+        userId: UniqueId,
+        updateProps: IUpdateProps
+    ): Promise<UserEntity>;
 }

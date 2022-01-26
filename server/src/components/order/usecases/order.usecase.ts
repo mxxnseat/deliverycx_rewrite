@@ -1,30 +1,53 @@
-import { Injectable } from "@nestjs/common";
-import { CartEntity } from "src/components/cart/entities/cart.entity";
+import { Inject, Injectable } from "@nestjs/common";
+import { ICartRepository } from "src/components/cart/repositories/interface.repository";
+import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { OrderDTO } from "../dto/order.dto";
 import { OrderEntity } from "../entities/order.entity";
 import { IOrderRepository } from "../repositores/interface.repository";
-import { ValidationCount } from "../services/validationCount/validationCount.service";
 
 @Injectable()
 export class OrderUsecase {
     constructor(
-        private readonly orderRepository: IOrderRepository,
+        @Inject("IIiko")
         private readonly orderService: IIiko,
-        private readonly validationCountService: ValidationCount
+
+        private readonly orderRepository: IOrderRepository,
+
+        private readonly cartRepository: ICartRepository,
+        private readonly DeliveryService: IDeliveryService
     ) {}
 
-    async create(
-        userId: UniqueId,
-        cart: Array<CartEntity>,
-        orderInfo: OrderDTO
-    ) {
-        this.validationCountService.validate(cart);
+    async create(userId: UniqueId, orderInfo: OrderDTO) {
+        const cart = await this.cartRepository.getAll(userId);
 
-        const orderResult = await this.orderService.create(cart, orderInfo);
+        const orderNumber = await this.orderService.create(
+            userId,
+            cart,
+            orderInfo
+        );
 
-        await this.orderRepository.create(userId, CartEntity.calc(cart));
+        const deliveryPrice = await this.DeliveryService.calculatingPrices(
+            userId,
+            orderInfo.orderType
+        );
 
-        return new OrderEntity(orderResult);
+        await this.orderRepository.create(
+            userId,
+            deliveryPrice.totalPrice,
+            orderNumber
+        );
+
+        await this.cartRepository.removeAll(userId);
+
+        return new OrderEntity(orderNumber);
+    }
+
+    async checkOrder(userId, orderInfo: OrderDTO) {
+        const cart = await this.cartRepository.getAll(userId);
+
+        const result = await this.orderService.check(userId, cart, orderInfo);
+
+        return result;
     }
 }

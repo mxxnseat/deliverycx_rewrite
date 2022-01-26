@@ -8,14 +8,15 @@ import logger from 'redux-logger'
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import { authApi, AUTH_API_REDUCER_KEY } from 'servises/repository/RTK/RTKAuth';
-import profileSlice from './slice/profileSlice';
+import profileSlice, { fetchUser } from './slice/profileSlice';
 import locationSlice from './slice/locationSlice';
 import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/RTKLocation';
 import { SHOP_API_REDUCER_KEY, RTKShop } from 'servises/repository/RTK/RTKShop';
 import ShopSlice from './slice/shopSlice';
 import { CATEGORIES_API_REDUCER_KEY, RTKCategories } from 'servises/repository/RTK/RTKCategories';
-import cartSlice from './slice/cartSlice';
+import cartSlice, { fetchAllCart } from './slice/cartSlice';
 import { CART_API_REDUCER_KEY, RTKCart } from 'servises/repository/RTK/RTKCart';
+import bankCardSlice from './slice/bankCardSlice';
 
 const history = createBrowserHistory()
 const persistConfig = {
@@ -29,7 +30,8 @@ const persistConfig = {
     CART_API_REDUCER_KEY,
     profileSlice.name,
     ShopSlice.name,
-    cartSlice.name
+    cartSlice.name,
+    bankCardSlice.name
   ],
   transforms: [
     createTransform(
@@ -58,8 +60,8 @@ const createRootReducer = combineReducers({
   [profileSlice.name]:profileSlice.reducer,
   [locationSlice.name]: locationSlice.reducer,
   [ShopSlice.name]: ShopSlice.reducer,
-  [cartSlice.name]:cartSlice.reducer
-  
+  [cartSlice.name]:cartSlice.reducer,
+  [bankCardSlice.name]:bankCardSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
@@ -71,7 +73,7 @@ const customMiddleware: Middleware<Record<string, unknown>, RootState> = store =
   return res;
 };
 
-const middlewares = [logger,routerMiddleware(history),RTKCart.middleware,customMiddleware];
+const middlewares = [logger,routerMiddleware(history),customMiddleware];
 
 const store = configureStore({
   reducer:persistedReducer,
@@ -81,7 +83,10 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 })
 
-const persistor = persistStore(store);
+const persistor = persistStore(store, undefined, async () => {
+  await store.dispatch(fetchUser() as any)
+  await store.dispatch(fetchAllCart() as any) 
+});
 
 export { store, persistor }
 export type RootState = ReturnType<typeof createRootReducer>;

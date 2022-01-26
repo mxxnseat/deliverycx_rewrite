@@ -1,17 +1,22 @@
-import { Body, Controller, Post, Req, Res, Session } from "@nestjs/common";
-import { Request, Response } from "express";
-import { GenerateUsernameService } from "../services/guestUsername.service";
+import {
+    Body,
+    Controller,
+    Patch,
+    Post,
+    Req,
+    Res,
+    Session
+} from "@nestjs/common";
+import { Request, response, Response } from "express";
 import { UserUsecase } from "../usecases/user.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UserEntity } from "../entities/user.entity";
+import { UpdateDTO } from "../dto/update.dto";
 
 @ApiTags("User endpoints")
 @Controller("user")
 export class UserController {
-    constructor(
-        private readonly userUsecase: UserUsecase,
-        private readonly generateUsernameService: GenerateUsernameService
-    ) {}
+    constructor(private readonly userUsecase: UserUsecase) {}
 
     @Post("create")
     @ApiResponse({
@@ -22,15 +27,33 @@ export class UserController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-        if (session.user) {
-            return response
-                .status(200)
-                .json(await this.userUsecase.getUser(session.user));
-        }
-        const username = await this.generateUsernameService.generate();
-        const result = await this.userUsecase.create(username);
-        session.user = result.getId;
+        let user: UserEntity;
 
-        response.status(200).json(result);
+        if (session.user) {
+            user = await this.userUsecase.getUser(session.user);
+
+            if (!user.check()) {
+                user = await this.userUsecase.createGuest();
+                session.user = user.getId;
+            }
+
+            return response.status(200).json(user);
+        }
+
+        user = await this.userUsecase.createGuest();
+        session.user = user.getId;
+
+        response.status(200).json(user);
+    }
+
+    @Patch("update")
+    async update(
+        @Session() session: Record<string, string>,
+        @Body() body: UpdateDTO,
+        @Res() response: Response
+    ) {
+        await this.userUsecase.updateUser(session.user, body);
+
+        response.status(201).json();
     }
 }

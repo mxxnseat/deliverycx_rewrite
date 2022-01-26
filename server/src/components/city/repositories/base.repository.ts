@@ -9,7 +9,7 @@ import { Model } from "mongoose";
 @Injectable()
 export class CityRepository implements ICityRepository {
     constructor(
-        @Inject("CITY_MODEL")
+        @Inject("City")
         private readonly cityModel: Model<CityClass>
     ) {}
 

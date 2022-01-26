@@ -4,10 +4,8 @@ import { organizationProviders } from "src/components/organization/providers/org
 import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
 import { OrganizationUsecase } from "src/components/organization/usecases/organization.usecase";
-import { DatabaseModule } from "src/modules/database.module";
 
 @Module({
-    imports: [DatabaseModule],
     controllers: [OrganizationController],
     providers: [
         OrganizationUsecase,

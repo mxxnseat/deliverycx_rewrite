@@ -1,6 +1,7 @@
 version: "3.9"
 networks:
     mongodb_net:
+        name: deliverycx_nest_mongodb_net
         driver: bridge
 services:
     deliverycx_client:
@@ -10,8 +11,15 @@ services:
             dockerfile: ./Dockerfile.webserver
         ports:
           - "80:80"
+          - "443:443"
+        depends_on:
+          - deliverycx_backend
         volumes:
           - ./static:/static
+          - ./dhparam:/etc/nginx/dhparam
+          - ./certbot/conf/:/etc/nginx/ssl/:ro
+          - ./certbot/data:/var/www/letsencrypt
+       
         networks:
           - mongodb_net
     deliverycx_backend:
@@ -29,6 +37,8 @@ services:
             - redis
         ports:
             - "5000:5000"
+        volumes:
+          - "./server/pinologs:/usr/node/app/pinologs"
     redis:
         image: redis
         command:
@@ -48,4 +58,11 @@ services:
         volumes:
             - ./mongo/data:/data/db
         networks:
-          - mongodb_net
+            - mongodb_net
+    certbot:
+        image: certbot/certbot
+        command: certonly --webroot --webroot-path=/var/www/letsencrypt --email kirill_shkarun@mail.ru --agree-tos --no-eff-email -d xn--e1aybc.xn--80apgfh0ct5a.xn--p1ai
+        volumes:
+            - ./certbot/logs/:/var/log/letsencrypt
+            - ./certbot/conf/:/etc/letsencrypt/:rw
+            - ./certbot/data:/var/www/letsencrypt

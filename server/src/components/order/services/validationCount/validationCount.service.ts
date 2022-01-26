@@ -18,9 +18,9 @@ export class ValidationCount {
             const regex = new RegExp(key + "-\\d+", "i");
 
             cart.forEach((cartEl) => {
-                const tagIndex = cartEl.getProductTags.findIndex((el) =>
-                    el.match(regex)
-                );
+                const tagIndex = cartEl.getProductTags
+                    ? cartEl.getProductTags.findIndex((el) => el.match(regex))
+                    : -1;
 
                 if (tagIndex !== -1) {
                     const key =

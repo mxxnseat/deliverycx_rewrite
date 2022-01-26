@@ -28,7 +28,7 @@ export function useCategories() {
     categories && dispatch(setCategories(categories[index]))
   }, [categories])
 
-  
+  console.log(currentSlide)
   useEffect(() => {
     /*
     if (Object.keys(category).length && categories) {
@@ -49,7 +49,6 @@ export function useCategories() {
     category
   })
   this.handlers({
-    setCurrentSlide,
     handleSliderClick
   })
   this.status({

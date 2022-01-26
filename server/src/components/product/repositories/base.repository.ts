@@ -5,71 +5,120 @@ import {
 import { IProductRepository } from "./interface.repository";
 import { ProductEntity } from "../entities/product.entity";
 import { CategoryClass } from "../../../database/models/category.model";
-import { BaseRepository } from "../../../common/abstracts/base.repository";
 import { productMapper } from "../entities/product.mapper";
 import { Inject, Injectable } from "@nestjs/common";
-import { Document, Model, Types } from "mongoose";
+import { Model, Types } from "mongoose";
 import { FavoriteClass } from "src/database/models/favorite.model";
+import { createPipeline } from "./aggregate.pipeline";
 
 @Injectable()
 export class ProductRepository implements IProductRepository {
     constructor(
-        @Inject("PRODUCT_MODEL")
+        @Inject("Product")
         private readonly productModel: Model<ProductClass>,
 
-        @Inject("FAVORITE_MODEL")
+        @Inject("Favorite")
         private readonly favoriteModel: Model<FavoriteClass>
     ) {}
 
     async getFavorites(userId: UniqueId) {
-        const result = await this.favoriteModel
-            .findOne({ user: userId })
-            .populate("products");
+        const result = (
+            await this.favoriteModel.aggregate([
+                {
+                    $match: { user: new Types.ObjectId(userId) }
+                },
+                {
+                    $lookup: {
+                        from: "products",
+                        as: "products",
+                        let: { favoriteProducts: "$products" },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $in: ["$_id", "$$favoriteProducts"]
+                                    }
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "stoplists",
+                                    as: "stoplist",
+                                    let: {
+                                        productGUID: "$id",
+                                        organization: "$organization"
+                                    },
+                                    pipeline: [
+                                        {
+                                            $addFields: {
+                                                isInStopList: {
+                                                    $cond: [
+                                                        {
+                                                            $in: [
+                                                                "$$productGUID",
+                                                                "$stoplist.product"
+                                                            ]
+                                                        },
+                                                        true,
+                                                        false
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        {
+                                            $replaceRoot: {
+                                                newRoot: {
+                                                    isInStopList:
+                                                        "$isInStopList"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                $set: {
+                                    stoplist: "$stoplist.isInStopList"
+                                }
+                            },
+                            {
+                                $match: {
+                                    $or: [
+                                        {
+                                            stoplist: false
+                                        },
+                                        {
+                                            stoplist: { $size: 0 }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ])
+        )[0] || { products: [] };
 
         return productMapper(
             result.products.map((product: any) => ({
-                ...product.toObject(),
+                ...product,
                 isFav: true
             })) as (ProductClass & { isFav: boolean })[]
         );
     }
 
     async getAll(categoryId: UniqueId, userId: UniqueId): Promise<any> {
-        const result = await this.productModel.aggregate([
+        const pipeline = createPipeline(
             {
-                $match: { category: new Types.ObjectId(categoryId) }
-            },
-            {
-                $lookup: {
-                    from: "favorites",
-                    as: "favorites",
-                    let: { productId: "$_id" },
-                    pipeline: [
-                        {
-                            $match: {
-                                user: new Types.ObjectId(userId),
-                                $expr: { $in: ["$$productId", "$products"] }
-                            }
-                        }
-                    ]
+                $match: {
+                    category: new Types.ObjectId(categoryId),
+                    tags: { $nin: ["hidden"] }
                 }
             },
-            {
-                $addFields: {
-                    isFav: {
-                        $cond: [
-                            { $eq: [{ $size: "$favorites" }, 1] },
+            userId
+        );
 
-                            true,
-                            false
-                        ]
-                    }
-                }
-            },
-            {
-                $unset: "favorites"
-            }
-        ]);
+        const result = await this.productModel.aggregate(pipeline);
 
         const productsPopulate = await Promise.all(
             result.map(async (product) => {
@@ -83,43 +132,17 @@ export class ProductRepository implements IProductRepository {
     }
 
     async getOne(productId: UniqueId, userId: UniqueId) {
-        const result = await this.productModel.aggregate([
+        const pipeline = createPipeline(
             {
                 $match: {
-                    _id: new Types.ObjectId(productId)
+                    _id: new Types.ObjectId(productId),
+                    tags: { $nin: ["hidden"] }
                 }
             },
-            {
-                $lookup: {
-                    from: "favorites",
-                    as: "favorites",
-                    let: { productId: "$_id" },
-                    pipeline: [
-                        {
-                            $match: {
-                                user: new Types.ObjectId(userId),
-                                $expr: { $in: ["$$productId", "$products"] }
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $addFields: {
-                    isFav: {
-                        $cond: [
-                            { $eq: [{ $size: "$favorites" }, 1] },
+            userId
+        );
 
-                            true,
-                            false
-                        ]
-                    }
-                }
-            },
-            {
-                $unset: "favorites"
-            }
-        ]);
+        const result = await this.productModel.aggregate(pipeline);
 
         const productPopulate = (
             await Promise.all(
@@ -132,7 +155,7 @@ export class ProductRepository implements IProductRepository {
         )[0];
 
         return new ProductEntity(
-            productPopulate?.id,
+            productPopulate?._id,
             productPopulate?.name,
             productPopulate?.description,
             productPopulate?.additionalInfo,
@@ -150,44 +173,17 @@ export class ProductRepository implements IProductRepository {
         organizationId: UniqueId,
         userId: UniqueId
     ) {
-        const result = await this.productModel.aggregate([
+        const pipeline = createPipeline(
             {
                 $match: {
                     organization: new Types.ObjectId(organizationId),
-                    name: { $regex: searchString, $options: "i" }
+                    name: { $regex: searchString, $options: "i" },
+                    tags: { $nin: ["hidden"] }
                 }
             },
-            {
-                $lookup: {
-                    from: "favorites",
-                    as: "favorites",
-                    let: { productId: "$_id" },
-                    pipeline: [
-                        {
-                            $match: {
-                                user: new Types.ObjectId(userId),
-                                $expr: { $in: ["$$productId", "$products"] }
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $addFields: {
-                    isFav: {
-                        $cond: [
-                            { $eq: [{ $size: "$favorites" }, 1] },
-
-                            true,
-                            false
-                        ]
-                    }
-                }
-            },
-            {
-                $unset: "favorites"
-            }
-        ]);
+            userId
+        );
+        const result = await this.productModel.aggregate(pipeline);
 
         const productsPopulate = await Promise.all(
             result.map(async (product) => {

@@ -5,13 +5,16 @@ import {
     prop,
     Ref
 } from "@typegoose/typegoose";
+import { Types } from "mongoose";
 import { CartClass } from "./cart.model";
 
 class Address {
+    @prop({ type: String })
     public street: string;
-    public home: string;
+    @prop({ type: Number })
+    public home: number;
 
-    constructor(street: string, home: string) {
+    constructor(street: string, home: number) {
         this.street = street;
         this.home = home;
     }
@@ -31,7 +34,10 @@ export class UserClass {
     @prop()
     public phone!: string;
 
-    @prop()
+    @prop({ type: Types.ObjectId })
+    public selectedOrganization: Types.ObjectId;
+
+    @prop({ type: Address })
     public address!: Address;
 
     @prop({ ref: () => CartClass })

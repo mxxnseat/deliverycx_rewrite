@@ -11,7 +11,7 @@ export class useCaseShopEntiti implements IuseCaseShopEntiti{
   get getReduserAction() {
     return {
       ['setCategories']: ShopEntitiesMetod.setCategories, 
-      
+      ['setStopList']: ShopEntitiesMetod.setStopList
       
     }
   }

@@ -4,6 +4,8 @@ import {
     Delete,
     Get,
     Post,
+    Query,
+    Res,
     Session,
     UseFilters,
     UseGuards,
@@ -11,7 +13,7 @@ import {
     ValidationPipe
 } from "@nestjs/common";
 import { AuthGuard } from "src/guards/authorize.guard";
-import { cartDTO } from "../dto/add.dto";
+import { AddCartDTO } from "../dto/add.dto";
 import { ChangeAmountDTO } from "../dto/changeAmount.dto";
 import { RemoveOneDTO } from "../dto/removeOne.dto";
 import { CartUsecase } from "../usecases/cart.usecase";
@@ -19,6 +21,8 @@ import { ApiBody, ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { CartEntity } from "../entities/cart.entity";
 import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { ValidationException } from "src/filters/validation.filter";
+import { Response } from "express";
+import { GetAllCartDTO } from "../dto/getAll.dto";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -39,25 +43,35 @@ export class CartController {
     constructor(private readonly cartUsecase: CartUsecase) {}
 
     @ApiBody({
-        type: cartDTO
+        type: AddCartDTO
     })
     @ApiResponse({
         status: 200,
-        type: CartEntity
+        schema: {
+            properties: {
+                item: { type: "object", example: CartEntity },
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
+            }
+        }
     })
     @Post("add")
     async add(
         @Body()
-        addBody: cartDTO,
+        addBody: AddCartDTO,
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
-        const result = await this.cartUsecase.add(
-            session.user,
-            addBody.productId
-        );
+        const result = await this.cartUsecase.add(session.user, addBody);
 
-        return result;
+        response.status(200).json(result);
     }
 
     @ApiBody({
@@ -65,7 +79,22 @@ export class CartController {
     })
     @ApiResponse({
         status: 200,
-        type: String,
+        schema: {
+            properties: {
+                deletedId: {
+                    type: "string",
+                    example: "61b609abaabff8e544dfecee"
+                },
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
+            }
+        },
         description: "Возращает ID удаленного итема"
     })
     @Delete("removeOne")
@@ -73,14 +102,15 @@ export class CartController {
         @Body()
         removeBody: RemoveOneDTO,
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.removeOne(
             session.user,
-            removeBody.cartId
+            removeBody
         );
 
-        return result;
+        response.status(200).json(result);
     }
 
     @ApiResponse({
@@ -91,11 +121,12 @@ export class CartController {
     @Delete("deleteAll")
     async deleteAll(
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.removeAll(session.user);
 
-        return result;
+        response.status(200).json(result);
     }
 
     @ApiBody({
@@ -103,35 +134,64 @@ export class CartController {
     })
     @ApiResponse({
         status: 200,
-        type: Number
+        schema: {
+            properties: {
+                item: { type: "object", example: CartEntity },
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
+            }
+        }
     })
     @Post("amount")
     async changeAmount(
         @Body()
         changeAmountBody: ChangeAmountDTO,
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response
     ) {
         const result = await this.cartUsecase.changeAmount(
             session.user,
-            changeAmountBody.cartId,
-            changeAmountBody.amount
+            changeAmountBody
         );
 
-        return result;
+        response.status(200).json(result);
     }
 
     @Get("getAll")
+    @ApiBody({
+        type: GetAllCartDTO
+    })
     @ApiResponse({
-        type: CartEntity,
+        schema: {
+            properties: {
+                cart: { type: "array", example: [] },
+                totalPrice: { type: "number", example: 1200 },
+                deliveryPrice: { type: "number", example: 0 },
+                deltaPrice: {
+                    type: "number",
+                    example: 0,
+                    description:
+                        "Отображает разницу между 600 и общей суммой товарров"
+                }
+            }
+        },
         status: 200
     })
     async getAll(
         @Session()
-        session: Record<string, string>
+        session: Record<string, string>,
+        @Res() response: Response,
+        @Query() query: GetAllCartDTO
     ) {
-        const result = await this.cartUsecase.getAll(session.user);
+        const result = await this.cartUsecase.getAll(session.user, query);
 
-        return result;
+        response.status(200).json(result);
     }
 }

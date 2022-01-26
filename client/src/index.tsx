@@ -1,4 +1,5 @@
 import "./scss/index.scss";
+
 import ReactDOM from 'react-dom';
 import App from 'application/App';
 import { store,persistor } from 'servises/redux/createStore';

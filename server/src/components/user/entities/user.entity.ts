@@ -21,19 +21,29 @@ export class UserEntity {
         required: false
     })
     private readonly address?: string;
+    @ApiProperty({
+        required: false
+    })
+    private readonly organization?: UniqueId;
 
     constructor(
         id: UniqueId,
         username: string,
         name?: string,
         phone?: string,
-        address?: string
+        address?: string,
+        organization?: UniqueId
     ) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.organization = organization;
+    }
+
+    public check() {
+        return !!this.id;
     }
 
     public get getAddress() {
@@ -50,5 +60,8 @@ export class UserEntity {
     }
     public get getId() {
         return this.id;
+    }
+    public get getOrganization() {
+        return this.organization;
     }
 }

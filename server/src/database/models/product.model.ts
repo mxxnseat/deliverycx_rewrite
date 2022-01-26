@@ -9,6 +9,7 @@ import {
 import { Types } from "mongoose";
 import { CategoryClass } from "./category.model";
 import { OrganizationClass } from "./organization.model";
+import { Decimal128 } from "bson";
 
 enum MeasureUnit {
     PIECE = "шт",

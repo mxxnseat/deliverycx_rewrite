@@ -8,6 +8,7 @@ import { useCategories } from "domain/use-case/useCaseCategories";
 import { useDispatch } from "react-redux";
 import { setCategories } from "servises/redux/slice/shopSlice";
 import { RTKShop } from "servises/repository/RTK/RTKShop";
+import LoaderProduct from "application/components/common/Loaders/loaderProduct";
 
 
 const Categories = () => {
@@ -15,20 +16,9 @@ const Categories = () => {
 
   const useCasePoints = adapterComponentUseCase(useCategories)
   const {categories,currentSlide,category } = useCasePoints.data
-  const {setCurrentSlide,handleSliderClick} = useCasePoints.handlers
+  const {handleSliderClick} = useCasePoints.handlers
   const { isFetching } = useCasePoints.status
   
-  useEffect(() => {
-    /*
-    if (Object.keys(category).length) {
-      const catIndex = categories.findIndex((cat:any) => cat.id === category.id)
-      setCurrentSlide(catIndex);
-      //dispatch(setCategories(categories[catIndex]))
-    }
-    */
-   
-    
-  }, [isFetching])
     
     
   
@@ -36,7 +26,7 @@ const Categories = () => {
     <Slider
       className="categories"
       initialSlide={currentSlide}
-      afterChange={(index: number)=>setCurrentSlide(index)}
+      afterChange={(index: number)=>handleSliderClick(index,slider)}
       ref={slider}
       centerMode
       slidesToShow={5}
@@ -66,6 +56,6 @@ const Categories = () => {
           })
       }
     </Slider>        
-  ) : <>load</>
+  ) : <LoaderProduct />
 }
 export default Categories
