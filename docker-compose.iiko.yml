@@ -5,7 +5,7 @@ services:
       build:
          context: ./iiko
       env_file:
-        - ./iiko/.production.env
+        - ./iiko/.env
       volumes:
         - ./static:/data/iiko
       command: bash -c "cp ./favorite.png /data/iiko && ts-node ./src/polling.ts"
@@ -14,4 +14,4 @@ services:
 networks:
   mongodb:
     external:
-      name: deliverycx_nest_mongodb_net    
+      name: main_gateway    

@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 config({
-    path: __dirname + "/../.development.env"
+    path: __dirname + "/../.env"
 });
 process.chdir(`${__dirname}/../..`);
 console.log(process.env, __dirname);

@@ -3,3 +3,6 @@ node_modules
 static
 redis
 mongo
+certbot
+nginx/nginx.conf
+client/**/config.*

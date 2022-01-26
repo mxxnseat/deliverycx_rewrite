@@ -7,15 +7,15 @@ import { ConnectedRouter } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-
 const history = createBrowserHistory()
-
-console.log(1);
-
+// alert(1);
+// d()
+// console.log(process.env);
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
     <App />
+    {/* <div>hello world</div> */}
     </PersistGate>
     
     

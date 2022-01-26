@@ -19,10 +19,7 @@ import { createClient } from "redis";
 @Module({
     imports: [
         ConfigModule.forRoot({
-            envFilePath: path.resolve(
-                __dirname,
-                `../../.${process.env.NODE_ENV}.env`
-            )
+            envFilePath: path.resolve(__dirname, `../../.env`)
         }),
         ProductModule,
         CategoryModule,
