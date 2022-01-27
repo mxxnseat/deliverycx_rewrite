@@ -15,6 +15,7 @@ import { DeliveryService } from "src/services/delivery/delivery.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { productProviders } from "src/components/product/providers/product.provider";
 import { IikoModule } from "src/modules/iiko.module";
+import { paymasterProvider } from "src/services/payment/sdk/provider/paymaster.provider";
 
 @Module({
     imports: [IikoModule],
@@ -42,6 +43,8 @@ import { IikoModule } from "src/modules/iiko.module";
             provide: ValidationCount,
             useClass: ValidationCount
         },
+        paymasterProvider,
+
         ...productProviders,
         ...cartProviders,
         ...orderProviders
