@@ -191,7 +191,6 @@ export class CartController {
         @Query() query: GetAllCartDTO
     ) {
         const result = await this.cartUsecase.getAll(session.user, query);
-
         response.status(200).json(result);
     }
 }

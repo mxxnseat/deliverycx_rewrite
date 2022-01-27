@@ -18,6 +18,7 @@ services:
       - main_gateway
     ports:
       - 3000:3000
+    cpus: 0.5
   nestjs:
     build:
       context: ./server
@@ -31,19 +32,13 @@ services:
       - "./server:/usr/app/cx"
     networks:
       - main_gateway
+    cpus: 0.5
   redis:
     image: redis
-    command:
-      - "redis-server"
-      - "--loglevel ${REDIS_LOGLEVEL:-warning}"
-      - "--databases 2"
-      - "--save 900 1"
-      - "--save 300 10"
-      - "--save 60 10000"
-    volumes:
-      - ./redis/data:/data
     networks:
       - main_gateway
+    mem_limit: 256m
+    cpus: 0.5
   mongodb:
     container_name: mongodb
     image: mongo
@@ -51,11 +46,15 @@ services:
       - ./mongo/data:/data/db
     networks:
       - main_gateway
+    mem_limit: 512m
+    cpus: 0.5
+    
   nginx:
     container_name: nginx
-    image: nginx:latest
+    image: nginx:1.21.6-alpine
     depends_on:
       - nestjs
+      - react
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf
       - ./static:/etc/static
