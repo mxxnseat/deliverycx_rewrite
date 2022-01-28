@@ -19,8 +19,9 @@ export class IIkoAxios {
         this.axios.interceptors.response.use(
             (response) => response,
             (error) => {
+                console.log(error);
                 return Promise.reject(
-                    new IikoError(error.response.data?.description)
+                    new IikoError(error.response.data?.message)
                 );
             }
         );

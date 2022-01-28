@@ -1,4 +1,5 @@
 import axios, { Axios } from "axios";
+import { PaymentError } from "../models/error.model";
 import { PaymasterRequest } from "../types/request.type";
 
 import { PaymasterResponse } from "../types/response.type";
@@ -18,7 +19,7 @@ export class PaymasterRequests {
         this.axios.interceptors.response.use(
             (response) => response,
             (error) => {
-                return Promise.reject(error);
+                return Promise.reject(new PaymentError(error));
             }
         );
     }
