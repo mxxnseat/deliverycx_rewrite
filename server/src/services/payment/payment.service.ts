@@ -41,13 +41,14 @@ export class PaymentService extends IPaymentService {
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
         // checking bank card support
-        // const organization = await this.OrganizationModel.findById(
-        //     body.organization
-        // );
+        const organization = await this.OrganizationModel.findById(
+            body.organization
+        );
 
-        // if (!organization.yopay?.isActive) {
-        //     throw new PaymentError("Заведение не поддерживает оплату картой");
-        // }
+        if (!organization.yopay?.isActive) {
+            throw new PaymentError("Заведение не поддерживает оплату картой");
+        }
+
         const d = {
             merchantId: "08121225-02f2-46dc-aff0-efd1a73ff7f1",
             testMode: true,
