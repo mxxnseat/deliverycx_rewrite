@@ -29,16 +29,15 @@ export class WebhookController {
         private readonly IikoStopListGateway: IikoWebsocketGateway
     ) {}
 
-    @Post("yoo")
+    @Post("paymentCallback")
     @UseGuards(YooWebhookGuard)
     async yowebhook(
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
     ) {
-        console.log(body.object.status + " - " + body.object.id);
-        if (body.object.status === "succeeded") {
-            await this.PaymentService.captrurePayment(body);
-        }
+        console.log(body);
+
+        this.PaymentService.captrurePayment(body.invoice.params);
 
         response.status(200).json({});
     }

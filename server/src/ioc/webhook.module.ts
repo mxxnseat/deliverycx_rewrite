@@ -15,6 +15,7 @@ import { DeliveryService } from "src/services/delivery/delivery.service";
 import { productProviders } from "src/components/product/providers/product.provider";
 import { IikoModule } from "src/modules/iiko.module";
 import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
+import { paymasterProvider } from "src/services/payment/sdk/provider/paymaster.provider";
 
 @Module({
     imports: [IikoModule],
@@ -40,6 +41,7 @@ import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
             provide: "IIiko",
             useClass: IikoService
         },
+        paymasterProvider,
         IikoWebsocketGateway,
         ...productProviders,
         ...orderProviders,
