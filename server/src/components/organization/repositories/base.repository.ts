@@ -6,8 +6,8 @@ import { IOrganizationRepository } from "./interface.repository";
 import { Inject, Injectable } from "@nestjs/common";
 import { CityClass } from "src/database/models/city.model";
 import { Model } from "mongoose";
-import { PaymentServiceDataClass } from "src/database/models/payment.model";
 import { PaymentInfoEntity } from "../entities/payments.entity";
+import { PaymentServiceDataClass } from "src/database/models/payment.model";
 
 @Injectable()
 export class OrganizationRepository
