@@ -9,7 +9,7 @@ export class YooWebhookGuard implements CanActivate {
 
         const allowedIp: Array<string> = [
             "91.200.28.0/24",
-            "54.36.30.17/0",
+            "54.36.30.17/32",
             "91.227.52.0/24"
         ];
         const ip = request.ip;
