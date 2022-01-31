@@ -6,7 +6,8 @@ export const initialStateCartMap = {
     stateMap: [],
     valueMap: "",
     disclaimer: false,
-    MapLoading: true
+    MapLoading: true,
+    inputMap:true
 };
 type typeinitialState = typeof initialStateCartMap;
 
@@ -18,6 +19,7 @@ export enum ReducerActionTypePoints {
     setExactCord,
     setDisclaimer,
     setValueMap,
+    setInputMap,
     loading
 }
 
@@ -40,6 +42,7 @@ export function CartMapReducer(
                 cord: action.payload.cord,
                 valueMap:action.payload.value,
                 disclaimer: false,
+                inputMap:false
                 
             };    
         case ReducerActionTypePoints.loading:
@@ -69,7 +72,13 @@ export function CartMapReducer(
                 ...state,
                 valueMap: action.payload,
                 
-            };
+        };
+        case ReducerActionTypePoints.setInputMap:
+          return {
+              ...state,
+              inputMap: action.payload,
+              
+          };
         default:
             return state;
     }

@@ -4,7 +4,8 @@ import {
     Body,
     Res,
     UseGuards,
-    UseFilters
+    UseFilters,
+    Inject
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -21,21 +22,22 @@ import { StopListEntity } from "src/components/stopList/entities/stopList.entity
 @Controller("webhook")
 export class WebhookController {
     constructor(
-        private readonly PaymentService: PaymentService,
+        @Inject("IIiko")
         private readonly IikoService: IIiko,
+
+        private readonly PaymentService: PaymentService,
         private readonly IikoStopListGateway: IikoWebsocketGateway
     ) {}
 
-    @Post("yoo")
+    @Post("paymentCallback")
     @UseGuards(YooWebhookGuard)
     async yowebhook(
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
     ) {
-        console.log(body.object.status + " - " + body.object.id);
-        if (body.object.status === "succeeded") {
-            await this.PaymentService.captrurePayment(body);
-        }
+        console.log(body);
+
+        this.PaymentService.captrurePayment(body.invoice.params);
 
         response.status(200).json({});
     }

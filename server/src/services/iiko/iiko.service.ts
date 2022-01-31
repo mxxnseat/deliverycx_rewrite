@@ -3,34 +3,31 @@ import { IIiko, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
-import {
-    OrganizationClass,
-    OrganizationModel
-} from "../../database/models/organization.model";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Model } from "mongoose";
 import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
-import { IStopListRepository } from "src/components/stopList/repositories/interface.repository";
-import { ICartRepository } from "src/components/cart/repositories/interface.repository";
-import { userInfo } from "os";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
+import { OrganizationClass } from "src/database/models/organization.model";
 
 export class IikoService implements IIiko {
     constructor(
-        @InjectPinoLogger() private readonly logger: PinoLogger,
-
-        @Inject("PRODUCT_MODEL")
+        @Inject("Product")
         private readonly productModel: Model<ProductClass>,
+
+        @Inject("Organization")
+        private readonly organizationModel: Model<OrganizationClass>,
 
         @Inject("IIKO_AXIOS")
         private readonly axios: IIkoAxios,
 
         private readonly DeliveryService: IDeliveryService,
 
-        private readonly StopListUsecase: StopListUsecase
+        private readonly StopListUsecase: StopListUsecase,
+
+        @InjectPinoLogger() private readonly logger?: PinoLogger
     ) {}
 
     /*-----------------| createOrderBody |-----------------------*/
@@ -39,7 +36,7 @@ export class IikoService implements IIiko {
         cart: Array<CartEntity>,
         userId: UniqueId
     ) {
-        const organization = await OrganizationModel.findById(
+        const organization = await this.organizationModel.findById(
             orderInfo.organization
         );
 
@@ -118,7 +115,7 @@ export class IikoService implements IIiko {
         organizationId: UniqueId,
         orderType: OrderTypesEnum
     ) {
-        const organizationGUID = await OrganizationModel.findById(
+        const organizationGUID = await this.organizationModel.findById(
             organizationId,
             { id: 1 }
         );

@@ -9,16 +9,16 @@ import { IOrderRepository } from "src/components/order/repositores/interface.rep
 import { PaymentService } from "src/services/payment/payment.service";
 import { ValidationCount } from "src/components/order/services/validationCount/validationCount.service";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
-import { DatabaseModule } from "src/modules/database.module";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { DeliveryService } from "src/services/delivery/delivery.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { productProviders } from "src/components/product/providers/product.provider";
 import { IikoModule } from "src/modules/iiko.module";
+import { paymasterProvider } from "src/services/payment/sdk/provider/paymaster.provider";
 
 @Module({
-    imports: [DatabaseModule, IikoModule],
+    imports: [IikoModule],
     controllers: [OrderController],
     providers: [
         PaymentService,
@@ -32,7 +32,7 @@ import { IikoModule } from "src/modules/iiko.module";
             useClass: OrderRepository
         },
         {
-            provide: IIiko,
+            provide: "IIiko",
             useClass: IikoService
         },
         {
@@ -43,6 +43,8 @@ import { IikoModule } from "src/modules/iiko.module";
             provide: ValidationCount,
             useClass: ValidationCount
         },
+        paymasterProvider,
+
         ...productProviders,
         ...cartProviders,
         ...orderProviders

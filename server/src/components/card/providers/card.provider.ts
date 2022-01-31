@@ -1,11 +1,12 @@
+import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
-import { CardSchema } from "src/database/models/card.model";
+import { CardModel, CardSchema } from "src/database/models/card.model";
 
 export const cardProviders = [
     {
-        provide: "CARD_MODEL",
+        provide: "Card",
         useFactory: (connection: Connection) =>
-            connection.model("card", CardSchema),
-        inject: ["DATABASE_CONNECTION"]
+            connection.model("Card", CardSchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

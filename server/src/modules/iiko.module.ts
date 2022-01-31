@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { cartProviders } from "src/components/cart/providers/cart.provider";
 import { CartRepository } from "src/components/cart/repositories/base.repository";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { organizationProviders } from "src/components/organization/providers/organization.provider";
@@ -10,13 +11,13 @@ import { IStopListRepository } from "src/components/stopList/repositories/interf
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
 import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
-import { DatabaseModule } from "./database.module";
 
 @Module({
-    imports: [DatabaseModule],
     providers: [
         ...iikoAxiosProviders,
         ...stopListProviders,
+        ...cartProviders,
+        ...organizationProviders,
         {
             provide: IStopListRepository,
             useClass: StopListRepository
@@ -37,7 +38,8 @@ import { DatabaseModule } from "./database.module";
     exports: [
         ...iikoAxiosProviders,
         ...stopListProviders,
-
+        ...cartProviders,
+        ...organizationProviders,
         {
             provide: IStopListRepository,
             useClass: StopListRepository

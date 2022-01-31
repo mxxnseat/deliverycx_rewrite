@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Model } from "mongoose";
 import { BaseRepository } from "src/common/abstracts/base.repository";
-import { CardClass, CardModel } from "src/database/models/card.model";
+import { CardClass } from "src/database/models/card.model";
 import { AddCardDTO } from "../dto/addCard.dto";
-import { CardEntity, ICardEntityClient } from "../entities/card.entity";
+import { CardEntity } from "../entities/card.entity";
 import { cardMapper } from "../entities/card.mapper";
 import { ICardRepository } from "./interface.repository";
 
@@ -13,19 +13,19 @@ export class CardRepository
     implements ICardRepository
 {
     constructor(
-        @Inject("CARD_MODEL")
-        private readonly cardModel: Model<CardClass>
+        @Inject("Card")
+        private readonly CardModel: Model<CardClass>
     ) {
         super(CardModel, cardMapper, "user");
     }
 
     async deleteCard(userId: UniqueId, cardId: UniqueId): Promise<UniqueId> {
-        const result = await this.cardModel.findByIdAndDelete(cardId);
+        const result = await this.CardModel.findByIdAndDelete(cardId);
 
         return cardId;
     }
     async addCard(userId: UniqueId, card: AddCardDTO): Promise<CardEntity> {
-        const doc = await this.cardModel.findOneAndUpdate(
+        const doc = await this.CardModel.findOneAndUpdate(
             { user: userId, number: card.number },
             {
                 $setOnInsert: {

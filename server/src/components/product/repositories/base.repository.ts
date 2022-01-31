@@ -14,10 +14,10 @@ import { createPipeline } from "./aggregate.pipeline";
 @Injectable()
 export class ProductRepository implements IProductRepository {
     constructor(
-        @Inject("PRODUCT_MODEL")
+        @Inject("Product")
         private readonly productModel: Model<ProductClass>,
 
-        @Inject("FAVORITE_MODEL")
+        @Inject("Favorite")
         private readonly favoriteModel: Model<FavoriteClass>
     ) {}
 
@@ -155,7 +155,7 @@ export class ProductRepository implements IProductRepository {
         )[0];
 
         return new ProductEntity(
-            productPopulate?.id,
+            productPopulate?._id,
             productPopulate?.name,
             productPopulate?.description,
             productPopulate?.additionalInfo,

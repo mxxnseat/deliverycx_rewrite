@@ -60,35 +60,6 @@ export class OrderDTO {
     })
     paymentMethod: PaymentMethods;
 
-    @ApiProperty({
-        example: "2200 0000 0000 0000",
-        examples: [
-            "2200 0000 0000 0000",
-            "4111 1111 1111 1111",
-            "2200000000000000",
-            "4111111111111111"
-        ]
-    })
-    // @IsCardNumber("", { message: "Не верный формат карты" })
-    @IsOptional()
-    cardNumber?: string;
-
-    @ApiProperty({ example: 777 })
-    @IsCardCvv("", { message: "Не правильный cvv/csv код" })
-    @IsOptional()
-    cvv?: string;
-
-    @ApiProperty({
-        properties: {
-            year: { type: "number", example: 29 },
-            month: { type: "number", example: 12 }
-        }
-    })
-    @prepareYear()
-    @IsCardExpires("", { message: "Не верно указана дата" })
-    @IsOptional()
-    expires?: ExpiresType;
-
     @ApiProperty({ required: false })
     @IsEmail({ message: "Не корректный e-mail" })
     @IsOptional()
