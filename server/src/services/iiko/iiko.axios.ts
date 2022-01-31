@@ -20,7 +20,10 @@ export class IIkoAxios {
             (response) => response,
             (error) => {
                 return Promise.reject(
-                    new IikoError(error.response.data?.description)
+                    new IikoError(
+                        error.response.data?.description ||
+                            error.response.data?.message
+                    )
                 );
             }
         );
