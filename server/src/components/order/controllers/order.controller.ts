@@ -26,6 +26,7 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { ValidationCount } from "../services/validationCount/validationCount.service";
 import { PaymentException } from "src/filters/payment.filter";
+import { RedirectEntity } from "../entities/redirect.entity";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -53,8 +54,8 @@ export class OrderController {
 
     @ApiResponse({
         status: 200,
-        type: OrderEntity,
-        description: "Возращает номер заказа"
+        type: RedirectEntity,
+        description: "Возращает урл для редиректа"
     })
     @Post("create")
     async create(
