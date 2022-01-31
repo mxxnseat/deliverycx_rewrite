@@ -5,21 +5,12 @@ import { isInSubnet } from "is-in-subnet";
 @Injectable()
 export class YooWebhookGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> {
-        const request = context.switchToHttp().getRequest<Request>();
-
-        return true;
+        const request = context.switchToHttp().getRequest();
 
         const allowedIp: Array<string> = [
-            "185.71.76.0/27",
-            "185.71.77.0/27",
-            "77.75.153.0/25",
-            "77.75.156.11/32",
-            "77.75.156.35/32",
-            "77.75.154.128/25",
-            "2a02:5180:0:1509::/64",
-            "2a02:5180:0:2655::/64",
-            "2a02:5180:0:1533::/64",
-            "2a02:5180:0:2669::/64"
+            "91.200.28.0/24",
+            "54.36.30.17/0",
+            "91.227.52.0/24"
         ];
         const ip = request.ip;
 

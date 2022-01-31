@@ -4,6 +4,7 @@ import { PaymasterResponse } from "src/services/payment/sdk/types/response.type"
 
 export interface IPaymentWebhookParams {
     user: string;
+    hash: string;
     body_organization: string;
     body_name: string;
     body_address_city: string;

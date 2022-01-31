@@ -2,6 +2,8 @@ import { iiko } from "src/services/iiko/interfaces";
 import {
     Body,
     Controller,
+    Get,
+    Param,
     Post,
     Res,
     Session,
@@ -101,5 +103,19 @@ export class OrderController {
         }
 
         response.status(200).json("OK");
+    }
+
+    @ApiResponse({
+        status: 200,
+        type: OrderEntity,
+        description: "Возращает номер заказа"
+    })
+    @Get("number/:hash")
+    async getOrderNumber(
+        @Res() response: Response,
+        @Param("hash") hash: string
+    ) {
+        const result = await this.OrderUsecase.getOrderNumber(hash);
+        response.status(200).json(result);
     }
 }

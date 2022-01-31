@@ -15,13 +15,15 @@ import { BaseErrorsFilter } from "src/filters/base.filter";
 import * as RedisStore from "connect-redis";
 import * as session from "express-session";
 import * as path from "path";
-import { createClient } from "redis";
+import { createClient, RedisClient } from "redis";
 import { WebhookModule } from "src/ioc/webhook.module";
 import { CardModule } from "src/ioc/card.module";
 import { ErrorsInterceptor } from "src/interceptors/errors.interceptor";
 import { LoggerModule } from "nestjs-pino";
 import * as fs from "fs";
 import { MongooseModule } from "@nestjs/mongoose";
+import { RedisModule } from "./redis/redis.module";
+import { REDIS } from "./redis/redis.constants";
 
 // КОСТЫЛЬ
 try {
@@ -41,6 +43,7 @@ try {
         MongooseModule.forRoot(process.env.CONNECTION, {
             connectionName: "DatabaseConnection"
         }),
+        RedisModule,
         LoggerModule.forRoot({
             pinoHttp: [
                 {
@@ -83,24 +86,14 @@ try {
     ]
 })
 export class AppModule implements NestModule {
+    constructor(@Inject(REDIS) private readonly redis: RedisClient) {}
+
     async configure(consumer: MiddlewareConsumer) {
-        const redisClientConfig =
-            process.env.NODE_ENV === "production"
-                ? {
-                      host: process.env.REDIS_HOST
-                  }
-                : {
-                      port: +process.env.REDIS_PORT,
-                      host: process.env.REDIS_HOST
-                  };
-
-        const redisClient = createClient(redisClientConfig);
-
         consumer
             .apply(
                 session({
                     store: new (RedisStore(session))({
-                        client: redisClient,
+                        client: this.redis,
                         logErrors: true
                     }),
                     secret: process.env.SESSION_SECRET,

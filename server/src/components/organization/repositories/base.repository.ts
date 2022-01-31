@@ -42,9 +42,9 @@ export class OrganizationRepository
     }
 
     public async getPaymentsInfo(organizationId: UniqueId) {
-        const paymentDoc = await this.PaymentServiceDataModel.findById(
-            organizationId
-        );
+        const paymentDoc = await this.PaymentServiceDataModel.findOne({
+            organization: organizationId
+        });
 
         return new PaymentInfoEntity(
             paymentDoc?.merchantId,

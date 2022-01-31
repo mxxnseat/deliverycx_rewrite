@@ -31,6 +31,6 @@ describe("Paymaster SDK", () => {
                 .catch((e) => {
                     done(e);
                 });
-        });
+        }, 10000);
     });
 });

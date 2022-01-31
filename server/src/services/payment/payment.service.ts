@@ -13,13 +13,17 @@ import { encodeBody } from "./utils/encodeBody";
 import { decodeBody } from "./utils/decodeBody";
 import { intToDecimal } from "./utils/intToDecimal";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
-import * as crypto from "crypto";
+import { REDIS } from "src/modules/redis/redis.constants";
+import { RedisClient } from "redis";
+import { createOrderHash } from "./utils/hash";
+import { RedirectEntity } from "src/components/order/entities/redirect.entity";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
     constructor(
         @InjectPinoLogger() private readonly logger: PinoLogger,
         @Inject("Paymaster") private readonly Paymaster: Paymaster,
+        @Inject(REDIS) private readonly redis: RedisClient,
 
         private readonly organizationRepository: IOrganizationRepository,
         private readonly cartRepository: ICartRepository,
@@ -32,8 +36,12 @@ export class PaymentService extends IPaymentService {
     async captrurePayment(body: IPaymentWebhookParams) {
         const preparedBody = decodeBody<OrderDTO & { user: string }>(body);
 
-        console.log(preparedBody);
-        // this.orderUsecase.create(preparedBody.user, preparedBody);
+        const orderResult = await this.orderUsecase.create(
+            preparedBody.user,
+            preparedBody
+        );
+
+        this.redis.set(body.hash, orderResult.getNumber.toString());
     }
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
@@ -52,8 +60,9 @@ export class PaymentService extends IPaymentService {
             userId,
             body.orderType
         );
-        const returnUrlHash = crypto.randomBytes(8).toString("hex");
 
+        const cart = await this.cartRepository.getAll(userId);
+        const orderHash = createOrderHash();
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
             testMode: true,
@@ -65,26 +74,48 @@ export class PaymentService extends IPaymentService {
                 description: 'Оплата заказа в "Старик Хинкалыч"',
                 params: {
                     user: userId,
+                    hash: orderHash,
                     ...encodeBody(body)
                 }
             },
             protocol: {
                 callbackUrl: process.env.PAYMENT_SERVICE_CALLBACK_URL,
-                returnUrl: `${process.env.CLIENT_PATH}/success?hash=${returnUrlHash}`
+                returnUrl: `${process.env.CLIENT_PATH}/success/${orderHash}`
+            },
+            reciept: {
+                client: {
+                    email: body.email,
+                    phone: body.phone
+                },
+                items: [
+                    cart.map((el) => {
+                        return {
+                            name: el.getProductName,
+                            quantity: el.getAmount,
+                            price: el.getPrice,
+                            vatType: "None",
+                            paymentSubject: "Commodity",
+                            paymentMethod: "FullPayment"
+                        };
+                    })
+                ]
             }
         };
-
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,
             organizationPaymentInfo.token
         );
-
-        return paymentResult;
+        return new RedirectEntity(
+            paymentResult.url.replace("payments", "cpay")
+        );
     }
 
-    async _byCash(body: OrderDTO, userId: UniqueId): Promise<OrderEntity> {
-        const result = await this.orderUsecase.create(userId, body);
+    async _byCash(body: OrderDTO, userId: UniqueId): Promise<RedirectEntity> {
+        const orderHash = createOrderHash();
+        const orderEntity = await this.orderUsecase.create(userId, body);
+        this.redis.set(orderHash, orderEntity.getNumber.toString());
+        const redirectUri = `/success/${orderHash}`;
 
-        return result;
+        return new RedirectEntity(redirectUri);
     }
 }

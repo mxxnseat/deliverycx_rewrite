@@ -16,9 +16,12 @@ import { productProviders } from "src/components/product/providers/product.provi
 import { IikoModule } from "src/modules/iiko.module";
 import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 import { paymasterProvider } from "src/services/payment/sdk/provider/paymaster.provider";
+import { RedisModule } from "src/modules/redis/redis.module";
+import { IOrderUtilsService } from "src/components/order/services/order/interface.service";
+import { OrderUtilsService } from "src/components/order/services/order/base.service";
 
 @Module({
-    imports: [IikoModule],
+    imports: [IikoModule, RedisModule],
     controllers: [WebhookController],
     providers: [
         {
@@ -36,6 +39,10 @@ import { paymasterProvider } from "src/services/payment/sdk/provider/paymaster.p
         {
             provide: IOrderRepository,
             useClass: OrderRepository
+        },
+        {
+            provide: IOrderUtilsService,
+            useClass: OrderUtilsService
         },
         {
             provide: "IIiko",

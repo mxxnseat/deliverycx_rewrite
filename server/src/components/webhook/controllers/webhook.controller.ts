@@ -18,6 +18,7 @@ import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 import { ApiResponse } from "@nestjs/swagger";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
+import { PaymasterResponse } from "src/services/payment/sdk/types/response.type";
 
 @Controller("webhook")
 export class WebhookController {
@@ -35,9 +36,9 @@ export class WebhookController {
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
     ) {
-        console.log(body);
-
-        this.PaymentService.captrurePayment(body.invoice.params);
+        if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+            this.PaymentService.captrurePayment(body.invoice.params);
+        }
 
         response.status(200).json({});
     }
