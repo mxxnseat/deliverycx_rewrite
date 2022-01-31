@@ -73,7 +73,10 @@ const customMiddleware: Middleware<Record<string, unknown>, RootState> = store =
   return res;
 };
 
-const middlewares = [logger,routerMiddleware(history),customMiddleware];
+const middlewares = [routerMiddleware(history), customMiddleware];
+if (process.env.NODE_ENV !== 'production') {
+  middlewares.push(logger)
+}
 
 const store = configureStore({
   reducer:persistedReducer,

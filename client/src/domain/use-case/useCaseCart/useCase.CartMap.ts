@@ -28,7 +28,7 @@ export function useCartMap() {
 
     useEffect(() => getGeoLoc(), [pointCords]);
 
-    console.log("load", stateReduceMap.MapLoading,stateReduceMap.stateMap);
+ 
     const mapstate = useMemo(() => {
         return { center: stateReduceMap.stateMap, zoom: 17 };
     }, [stateReduceMap.stateMap]);

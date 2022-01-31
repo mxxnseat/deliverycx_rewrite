@@ -25,7 +25,6 @@ export function CartFormReducer(state: typeinitialState, action: ReducerAction<R
   switch (action.type) {
     case ReducerActionTypePoints.selectPayment:
       const paymentReady = action.payload.id === CartFormMetods.paymentsMetod[1].id ? false : true
-      console.log('red',paymentReady)
       return {
         ...state,
         paymentReady

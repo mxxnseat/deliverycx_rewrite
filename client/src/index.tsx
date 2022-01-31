@@ -11,7 +11,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 const history = createBrowserHistory()
 
-console.log(1);
+
 
 ReactDOM.render(
   <Provider store={store}>
