@@ -51,15 +51,14 @@ export function useCaseShopItem(id:string) {
 
   useEffect(() => {
       const id = localStorage.getItem('prod')
+      console.log(cardRef.current?.dataset.id == id);
       new Promise((resolve, reject) => {
           if (cardRef.current?.dataset.id == id) {
               resolve(cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
-          } else {
-              id && reject()
           }
       })
-          .then(() => localStorage.removeItem('prod'))
-          .catch(() => localStorage.removeItem('prod'))
+          //.then(() => localStorage.removeItem('prod'))
+          //.catch(() => localStorage.removeItem('prod'))
       
   }, [])
 
