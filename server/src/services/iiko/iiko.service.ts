@@ -79,7 +79,7 @@ export class IikoService implements IIiko {
                       id: deliveryProduct.id,
                       name: deliveryProduct.name,
                       amount: 1,
-                      price: deliveryPrice
+                      sum: deliveryPrice
                   }
                 : undefined
         ].filter(Boolean);
