@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setStopList } from "servises/redux/slice/shopSlice";
 import { IStopList } from "@types";
 import { fetchRefreshCart } from "servises/redux/slice/cartSlice";
-import config from "config.json";
+import config from "./config.json";
 
 
 
