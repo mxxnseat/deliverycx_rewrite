@@ -6,3 +6,5 @@ mongo
 certbot
 nginx
 client/**/config.*
+docker-compose.iiko.yml
+Dockerfile*

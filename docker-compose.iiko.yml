@@ -3,7 +3,7 @@ services:
     iiko:
       container_name: iiko
       build:
-         context: ./iiko
+         context: ./iiko1
       env_file:
         - ./iiko/.production.env
       links: [mongo]
