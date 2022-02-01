@@ -4,6 +4,7 @@ import { FC, memo, PropsWithChildren } from "react";
 import cn from "classnames";
 import { Link } from "react-router-dom";
 import { isEqual } from "lodash";
+import { ROUTE_APP } from 'application/contstans/route.const';
 
 interface IProps{
     isActive: boolean,
@@ -41,7 +42,7 @@ const Menu: FC<IProps> = ({isActive, setter})=>{
                         <Link to="/" className="header__menu__link mark">Выбор заведения</Link>
                         {/* <a href="#" className="header__menu__link order-history">История заказов</a> */}
                         <a href="https://t.me/lokolyapis" target="_blank" className="header__menu__link messanger">Связаться с нами</a>
-                        <Link to="/about" className="header__menu__link faq">О сервисе</Link>
+                        <Link to={ROUTE_APP.PAGES.ABOUT} className="header__menu__link faq">О сервисе</Link>
                         <a target="_blank" rel="noreferrer" href="//xn--80aaudyq1a9a.xn--80apgfh0ct5a.xn--p1ai/" className="header__menu__link franchise">Франшиза</a>
                     </div>
                 </div>

@@ -11,3 +11,9 @@ export class ValidationCountError extends BaseError {
         super(error, 422);
     }
 }
+
+export class CannotDeliveryError extends BaseError {
+    constructor(error) {
+        super(error, 400);
+    }
+}

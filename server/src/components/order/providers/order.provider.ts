@@ -1,11 +1,12 @@
+import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
-import { OrderSchema } from "src/database/models/order.model";
+import { OrderModel, OrderSchema } from "src/database/models/order.model";
 
 export const orderProviders = [
     {
-        inject: ["DATABASE_CONNECTION"],
+        provide: "Order",
         useFactory: (connection: Connection) =>
-            connection.model("order", OrderSchema),
-        provide: "ORDER_MODEL"
+            connection.model("Order", OrderSchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

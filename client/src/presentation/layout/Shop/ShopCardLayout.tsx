@@ -11,15 +11,15 @@ interface IMatchProps {
 type RouteProps = RouteComponentProps<IMatchProps>;
 
 const ShopCardLayout:FC<RouteProps> = ({ match }) => {
-  const [group, setGroup] = useState<ICategory>({} as ICategory)
+  const [group, setGroup] = useState<string>()
   const productId = match.params.id;
-  console.log(group)
+
   return (
     <div className="product-card">
             <HeaderBack backgroundColor="#fff">
                 <div className="product-card__category">
                     <div className="category-image-wrap">
-                        <img src={group.image} />
+                        <img src={group} />
                     </div>
                 </div>
             </HeaderBack>    

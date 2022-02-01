@@ -1,8 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Types } from "mongoose";
 
 export class CategoryEntity {
     @ApiProperty()
-    private readonly id: UniqueId;
+    private readonly id: Types.ObjectId;
 
     @ApiProperty()
     private readonly name: string;
@@ -10,7 +11,7 @@ export class CategoryEntity {
     @ApiProperty()
     private readonly image: ImagePath;
 
-    constructor(id: UniqueId, name: string, image: ImagePath) {
+    constructor(id: Types.ObjectId, name: string, image: ImagePath) {
         this.id = id;
         this.name = name;
         this.image = image;

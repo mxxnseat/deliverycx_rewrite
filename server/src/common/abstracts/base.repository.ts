@@ -5,19 +5,22 @@ export abstract class BaseRepository<ModelClass, ReturnValue> {
     constructor(
         private readonly model: Model<any>,
 
-        private readonly mapper: Mapper<ModelClass, Array<ReturnValue>>,
+        private readonly mapper:
+            | Mapper<ModelClass, ReturnValue>
+            | Mapper<ModelClass, Promise<ReturnValue>>,
 
         private readonly field: string,
 
         private readonly populateField: string = ""
     ) {}
 
-    async getAll(id?: UniqueId): Promise<Array<ReturnValue>> {
-        const result = await this.model
+    async getAll(id?: UniqueId): Promise<ReturnValue> {
+        const result = await (<any>this.model
             .find({
                 [this.field]: id
             })
-            .populate(this.populateField);
+            .sort({ order: 1 })
+            .populate(this.populateField));
         return this.mapper(result);
     }
 }

@@ -27,7 +27,7 @@ export class CartClass {
         type: () => Number,
         validate: {
             validator: (v: number) => {
-                return v < 1;
+                return v > 1;
             },
             message: "Некорректное значение"
         }

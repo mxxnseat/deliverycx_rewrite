@@ -13,5 +13,9 @@ export abstract class ICartRepository {
         userId: UniqueId,
         cartId: UniqueId,
         value: number
-    ): Promise<number>;
+    ): Promise<CartEntity>;
+
+    abstract calc(userId: UniqueId): Promise<number>;
+
+    abstract removeSome(removeItems: Array<UniqueId>);
 }

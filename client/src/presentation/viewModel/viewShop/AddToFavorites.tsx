@@ -2,6 +2,7 @@ import { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 
 import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
 import { debounce } from "lodash";
+import { RequestShop } from "servises/repository/Axios/Request";
 
 interface IProps {
     id: string,
@@ -15,8 +16,9 @@ const AddToFavorites: FC<IProps> = ({ id, isFav, _class}) => {
     const favoriteCN = cn(_class, { favorite_active: isActive });
     
 
-    const debaunceHandleClick = debounce(async ()=>{
-        setIsActive(isFav);
+    const debaunceHandleClick = debounce(async () => {
+        const {data} = await RequestShop.addFavorites({productId: id})
+        setIsActive(data.isFav);
         
     }, 400);
 

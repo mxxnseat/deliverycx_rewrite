@@ -1,8 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Types } from "mongoose";
 
 export class ProductEntity {
     @ApiProperty()
-    private readonly id: string | undefined;
+    private readonly id: Types.ObjectId | undefined;
 
     @ApiProperty()
     private readonly name?: string;
@@ -34,7 +35,7 @@ export class ProductEntity {
     private readonly isFav?: boolean;
 
     constructor(
-        id: string | undefined,
+        id: Types.ObjectId | undefined,
         name?: string,
         description?: string,
         additionalInfo?: string,
@@ -57,7 +58,7 @@ export class ProductEntity {
         this.isFav = isFav;
     }
 
-    public get getId(): string | undefined {
+    public get getId(): Types.ObjectId | undefined {
         return this.id;
     }
     public get getMeasureUnit() {

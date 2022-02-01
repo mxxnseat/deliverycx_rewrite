@@ -1,29 +1,12 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import cn from "classnames";
-import { RootState } from "servises/redux/createStore";
-import { useOutside } from "application/hooks/useOutside";
-import { useDeepCompareEffect } from "application/hooks/useDeepCompareEffect";
+import { FC, memo, useRef } from "react";
+import { adapterComponentUseCase } from "adapters/adapterComponents";
+import { useAddCart } from "domain/use-case/useCaseCart";
 
 const ShopLinkToCart: FC = () => {
-    const history = useHistory();
-    const cartList = useSelector((state: RootState)=> []);
-    const [isPopupEmpty, setIsPopupEmpty] = useState(false);
-    const [itemsCount, setItemsCount] = useState(0);
     const ref = useRef<HTMLDivElement | null>(null);
-
-    const emptyCN = cn("link-to-cart", {open: isPopupEmpty});
-
-    const linkHandler = () => {
-        itemsCount ? history.push("/cart") : setIsPopupEmpty(true);
-    }
-    useOutside(ref, ()=>setIsPopupEmpty(false), isPopupEmpty);
-    useDeepCompareEffect(()=>{
-        setItemsCount(cartList.reduce((acc, el:any)=>{
-            return acc+el.amount;
-        },0));
-    }, [cartList]);
+    const useCaseCart = adapterComponentUseCase(useAddCart,ref)
+    const { itemsCount, emptyCN } = useCaseCart.data
+    const {linkHandler} = useCaseCart.handlers
 
     return (
         <div onClick={linkHandler} className={emptyCN}>

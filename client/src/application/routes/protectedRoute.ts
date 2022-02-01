@@ -15,7 +15,7 @@ const protectedRoutes: IRoute[] = [
     component: lazy(() => import('presentation/layout/Shop/ShopCardLayout'))
   },
   {
-    exact: true,
+    exact: false,
     path: ROUTE_APP.CART.CART_DELIVERY,
     component: CartDelivery,
     layout:lazy(() => import('presentation/layout/Cart/CartLayout'))
@@ -31,6 +31,18 @@ const protectedRoutes: IRoute[] = [
     path: ROUTE_APP.CART.CART_PICKUP,
     component: CartPickup,
     layout:lazy(() => import('presentation/layout/Cart/CartLayout'))
+  },
+  {
+    exact: true,
+    path: ROUTE_APP.CART.CART_MAP,
+    component:lazy(() => import('application/components/core/Cart/CartYmap')),
+    
+  },
+  {
+    exact: true,
+    path: ROUTE_APP.CART.CART_ORDER,
+    component: lazy(() => import('application/components/core/Cart/CheckOut')),
+    
   },
   
 ]

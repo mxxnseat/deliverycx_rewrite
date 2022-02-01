@@ -1,9 +1,8 @@
 import { config } from "dotenv";
 config({
-    path: __dirname + "/../.env"
+    path: __dirname + "/../.development.env"
 });
 process.chdir(`${__dirname}/../..`);
-
 import axios from "axios";
 import { Types, Document } from "mongoose";
 
@@ -149,31 +148,54 @@ class IikoService {
                             { upsert: true }
                         );
 
-                        await Promise.all(
+                        // console.log(data.groups);
+
+                        await CategoryModel.deleteMany({ organization: _id });
+                        const categories = await Promise.all(
                             data.groups.map(async (category) => {
-                                await CategoryModel.updateOne(
-                                    {
-                                        id: category.id
-                                    },
-                                    {
-                                        $setOnInsert: {
-                                            id: category.id,
-                                            name: category.name,
-                                            image: category.images[
-                                                category.images.length - 1
-                                            ]
-                                                ? category.images[
-                                                      category.images.length - 1
-                                                  ].imageUrl
-                                                : "",
-                                            order: category.order,
-                                            organization: _id
-                                        }
-                                    },
-                                    { upsert: true }
-                                );
+                                if (category.description !== "HIDDEN") {
+                                    await CategoryModel.updateOne(
+                                        {
+                                            id: category.id
+                                        },
+                                        {
+                                            $setOnInsert: {
+                                                id: category.id,
+                                                name: category.name,
+                                                image: category.images[
+                                                    category.images.length - 1
+                                                ]
+                                                    ? category.images[
+                                                          category.images
+                                                              .length - 1
+                                                      ].imageUrl
+                                                    : "",
+                                                order: category.order,
+                                                organization: _id
+                                            }
+                                        },
+                                        { upsert: true }
+                                    );
+                                }
                             })
                         );
+
+                        const favoriteCategory =
+                            await CategoryModel.findOneAndUpdate(
+                                {
+                                    name: "Избранное",
+                                    organization: _id
+                                },
+                                {
+                                    $setOnInsert: {
+                                        organization: _id,
+                                        name: "Избранное",
+                                        order: categories.length,
+                                        image: "/static/shop/favorite.png"
+                                    }
+                                },
+                                { upsert: true, new: true }
+                            );
 
                         await Promise.all(
                             data.products.map(async (product) => {
@@ -199,7 +221,7 @@ class IikoService {
                                         additionalInfo: product.additionalInfo,
                                         price: product.price,
                                         tags: product.tags,
-                                        weight: product.price,
+                                        weight: product.weight,
                                         measureUnit: product.measureUnit,
                                         category: categoryId,
                                         id: product.id
@@ -217,6 +239,8 @@ class IikoService {
     }
 
     public async polling() {
+        console.log("start");
+
         await this.getToken();
         await this.getAddresses();
         await this.getNomenclature();
@@ -231,6 +255,7 @@ const iikoService = new IikoService(
 );
 
 connection().then(async () => {
+    console.log("success connect");
     await iikoService.polling();
 
     process.exit(1);

@@ -5,8 +5,8 @@ import { Injectable } from "@nestjs/common";
 export class CityUsecase {
     constructor(private readonly cityRepository: ICityRepository) {}
 
-    async getAll() {
-        const result = await this.cityRepository.getAll();
+    async getAll(searchString: string) {
+        const result = await this.cityRepository.getAll(searchString);
 
         return result;
     }

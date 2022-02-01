@@ -6,6 +6,8 @@ import {
 } from "@typegoose/typegoose";
 import { CategoryClass } from "./category.model";
 import { OrganizationClass } from "./organization.model";
+import { Types } from "mongoose";
+import { Decimal128 } from "bson";
 
 enum MeasureUnit {
     PIECE = "шт",

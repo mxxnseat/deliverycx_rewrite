@@ -1,11 +1,12 @@
+import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
-import { CitySchema } from "../../../database/models/city.model";
+import { CityModel, CitySchema } from "../../../database/models/city.model";
 
 export const cityProviders = [
     {
-        provide: "CITY_MODEL",
+        provide: "City",
         useFactory: (connection: Connection) =>
-            connection.model("city", CitySchema),
-        inject: ["DATABASE_CONNECTION"]
+            connection.model("City", CitySchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

@@ -3,7 +3,7 @@ import cn from "classnames";
 
 import React from "react";
 import YMapPoint from "application/components/core/Location/Points/YMapPoint";
-import { usePoints } from "domain/use-case/useCaseLocation/usePoints";
+import { usePoints } from "domain/use-case/useCaseLocation";
 import { adapterComponentUseCase, TadapterCaseCallback } from "adapters/adapterComponents";
 import HeadMap from "presentation/viewModel/viewLocation/HeadMap";
 import PopupPoint from "./PopupPoint";

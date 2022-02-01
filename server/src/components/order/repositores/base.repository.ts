@@ -8,14 +8,11 @@ import { IOrderRepository } from "./interface.repository";
 @Injectable()
 export class OrderRepository implements IOrderRepository {
     constructor(
-        @Inject("ORDER_MODEL")
-        private readonly orderModel: Model<OrderClass>,
-
-        @Inject("CART_MODEL")
-        private readonly cartModel: Model<CartClass>
+        @Inject("Order")
+        private readonly orderModel: Model<OrderClass>
     ) {}
 
-    async create(userId: UniqueId, cartPrice: number) {
+    async create(userId: UniqueId, cartPrice: number, orderNumber: string) {
         await this.orderModel.findOneAndUpdate(
             { user: userId },
             {
@@ -24,13 +21,12 @@ export class OrderRepository implements IOrderRepository {
                 },
                 $push: {
                     orders: {
-                        price: cartPrice
+                        price: cartPrice,
+                        orderNum: orderNumber
                     }
                 }
             },
             { upsert: true }
         );
-
-        await this.cartModel.deleteMany({ user: userId });
     }
 }

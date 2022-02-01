@@ -7,13 +7,15 @@ interface IProps{
     placeholderValue: string,
     isValid?: boolean,
     error?: boolean,
-    errorValue?: string
+    errorValue?: string,
+    addfild?:string
 }
 
-const FormFieldWrapper: FC<IProps> = ({ placeholderIco, placeholderValue, children, isValid, error,errorValue }) => {
+const FormFieldWrapper: FC<IProps> = ({ placeholderIco, placeholderValue, children, isValid, error,errorValue,addfild }) => {
     const validCN = cn("form__field-wrapper", {
         "not-valid": isValid !== undefined ? isValid : false,
-        "error": error !== undefined ? error : false
+        "error": error !== undefined ? error : false,
+        "addfild": addfild
     });
     return (
         <div className={validCN}>

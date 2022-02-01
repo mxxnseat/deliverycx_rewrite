@@ -1,7 +1,8 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { CityUsecase } from "../usecases/city.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CityEntity } from "../entities/city.entity";
+import { CityQueryDTO } from "../dto/cityQuery.dto";
 
 @ApiTags("City endpoints")
 @Controller("city")
@@ -13,8 +14,13 @@ export class CityController {
         type: [CityEntity]
     })
     @Get("all")
-    async getAll() {
-        const result = this.cityUsecase.getAll();
+    async getAll(
+        @Query()
+        query: CityQueryDTO
+    ) {
+        const result = this.cityUsecase.getAll(
+            query.search ? query.search : ""
+        );
 
         return result;
     }

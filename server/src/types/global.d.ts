@@ -1,6 +1,20 @@
+//util types
+type ReturnTypeAsync<T extends (...args) => any> = T extends (
+    ...args
+) => Promise<infer R>
+    ? R
+    : any;
+
 type UniqueId = string;
 type ImagePath = string;
 type Token = string;
+type RedirectURI = string | null;
+type Email = string;
+
+type ExpiresType = {
+    year: string;
+    month: string;
+};
 
 //Iiko responses
 interface OrderInfoIiko {
@@ -22,4 +36,18 @@ interface OrderInfoIiko {
         hasProblem: boolean;
         problem: string;
     };
+}
+
+interface OrderCheckCreationResult {
+    problem: string;
+    resultState: ResultStateEnum;
+}
+
+interface OrderTypesIiko {
+    items: Array<{
+        id: UniqueId;
+        name: string;
+        orderServiceType: string;
+        externalRevision: number;
+    }>;
 }

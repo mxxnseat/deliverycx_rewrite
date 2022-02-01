@@ -4,18 +4,20 @@ import { OrganizationEntity } from "./organization.entity";
 import { OrganizationClass } from "../../../database/models/organization.model";
 
 export const organizationMapper: Mapper<
-    OrganizationClass,
+    Array<OrganizationClass>,
     Array<OrganizationEntity>
 > = (p) => {
     return p.map((organization) => {
         const address = `${organization.address.street}, ${organization.address.home}`;
 
         return new OrganizationEntity(
-            organization.id,
+            organization._id,
             address,
             (organization.city as CityClass)?.name,
             [organization.address.latitude, organization.address.longitude],
-            organization.phone
+            organization.phone,
+            organization.workTime,
+            !!organization.yopay?.isActive
         );
     });
 };

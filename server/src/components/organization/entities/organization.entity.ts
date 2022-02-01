@@ -1,8 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Types } from "mongoose";
+import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 
 export class OrganizationEntity {
     @ApiProperty()
-    private readonly id: UniqueId;
+    @IsMongoIdObject()
+    private readonly id: Types.ObjectId;
 
     @ApiProperty()
     private readonly address?: string;
@@ -25,13 +28,17 @@ export class OrganizationEntity {
     @ApiProperty()
     private readonly workTime?: string;
 
+    @ApiProperty()
+    private readonly cardPay?: boolean;
+
     constructor(
-        id: UniqueId,
+        id: Types.ObjectId,
         address?: string,
         city?: string,
         cords?: [number, number],
         phone?: string,
-        workTime?: string
+        workTime?: string,
+        cardPay?: boolean
     ) {
         this.id = id;
         this.address = address;
@@ -39,6 +46,7 @@ export class OrganizationEntity {
         this.cords = cords;
         this.phone = phone;
         this.workTime = workTime;
+        this.cardPay = cardPay;
     }
 
     public get getId() {
@@ -63,5 +71,9 @@ export class OrganizationEntity {
 
     public get getWorkTime() {
         return this.workTime;
+    }
+
+    public get getCardPay() {
+        return this.cardPay;
     }
 }

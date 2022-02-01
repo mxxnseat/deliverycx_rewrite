@@ -1,11 +1,15 @@
+import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
-import { CategorySchema } from "../../../database/models/category.model";
+import {
+    CategoryModel,
+    CategorySchema
+} from "../../../database/models/category.model";
 
 export const categoryProviders = [
     {
-        provide: "CATEGORY_MODEL",
+        provide: "Category",
         useFactory: (connection: Connection) =>
-            connection.model("category", CategorySchema),
-        inject: ["DATABASE_CONNECTION"]
+            connection.model("Category", CategorySchema),
+        inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

@@ -3,18 +3,16 @@ import { adapterComponentUseCase } from "adapters/adapterComponents"
 import LoaderProduct from "application/components/common/Loaders/loaderProduct"
 import { useCaseShop } from "domain/use-case/useCaseShop"
 import FavoriteEmpty from "presentation/viewModel/viewShop/FavoriteEmpty"
-import ShopProductItem from "presentation/viewModel/viewShop/ShopProductItems"
-import { FC} from "react"
+import ShopProductItems from "application/components/core/Shop/ShopProductItems"
+import { FC, useEffect} from "react"
 
-interface IProps {
-  searchQuery?: string
-}
 
-const ShopProduct: FC<IProps> = ({ searchQuery }) => {
-  const useCasePoints = adapterComponentUseCase(useCaseShop,searchQuery)
+
+
+const ShopProduct = () => {
+  const useCasePoints = adapterComponentUseCase(useCaseShop)
   const { category,products } = useCasePoints.data
-  const { isFetching} = useCasePoints.status
-
+  const { isFetching } = useCasePoints.status
   
   return (
       <div className="product__list">
@@ -22,7 +20,9 @@ const ShopProduct: FC<IProps> = ({ searchQuery }) => {
 
                 !isFetching && products ? (
                   products.length
-                        ? products.map((item:IProduct) => <ShopProductItem key={item.id} {...item} />)
+                        ? products.map((item: IProduct) => {
+                          return <ShopProductItems key={item.id} products={item}/>
+                        })
                         : category === 'favorite' ? <FavoriteEmpty /> : "Эта категория пуста :("
 
                 ) : <LoaderProduct />

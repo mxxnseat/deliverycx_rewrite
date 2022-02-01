@@ -1,15 +1,15 @@
 /* eslint-disable react/display-name */
 import { IRoute } from "@types";
-import { FC, Suspense, useCallback } from "react";
+import { FC, Suspense, useCallback, useState } from "react";
 import { BrowserRouter, Link, Redirect, Route, Switch,useLocation } from "react-router-dom";
+import { adapterSelector } from "servises/redux/selectors/selectors";
 import protectedRoutes from "./protectedRoute";
 import publicRoutes from "./publicRoute";
+import { useEffect } from 'react';
 
-interface INestedRoute {
-  isAuth:boolean
-}
-const NestedRoute: FC<INestedRoute> = ({ isAuth }) => {
 
+const NestedRoute = () => {
+  const {isAuth} = adapterSelector.useSelectors(selector => selector.profile)
   const renderRoute = useCallback((route) => (data: any) => {
     if (route.layout) {
       return (
@@ -27,7 +27,7 @@ const NestedRoute: FC<INestedRoute> = ({ isAuth }) => {
   
   
   return (
-    <Suspense fallback={"load"}>
+    <Suspense fallback={null}>
       <BrowserRouter>
       <Switch>
       

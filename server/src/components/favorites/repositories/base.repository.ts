@@ -8,9 +8,22 @@ import { FavoriteEntity } from "../entities/favorite.entity";
 @Injectable()
 export class FavoriteRepository implements IFavoriteRepository {
     constructor(
-        @Inject("FAVORITE_MODEL")
+        @Inject("Favorite")
         private readonly favoriteModel: Model<FavoriteClass>
     ) {}
+
+    async clear(userId: UniqueId) {
+        await this.favoriteModel.findOneAndUpdate(
+            {
+                user: userId
+            },
+            {
+                $set: {
+                    products: []
+                }
+            }
+        );
+    }
 
     async add_remove(productId: UniqueId, userId: UniqueId) {
         let action: any = {};
