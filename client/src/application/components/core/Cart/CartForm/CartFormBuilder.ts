@@ -13,4 +13,15 @@ export class FormBuilderCart {
             ];
         };
     }
+    static pickup(metods: ICartFormMetods) {
+        return (builder: any): IWrapper[] => {
+            return [
+                //builder.paymentPopup(),
+                //builder.payment(metods.paymentsMetod),
+                //builder.adress(),
+                builder.name(),
+                builder.phone()
+            ];
+        };
+    }
 }

@@ -34,13 +34,15 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
 
   useEffect(() => () => debouncedChangeHandler.cancel(), [product.amount]);
 
-  useEffect(()=>{
-    //   console.log(product.pro)
-    const tag = product.productTags?.find(el=>el!=="HIDDEN")?.match(/[a-z]{2,}/i)![0];
+  useEffect(() => {
+    if (product.productTags) {
+      const tag = product.productTags.find(el => el !== "HIDDEN"); //?.match(/[a-z]{2,}/i)![0]
 
-    if(tag && tag in errorSchema){
-        setError(errorSchema?.HI?.message);
+      if(tag && tag in errorSchema){
+          setError(errorSchema?.HI?.message);
+      }
     }
+    
   }, [errorSchema])
 
   const changeCountHandler = ({ id, type, code}: any) => {

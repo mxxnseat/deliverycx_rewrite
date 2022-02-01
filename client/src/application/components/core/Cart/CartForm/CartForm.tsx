@@ -9,7 +9,7 @@ import { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "servises/redux/createStore";
 import { useDispatch } from 'react-redux';
-import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
+import { fetchDeleteCart, setErrors } from "servises/redux/slice/cartSlice";
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_APP } from 'application/contstans/route.const';
@@ -96,6 +96,8 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
 
   useEffect(() => {
     selectAddress && formik.setFieldValue("address", selectAddress)
+    orderError.status && dispatch(setErrors({errors:{}}))
+    
   },[])
   useEffect(() => {
     orderNumber && history.push(ROUTE_APP.CART.CART_ORDER)

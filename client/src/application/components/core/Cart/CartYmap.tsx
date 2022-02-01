@@ -64,9 +64,9 @@ const CartYmap = () => {
                                         <img src={require("assets/i/mark-red.svg").default} alt="Телефон заведения" />
                                         
                                         {
-                                            stateReduceMap.valueMap
-                                                ? <div className="mapsPopup__value" onClick={() => onMapTyping().setValueMap("")}>{stateReduceMap.valueMap}</div>
-                                                : <SuggestComponent dispatchMap={onMapTyping}  />
+                                            !stateReduceMap.inputMap
+                                                ? <div className="mapsPopup__value" onClick={() => onMapTyping().setInputMap(true)}>{stateReduceMap.valueMap}</div>
+                                                : <SuggestComponent dispatchMap={onMapTyping} stateReduceMap={stateReduceMap}  />
                                         }
                                     
                                     </div>

@@ -28,7 +28,7 @@ export class ValidationCount {
 
                     filteredCart = {
                         ...filteredCart,
-                        [key]:
+                        [key.toUpperCase()]:
                             key in filteredCart
                                 ? filteredCart[key] + cartEl.getAmount
                                 : cartEl.getAmount

@@ -13,7 +13,7 @@ type RouteProps = RouteComponentProps<IMatchProps>;
 const ShopCardLayout:FC<RouteProps> = ({ match }) => {
   const [group, setGroup] = useState<string>()
   const productId = match.params.id;
-  console.log(group)
+
   return (
     <div className="product-card">
             <HeaderBack backgroundColor="#fff">

@@ -63,6 +63,26 @@ export class IikoService implements IIiko {
             organization: orderInfo.organization
         });
 
+        const {
+            notPickup,
+            deliveryPriceNotEqualZero,
+            deliveryProductIsDefiend
+        } = {
+            notPickup: orderInfo.orderType !== OrderTypesEnum.PICKUP,
+            deliveryProductIsDefiend: deliveryProduct,
+            deliveryPriceNotEqualZero: deliveryPrice !== 0
+        };
+
+        const deliveryProductObject =
+            notPickup && deliveryPriceNotEqualZero && deliveryProductIsDefiend
+                ? {
+                      id: deliveryProduct.id,
+                      name: deliveryProduct.name,
+                      amount: 1,
+                      sum: deliveryPrice
+                  }
+                : undefined;
+
         const requestOrderItems = [
             ...cart.map((cartEl) => {
                 return {
@@ -71,14 +91,7 @@ export class IikoService implements IIiko {
                     amount: cartEl.getAmount
                 };
             }),
-            deliveryProduct
-                ? {
-                      id: deliveryProduct.id,
-                      name: deliveryProduct.name,
-                      amount: 1,
-                      sum: deliveryPrice
-                  }
-                : undefined
+            deliveryProductObject
         ].filter(Boolean);
 
         const result = {
@@ -101,9 +114,10 @@ export class IikoService implements IIiko {
                 items: requestOrderItems,
                 comment: orderInfo.comment,
                 orderTypeId: orderTypeId,
-                isSelfService: (orderInfo.orderType === OrderTypesEnum.PICKUP
-                    ? "true"
-                    : "false") as "true" | "false"
+                isSelfService:
+                    orderInfo.orderType === OrderTypesEnum.PICKUP
+                        ? "true"
+                        : "false"
             }
         };
 

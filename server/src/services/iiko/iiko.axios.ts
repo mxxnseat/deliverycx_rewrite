@@ -21,7 +21,10 @@ export class IIkoAxios {
             (error) => {
                 console.log(error);
                 return Promise.reject(
-                    new IikoError(error.response.data?.message)
+                    new IikoError(
+                        error.response.data?.description ||
+                            error.response.data?.message
+                    )
                 );
             }
         );

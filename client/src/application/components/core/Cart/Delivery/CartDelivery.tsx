@@ -9,7 +9,6 @@ import { CART_CHOICE } from "application/contstans/cart.const";
 
 const CartDelivery = () => {
   const { deltaPrice, orderType } = adapterSelector.useSelectors(selector => selector.cart)
-  const { city, address } = adapterSelector.useSelectors(selector => selector.point)
   return (
     <>
       <div className="cart__memo">
@@ -21,10 +20,7 @@ const CartDelivery = () => {
               : <div className="cart__memo__banner ">До <b>бесплатной доставки</b> закажите на сумму <b className="price">{deltaPrice} ₽</b></div>
           )
         }
-        {
-          orderType === CART_CHOICE.PICKUP &&
-          <div className="cart__memo__banner">Заказ можно получить по адресу,<br /> <b className="price"> г. {city}, {address} </b></div>
-        }
+        
        
         После заказа с вами свяжется администратор
       </div>
