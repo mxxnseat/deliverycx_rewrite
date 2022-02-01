@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosPromise, AxiosResponse, AxiosError, AxiosRequestConfig } from "axios";
-import {config,mock} from "servises/repository/config";
 
 
 class AxiosCreate {
