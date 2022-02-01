@@ -126,7 +126,7 @@ export class IikoService implements IIiko {
             return orderTypeEl.orderServiceType.includes(orderType);
         });
 
-        return result.id;
+        return result?.id;
     }
 
     /*-----------------|      create     |-----------------------*/
