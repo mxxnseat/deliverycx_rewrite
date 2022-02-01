@@ -1,7 +1,7 @@
 node_modules
 *.env
 static
-redis
+./redis
 mongo
 certbot
 nginx
