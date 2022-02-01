@@ -112,6 +112,16 @@ describe("Order Module", () => {
         await mongo.stop();
     });
 
+    afterAll(async () => {
+        await new Promise((resolve, reject) => {
+            redis.quit(() => {
+                resolve(1);
+            });
+        });
+
+        await new Promise((resolve) => setImmediate(resolve));
+    });
+
     describe("Order Tests", () => {
         it("should return /success/* uri", (done) => {
             jest.spyOn<any, "create">(iikoService, "create").mockImplementation(
