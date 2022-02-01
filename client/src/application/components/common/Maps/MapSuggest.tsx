@@ -9,10 +9,10 @@ import { setAdress } from "servises/redux/slice/cartSlice";
 
 declare var ymaps: any;
 
-const MapSuggestComponent = ({dispatchMap}: any) => {
+const MapSuggestComponent = ({dispatchMap,stateReduceMap}: any) => {
   const dispatch = useDispatch()
   const name = useSelector((state: RootState) => state.location.point.city);
-  const getAddress = useSelector((state: RootState) => state.cart.address);
+  
   
   const geoCode = (request: string, set: boolean) => {
     return ymaps.geocode(`${name}, ${request}`)
@@ -29,8 +29,8 @@ const MapSuggestComponent = ({dispatchMap}: any) => {
           axios.get<IGeoCodeResponse>(
             `https://geocode-maps.yandex.ru/1.x/?geocode=${cords.reverse()}&format=json&apikey=f5bd494f-4a11-4375-be30-1d2d48d88e93`
           ).then(({ data }) => {
-              
-              dispatch(setAdress(data.response.GeoObjectCollection.featureMember[0].GeoObject.name))
+              dispatchMap().setValueMap(data.response.GeoObjectCollection.featureMember[0].GeoObject.name)
+              //dispatch(setAdress(data.response.GeoObjectCollection.featureMember[0].GeoObject.name))
           })
           .catch((e:any)=>{
             console.log(e);
@@ -70,7 +70,7 @@ const MapSuggestComponent = ({dispatchMap}: any) => {
       className="mapsPopup__input"
       type="text" id="suggest"    
       name="address"
-      defaultValue={getAddress}
+      defaultValue={stateReduceMap.valueMap}
       placeholder="Введите адрес доставки"
       
     />;

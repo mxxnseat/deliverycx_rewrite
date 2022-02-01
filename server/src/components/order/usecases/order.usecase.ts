@@ -55,6 +55,9 @@ export class OrderUsecase {
     }
 
     async getOrderNumber(hash: string) {
-        return await this.OrderUtilsService.getOrderNumber(hash);
+        const orderNumber = await this.OrderUtilsService.getOrderNumber(hash);
+        this.OrderUtilsService.removeOrderNumber(hash);
+
+        return orderNumber;
     }
 }

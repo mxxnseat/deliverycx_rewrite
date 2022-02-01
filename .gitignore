@@ -4,5 +4,7 @@ static
 ./redis
 mongo
 certbot
-nginx
+nginx/*
 client/**/config.*
+docker-compose*.yml
+Dockerfile*

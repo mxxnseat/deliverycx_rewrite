@@ -27,7 +27,6 @@ const CartLayout: FC<ICartLayout> = ({ children }) => {
 
           {children}
         </div>
-        
       </div>
     </div>
   );

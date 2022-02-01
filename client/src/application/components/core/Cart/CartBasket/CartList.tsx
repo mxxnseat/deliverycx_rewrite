@@ -1,7 +1,7 @@
 import { IReqCart } from "@types"
 import { adapterComponentUseCase, TadapterCaseCallback } from "adapters/adapterComponents"
 import { useCartItems } from "domain/use-case/useCaseCart"
-import CartItem from "presentation/viewModel/viewCart/CartItem"
+import CartItem from "application/components/core/Cart/CartBasket/CartItem"
 import React from "react";
 
 export const CartContext = React.createContext<TadapterCaseCallback>({

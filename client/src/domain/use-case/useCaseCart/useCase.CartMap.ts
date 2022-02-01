@@ -1,6 +1,6 @@
 import { IGeoCodeResponse } from "@types";
 import { ROUTE_APP } from "application/contstans/route.const";
-import { getGeoLocation } from "application/helpers/yandexapi";
+import { geoCodeValidAdress, getGeoLocation } from "application/helpers/yandexapi";
 import {
     CartMapReducer,
     initialStateCartMap,
@@ -14,21 +14,31 @@ import { adapterSelector } from "servises/redux/selectors/selectors";
 import { setAdress } from "servises/redux/slice/cartSlice";
 
 export function useCartMap() {
-  const dispatch = useDispatch()
-  const history = useHistory()
+    const dispatch = useDispatch()
+    const history = useHistory()
     const pointCords = adapterSelector.createSelectors(
         (selector) => selector.point,
         (val) => val.cords
     );
-    const {address} = adapterSelector.useSelectors(selector => selector.cart);
+  const { address } = adapterSelector.useSelectors(selector => selector.cart);
+  const {city} = adapterSelector.useSelectors(selector => selector.point);
     const [stateReduceMap, dispatchMap] = useReducer(
         CartMapReducer,
         initialStateCartMap
     );
 
     useEffect(() => getGeoLoc(), [pointCords]);
-
-    console.log("load", stateReduceMap.MapLoading,stateReduceMap.stateMap);
+    useEffect(() => {
+      if (address) {
+        dispatchMap({
+          type: ReducerActionTypePoints.setValueMap,
+          payload: address
+        })
+      }
+    }, [address])
+    
+      
+ 
     const mapstate = useMemo(() => {
         return { center: stateReduceMap.stateMap, zoom: 17 };
     }, [stateReduceMap.stateMap]);
@@ -65,8 +75,13 @@ export function useCartMap() {
       axios.get<IGeoCodeResponse>(
           `https://geocode-maps.yandex.ru/1.x/?geocode=${cords.reverse()}&format=json&apikey=f5bd494f-4a11-4375-be30-1d2d48d88e93`
       ).then(({ data }) => {
-        
-        dispatch(setAdress(data.response.GeoObjectCollection.featureMember[0].GeoObject.name))
+
+        geoCodeValidAdress(city, data.response.GeoObjectCollection.featureMember[0].GeoObject.name, (valid: boolean) => {
+          dispatchMap({
+            type: ReducerActionTypePoints.setDisclaimer,
+            payload: valid
+          })
+        })
         dispatchMap({
           type: ReducerActionTypePoints.onMapClick,
           payload: {
@@ -100,14 +115,19 @@ export function useCartMap() {
             setValueMap:(val:string) => dispatchMap({
                 type: ReducerActionTypePoints.setValueMap,
                 payload: val
-            })
+            }),
+            setInputMap:(val:boolean) => dispatchMap({
+              type: ReducerActionTypePoints.setInputMap,
+              payload: val
+          })
         }
     }
     /**
      * @description конпка "заказать доставку"
      */
     const hendleMapPopup = () => {
-        if ((stateReduceMap.valueMap || address) && !stateReduceMap.disclaimer) {
+      if ((stateReduceMap.valueMap || address) && !stateReduceMap.disclaimer) {
+          dispatch(setAdress(stateReduceMap.valueMap))
           history.push(ROUTE_APP.CART.CART_DELIVERY)
           onMapTyping().setValueMap("")
         }

@@ -69,7 +69,7 @@ export namespace iiko {
         items: Array<INestedItemsBody>;
         comment: string;
         orderTypeId: string;
-        isSelfService: "true" | "false";
+        isSelfService: string;
     }
 
     export interface IOrderBody {

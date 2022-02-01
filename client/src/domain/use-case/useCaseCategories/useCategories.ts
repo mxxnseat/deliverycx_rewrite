@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "servises/redux/createStore";
@@ -22,24 +23,27 @@ export function useCategories() {
   const category = adapterSelector.useSelectors<ICategory>(selector => selector.category)
   const { data: categories, isFetching } = useGetCategoriQuery(id)
   
-  const handleSliderClick = useCallback((index: number,slider:any) => {
+  const handleSliderClick = useCallback((index: number,slider?:any) => {
     slider.current?.slickGoTo(index);
     setCurrentSlide(index);
     categories && dispatch(setCategories(categories[index]))
+    localStorage.removeItem('prod')
   }, [categories])
 
-  console.log(currentSlide)
+
   useEffect(() => {
-    /*
+    let time: null | ReturnType<typeof setTimeout> = null
     if (Object.keys(category).length && categories) {
       const catIndex = categories.findIndex((cat) => cat.id === category.id)
-      setCurrentSlide(catIndex);
-      //dispatch(setCategories(categories[catIndex]))
+      dispatch(setCategories(categories[catIndex]))
+      time = setTimeout(() => {
+        setCurrentSlide(catIndex);
+      },0)
     }
-    */
-   
-    
-  },[])
+    return () => {
+      typeof time === 'number' && clearTimeout(time)
+    }
+  }, [])
   
  
   

@@ -95,6 +95,7 @@ describe("Order Module", () => {
         await productModel.insertMany(productsStub);
         await organizationModel.insertMany(organizationStub);
         await organizationPaymentsInfo.insertMany(paymentInfoStub);
+
         app = moduleRef.createNestApplication();
         app.use((req, res, next) => {
             req.session = {
@@ -217,6 +218,17 @@ describe("Order Module", () => {
 
                     done();
                 });
+        });
+
+        it("should remove key", (done) => {
+            redis.set("key", "4444");
+
+            orderUsecase.getOrderNumber("key").then(() => {
+                redis.get("key", (err, res) => {
+                    expect(res).not.toBeTruthy();
+                    done();
+                });
+            });
         });
     });
 });
