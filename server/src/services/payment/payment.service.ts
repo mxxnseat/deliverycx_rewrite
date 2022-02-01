@@ -4,7 +4,6 @@ import { IPaymentWebhookParams } from "../../components/order/dto/paymentWebhook
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { OrderUsecase } from "src/components/order/usecases/order.usecase";
 import { OrderDTO } from "src/components/order/dto/order.dto";
-import { OrderEntity } from "src/components/order/entities/order.entity";
 import { PaymentError } from "./payment.error";
 import { IDeliveryService } from "../delivery/delivery.abstract";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";

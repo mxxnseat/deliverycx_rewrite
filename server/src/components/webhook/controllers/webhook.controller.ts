@@ -37,7 +37,7 @@ export class WebhookController {
         @Res() response: Response
     ) {
         if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-            this.PaymentService.captrurePayment(body.invoice.params);
+            await this.PaymentService.captrurePayment(body.invoice.params);
         }
 
         response.status(200).json({});
