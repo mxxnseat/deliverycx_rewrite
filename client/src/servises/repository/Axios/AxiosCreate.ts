@@ -4,7 +4,7 @@ import {config,mock} from "servises/repository/config";
 
 class AxiosCreate {
   static _instanse: null | AxiosCreate = null
-  private URL: string = config.REACT_APP_API_URL
+  private URL: string = process.env.REACT_APP_API_URL as string
   api: AxiosInstance
 
   private constructor() {

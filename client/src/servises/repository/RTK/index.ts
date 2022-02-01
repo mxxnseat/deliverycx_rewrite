@@ -6,7 +6,7 @@ import { config } from 'servises/repository/config';
 export const defFetchBaseQuery = fetchBaseQuery({ baseUrl: config.REACT_APP_API_URL,credentials: "include" })
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: config.REACT_APP_API_URL,
+  baseUrl: process.env.REACT_APP_API_URL,
   prepareHeaders: (headers) => {
       const token = localStorage.getItem("authToken");  
       if (token) {

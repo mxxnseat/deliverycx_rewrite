@@ -4,6 +4,8 @@ import { CartFormContext } from "../CartForm/CartForm"
 import cn from "classnames";
 import { useHistory } from 'react-router-dom';
 import { CartFormMetods } from "../CartForm/CartMetods";
+// CartLayout - CartDelivery - cartForm - CartModals
+
 
 const CartModalPayment = () => {
   const history = useHistory()
