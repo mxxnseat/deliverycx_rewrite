@@ -1,33 +1,22 @@
-import axios, { Axios } from "axios";
+// import axios, { Axios } from "axios";
+import { AxiosInstance } from "axios";
+import { Axios } from "src/common/abstracts/request";
 import { PaymasterRequest } from "../types/request.type";
 
 import { PaymasterResponse } from "../types/response.type";
 
-export class PaymasterRequests {
-    private axios: Axios;
+export class PaymasterRequests extends Axios {
+    public _axios: AxiosInstance;
 
     constructor() {
-        this.init();
-    }
-
-    private init() {
-        this.axios = axios.create({
-            baseURL: "https://paymaster.ru"
-        });
-
-        this.axios.interceptors.response.use(
-            (response) => response,
-            (error) => {
-                return Promise.reject(error);
-            }
-        );
+        super("https://paymaster.ru", (error) => error);
     }
 
     public async invoices(
         requestBody: PaymasterRequest.IInvoice,
         token: string
     ) {
-        const { data } = await this.axios.post<PaymasterResponse.IInvoice>(
+        const { data } = await this._axios.post<PaymasterResponse.IInvoice>(
             "/api/v2/invoices",
             requestBody,
             {

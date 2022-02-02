@@ -1,36 +1,23 @@
 import { iiko } from "src/services/iiko/interfaces";
 import { Injectable } from "@nestjs/common";
-import axios, { AxiosInstance } from "axios";
 import { IikoError } from "./iiko.error";
+import { Axios } from "src/common/abstracts/request";
+import { AxiosInstance } from "axios";
 
 @Injectable()
-export class IIkoAxios {
-    private axios: AxiosInstance;
+export class IIkoAxios extends Axios {
+    public _axios: AxiosInstance;
 
     constructor() {
-        this.init();
-    }
-
-    private init() {
-        this.axios = axios.create({
-            baseURL: process.env.SERVICE_URL
-        });
-
-        this.axios.interceptors.response.use(
-            (response) => response,
-            (error) => {
-                return Promise.reject(
-                    new IikoError(
-                        error.response.data?.description ||
-                            error.response.data?.message
-                    )
-                );
-            }
+        super(
+            process.env.SERVICE_URL,
+            (error) =>
+                error.response.data?.description || error.response.data?.message
         );
     }
 
     private async token() {
-        const { data } = await this.axios.get<string>(
+        const { data } = await this._axios.get<string>(
             `/api/0/auth/access_token?user_id=${process.env.SERVICE_LOGIN}&user_secret=${process.env.SERVICE_PASSWORD}`
         );
 
@@ -39,7 +26,7 @@ export class IIkoAxios {
 
     public async orderTypes(organization) {
         const token = await this.token();
-        const { data } = await this.axios.get<OrderTypesIiko>(
+        const { data } = await this._axios.get<OrderTypesIiko>(
             `/api/0/rmsSettings/getOrderTypes?access_token=${token}&organization=${organization}`
         );
 
@@ -49,7 +36,7 @@ export class IIkoAxios {
     public async orderCreate(orderData: iiko.IOrderBody) {
         const token = await this.token();
 
-        const { data } = await this.axios.post<OrderInfoIiko>(
+        const { data } = await this._axios.post<OrderInfoIiko>(
             `/api/0/orders/add?access_token=${token}`,
             orderData
         );
@@ -60,7 +47,7 @@ export class IIkoAxios {
     public async checkOrder(orderData: iiko.IOrderBody) {
         const token = await this.token();
 
-        const { data } = await this.axios.post<OrderCheckCreationResult>(
+        const { data } = await this._axios.post<OrderCheckCreationResult>(
             `/api/0/orders/checkCreate?access_token=${token}`,
             orderData
         );
@@ -70,7 +57,7 @@ export class IIkoAxios {
 
     public async stopList(organization: UniqueId) {
         const token = await this.token();
-        const { data } = await this.axios.get<iiko.IStopListBody>(
+        const { data } = await this._axios.get<iiko.IStopListBody>(
             `/api/0/stopLists/getDeliveryStopList?access_token=${token}&organization=${organization}`
         );
 
