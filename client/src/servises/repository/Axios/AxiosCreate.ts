@@ -5,7 +5,6 @@ import axios, {
     AxiosError,
     AxiosRequestConfig
 } from "axios";
-import { config } from "servises/repository/config";
 
 class AxiosCreate {
     static _instanse: null | AxiosCreate = null;
