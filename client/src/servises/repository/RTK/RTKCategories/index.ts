@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ICategory } from '@types';
 import { staticCategories } from 'domain/use-case/useCaseCategories';
-import { config } from "servises/repository/config"
 import { defFetchBaseQuery } from '..';
 
 export interface IAuthResponse{
