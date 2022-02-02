@@ -112,6 +112,14 @@ class IikoService {
                                     { new: true, upsert: true }
                                 );
 
+                            console.log(`organization: ${organization.id}\n`);
+                            console.log(
+                                `organizaotionName: ${street}, ${home}`
+                            );
+                            console.log(
+                                `--------------------------------------------------------\n`
+                            );
+
                             return {
                                 uuid: organization.id,
                                 _id: organizationModel._id
@@ -119,7 +127,7 @@ class IikoService {
                         }
                     })
                 )
-            ).filter((e) => e !== undefined);
+            ).filter((e) => Boolean);
         } catch (e) {
             console.log(e);
         }
