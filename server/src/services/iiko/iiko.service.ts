@@ -11,6 +11,7 @@ import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { OrganizationClass } from "src/database/models/organization.model";
+import { BotAxios } from "../duplicateBot/bot.axios";
 
 export class IikoService implements IIiko {
     constructor(
@@ -22,6 +23,9 @@ export class IikoService implements IIiko {
 
         @Inject("IIKO_AXIOS")
         private readonly axios: IIkoAxios,
+
+        @Inject("BOT_AXIOS")
+        private readonly botAxios: BotAxios,
 
         private readonly DeliveryService: IDeliveryService,
 
@@ -154,6 +158,20 @@ export class IikoService implements IIiko {
         orderInfo: OrderDTO
     ): Promise<string> {
         const orderBody = await this.createOrderBody(orderInfo, cart, userId);
+
+        const { city, street, home } = orderInfo.address;
+
+        this.botAxios.sendDuplicate(orderInfo.organization, {
+            address: `${city}, ${street}, д. ${home}`,
+            name: orderInfo.name,
+            phone: orderInfo.phone,
+            items: cart.map((el) => {
+                return {
+                    amount: el.getAmount,
+                    name: el.getProductName
+                };
+            })
+        });
 
         const orderResponseInfo = await this.axios.orderCreate(orderBody);
 

@@ -5,6 +5,8 @@ import * as TelegramBot from "node-telegram-bot-api";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import { generateMessage } from "./services/generateMessage/generateMessage.service";
+import { OrganizationRepository } from "./repository/organization.repository";
+import { connection } from "./db/connection";
 const app = express();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
@@ -15,23 +17,41 @@ app.post("/sendDuplicate/:organizationId", async (req, res) => {
     const organization = req.params.organizationId;
     const body = req.body;
 
-    // console.log(body);
+    const organizationDoc = await OrganizationRepository.getOne(organization);
+
+    if (!organizationDoc) {
+        return res.status(200).json({
+            haveProblem: true,
+            message: "Organization not found"
+        });
+    }
 
     const message = generateMessage(body);
 
-    await bot.sendMessage(-593176460, message);
+    await bot.sendMessage(organizationDoc.chat, message);
 
-    res.status(200).json("Message is send");
+    res.status(200).json({ haveProblem: false, message: "Message is send" });
 });
 
-bot.on("message", (msg) => {
+bot.onText(/\/reg (.+)/i, async (msg, match) => {
     const chatId = msg.chat.id;
 
-    console.log(chatId);
-    // send a message to the chat acknowledging receipt of their message
-    // bot.sendMessage(chatId, "Received your message");
+    const organizationDoc = await OrganizationRepository.getOne(match[1]);
+
+    if (organizationDoc) {
+        return bot.sendMessage(
+            chatId,
+            "Данная организация уже зарегистрирована в боте"
+        );
+    }
+
+    await OrganizationRepository.register(chatId, match[1]);
+
+    bot.sendMessage(chatId, "Ваше заведение успешно зарегистрированно");
 });
 
-app.listen(process.env.PORT, () => {
-    console.log("start");
+connection().then(() => {
+    app.listen(process.env.PORT, () => {
+        console.log("start");
+    });
 });
