@@ -240,8 +240,6 @@ class IikoService {
                                 );
                             })
                         );
-
-                        console.log(`Stop load product: ${productUp}`);
                     }
                 })
             );
