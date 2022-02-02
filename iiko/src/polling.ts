@@ -127,7 +127,7 @@ class IikoService {
                         }
                     })
                 )
-            ).filter((e) => Boolean);
+            ).filter(Boolean);
         } catch (e) {
             console.log(e);
         }
@@ -204,12 +204,14 @@ class IikoService {
                                 },
                                 { upsert: true, new: true }
                             );
-
+                        let productUp = ``;
                         await Promise.all(
                             data.products.map(async (product) => {
                                 const categoryId = await CategoryModel.findOne({
                                     id: product.parentGroup
                                 });
+                                productUp = product.name;
+                                console.log(`start load product: ${productUp}`);
 
                                 const image = product.images[
                                     product.images.length - 1
