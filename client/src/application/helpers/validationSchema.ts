@@ -46,21 +46,45 @@ import * as yup from "yup";
 
 // const debounceCheckAddress = debounce(checkAddress, 200);
 
+const schemaBuild = (type:string) => {
+  const valid ={
+      name: yup
+          .string()
+          .required('Поле обязательно для заполнения'),
+      address: yup
+          .string()
+          .required('Поле обязательно для заполнения'),
+      phone: yup
+          .string()
+          .trim()
+          .matches(/^(\+7)(\s(\d){3}){2}(\s(\d){2}){2}/, {
+              message: "Не верный формат телефона"
+          })
+          .required('Поле обязательно для заполнения')
+  }
+  switch (type) {
+    case 'COURIER':
+      return yup.object().shape({
+        address:valid.address,
+        name: valid.name,
+        phone: valid.phone
+      })
+      break;
+    case 'PICKUP':
+      return yup.object().shape({
+        name: valid.name,
+        phone: valid.phone
+      })
+      break;
+    default:
+      return yup.object().shape({
+        address:valid.address,
+        name: valid.name,
+        phone: valid.phone
+      })
+      break;
+  }
 
-const schema = yup.object().shape({
-    name: yup
-        .string()
-        .required('Поле обязательно для заполнения'),
-    address: yup
-        .string()
-        .required('Поле обязательно для заполнения'),
-    phone: yup
-        .string()
-        .trim()
-        .matches(/^(\+7)(\s(\d){3}){2}(\s(\d){2}){2}/, {
-            message: "Не верный формат телефона"
-        })
-        .required('Поле обязательно для заполнения')
-});
+}
 
-export default schema;
+export default schemaBuild;
