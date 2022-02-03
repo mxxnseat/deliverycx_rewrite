@@ -153,6 +153,8 @@ class IikoRequester {
 
         for (let city in this.cities) {
             for (let i = 0; i < this.cities[city].length; i++) {
+                await this.getToken();
+
                 const { guid, objectId } = this.cities[city][i];
                 const { data } = await _axios.get(
                     `/api/0/nomenclature/${guid}?access_token=${this.token}`
