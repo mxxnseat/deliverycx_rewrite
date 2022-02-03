@@ -55,7 +55,6 @@ class IikoService {
             this.organizations = (
                 await Promise.all(
                     organizations.map(async (organization) => {
-                        // if (!organization.description.match("HIDDEN")) {
                         console.log(
                             organization.address,
                             organization.address.match(
@@ -64,7 +63,7 @@ class IikoService {
                         );
                         if (
                             organization.address.match(
-                                /^(?<city>.*?),(?<address>.+)/
+                                /^(?<city>.*?),\s?(?<address>.+)/
                             ) !== null
                         ) {
                             const splitAddress = organization.address.match(
