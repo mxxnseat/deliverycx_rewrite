@@ -2,6 +2,7 @@ import { config } from "dotenv";
 config({
     path: __dirname + "/../.development.env"
 });
+import "longjohn";
 process.chdir(`${__dirname}/../..`);
 import axios from "axios";
 import { Types, Document } from "mongoose";
@@ -55,26 +56,22 @@ class IikoService {
             this.organizations = (
                 await Promise.all(
                     organizations.map(async (organization) => {
-                        console.log(
-                            organization.address,
-                            organization.address.match(
-                                /^(?<city>.*?),(?<address>.+)/
-                            )
-                        );
                         if (
                             organization.address.match(
                                 /^(?<city>.*?),\s?(?<address>.+)/
-                            ) !== null
+                            )
                         ) {
                             const splitAddress = organization.address.match(
-                                /^(?<city>.*?),(?<address>.+)/
+                                /^(?<city>.*?),\s?(?<address>.+)/
                             ).groups;
                             const organization_id = new Types.ObjectId();
 
                             const { street, home } = splitAddress.address
                                 .trim()
                                 .replace(",", "")
-                                .match(/(?<street>.*?)(?<home>.*)/).groups;
+                                .match(
+                                    /(?<street>.*)\s?(?<home>\d{1}.*)?/i
+                                ).groups;
 
                             const city = await CityModel.findOneAndUpdate(
                                 {
@@ -110,8 +107,9 @@ class IikoService {
                                             city: city._id
                                         },
                                         address: {
-                                            street: street.trim(),
-                                            home: home.trim(),
+                                            street: street?.trim(),
+                                            home:
+                                                home?.trim() || street?.trim(),
                                             longitude: position[0],
                                             latitude: position[1]
                                         },
@@ -223,11 +221,9 @@ class IikoService {
                                 productUp = product.name;
                                 console.log(`start load product: ${productUp}`);
 
-                                const image = product.images[
-                                    product.images?.length - 1
-                                ]
+                                const image = product.images
                                     ? product.images[product.images.length - 1]
-                                          .imageUrl
+                                          ?.imageUrl
                                     : "";
                                 await ProductModel.updateOne(
                                     {
