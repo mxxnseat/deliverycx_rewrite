@@ -52,7 +52,6 @@ class IikoRequester {
 
         for (let i = 0; i < data.length; i++) {
             const organization = data[i];
-
             if (
                 this.env === "prod" &&
                 organization.description.match("HIDDEN")
