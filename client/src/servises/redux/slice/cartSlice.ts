@@ -165,9 +165,10 @@ export const fetchOrderCart = createAsyncThunk(
         try {
             const request = await RequestCart.OrderCheckCart(value);
             if (request.data && request.status === 200) {
-                const order = await RequestCart.OrderCart(value);
-                dispatch(actionPaymentAccsess());
-                return order.data.number;
+                //const order = await RequestCart.OrderCart(value);
+                //dispatch(actionPaymentAccsess());
+                //return order.data.number;
+                return '222'
             }
         } catch (error: any) {
             // Ошибка валидации по количеству
