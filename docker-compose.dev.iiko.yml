@@ -4,6 +4,7 @@ services:
       container_name: development_iiko
       build:
          context: ./iiko
+         dockerfile: Dockerfile.dev
       env_file:
         - ./iiko/.production.env
       links: [mongo]
