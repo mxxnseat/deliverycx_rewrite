@@ -33,7 +33,7 @@ services:
         build:
             context: ./server
         networks:
-          - production_net
+          - development_net
         links:
             - redis
         volumes:
