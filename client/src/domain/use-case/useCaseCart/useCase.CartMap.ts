@@ -77,9 +77,7 @@ export function useCartMap() {
         });
         axios
             .get<IGeoCodeResponse>(
-                `https://geocode-maps.yandex.ru/1.x/?geocode=${cords.reverse()}&format=json&apikey=${
-                    process.env.YANDEX_API_KEY
-                }`
+                `https://geocode-maps.yandex.ru/1.x/?geocode=${cords.reverse()}&format=json&apikey=25ff2aee-f172-4ef8-9ba4-6e829954c5b5`
             )
             .then(({ data }) => {
                 geoCodeValidAdress(

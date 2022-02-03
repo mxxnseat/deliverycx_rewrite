@@ -6,6 +6,8 @@ export class DownloadImage {
         return new Promise<string>(async (resolve, reject) => {
             if (!url) {
                 resolve("");
+
+                return;
             }
 
             const timerId = setTimeout(() => {
