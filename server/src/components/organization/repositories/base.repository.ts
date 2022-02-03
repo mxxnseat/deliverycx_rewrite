@@ -24,7 +24,7 @@ export class OrganizationRepository
         const organizationDoc = await this.OrganizationModel.findOne({ id });
         const organizationEntity = new OrganizationEntity(
             organizationDoc._id,
-            `${organizationDoc.address.street}, ${organizationDoc.address.home}`,
+            organizationDoc.address.street,
             (organizationDoc.city as CityClass)?.name,
             [
                 organizationDoc.address.latitude,

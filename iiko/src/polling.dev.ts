@@ -108,8 +108,7 @@ class IikoService {
                                         },
                                         address: {
                                             street: street?.trim(),
-                                            home:
-                                                home?.trim() || street?.trim(),
+                                            home: home?.trim() || "",
                                             longitude: position[0],
                                             latitude: position[1]
                                         },
@@ -119,14 +118,6 @@ class IikoService {
                                     },
                                     { new: true, upsert: true }
                                 );
-
-                            console.log(`organization: ${organization.id}\n`);
-                            console.log(
-                                `organizaotionName: ${street}, ${home}`
-                            );
-                            console.log(
-                                `--------------------------------------------------------\n`
-                            );
 
                             return {
                                 uuid: organization.id,
@@ -163,8 +154,6 @@ class IikoService {
                             },
                             { upsert: true }
                         );
-
-                        // console.log(data.groups);
 
                         await CategoryModel.deleteMany({ organization: _id });
                         const categories = await Promise.all(

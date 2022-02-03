@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "ts-node ./src/polling.ts"
+    "start_windows": "set NODE_OPTIONS=--max_old_space_size=5120 && ts-node ./src/pooling.test.ts"
   },
   "keywords": [],
   "author": "",

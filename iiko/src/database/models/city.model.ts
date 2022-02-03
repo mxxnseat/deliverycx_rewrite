@@ -6,6 +6,7 @@ import {
     Ref
 } from "@typegoose/typegoose";
 import { OrganizationClass } from "./organization.model";
+import { Types } from "mongoose";
 
 @ModelOptions({
     options: { customName: "City" },
@@ -13,7 +14,7 @@ import { OrganizationClass } from "./organization.model";
 })
 export class CityClass {
     @prop({ type: mongoose.Types.ObjectId })
-    public _id!: UniqueId;
+    public _id!: Types.ObjectId;
 
     @prop()
     public name!: string;
