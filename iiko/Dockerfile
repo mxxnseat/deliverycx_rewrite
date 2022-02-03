@@ -10,4 +10,4 @@ COPY ./favorite.png .
 RUN npm install
 RUN npm install -g ts-node
 
-CMD ["ts-node", "./src/polling.ts", "prod"]
+CMD ["ts-node", "./src/pooling.ts", "prod"]
