@@ -1,1 +1,1 @@
-cd ../ && docker-compose -f docker-compose.dev.yml up -d
+cd ../ && sudo docker-compose -f docker-compose.dev.yml up -d
