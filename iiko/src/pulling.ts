@@ -114,7 +114,7 @@ class IikoRequester {
                             workTime
                         }
                     },
-                    { upsert: true }
+                    { upsert: true, new: true }
                 );
 
                 organizations.push(objectId);
