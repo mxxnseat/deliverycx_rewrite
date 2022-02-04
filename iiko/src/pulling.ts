@@ -169,7 +169,11 @@ class IikoRequester {
                 }
 
                 for (let i = 0; i < groups.length; i++) {
-                    const { name, order, images, id } = groups[i];
+                    const { name, order, images, id, parentGroup } = groups[i];
+
+                    if (!parentGroup) {
+                        continue;
+                    }
 
                     const image = images
                         ? images[images.length - 1]?.imageUrl
