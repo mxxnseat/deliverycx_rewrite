@@ -75,8 +75,8 @@ class IikoRequester {
                     street,
                     guid: organization.id,
                     objectId: organizationId,
-                    longitude: position[1],
-                    latitude: position[0],
+                    longitude: position[0],
+                    latitude: position[1],
                     workTime: organization.workTime.split(";")[0],
                     phone: organization.phone
                 };
