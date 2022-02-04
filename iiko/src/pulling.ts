@@ -164,6 +164,8 @@ class IikoRequester {
                 ).lean();
                 const { groups, products, revision } = data;
 
+                console.log(revisionFromDatabase, revision);
+
                 if (revision === revisionFromDatabase.revision) {
                     continue;
                 }
@@ -252,7 +254,7 @@ class IikoRequester {
                 productsArray = [];
 
                 await OrganizationModel.updateOne(
-                    { organization: objectId },
+                    { id: guid },
                     { $set: { revision } }
                 );
 
