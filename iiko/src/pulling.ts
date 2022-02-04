@@ -187,7 +187,7 @@ class IikoRequester {
                         name,
                         order,
                         organization: objectId,
-                        image: await downloader.download(image)
+                        image: await downloader.download(image, 70)
                     };
                     categoriesArray.push(category);
                 }
@@ -235,7 +235,7 @@ class IikoRequester {
                         description,
                         order,
                         id,
-                        image: await downloader.download(image),
+                        image: await downloader.download(image, 300),
                         additionalInfo,
                         tags,
                         measureUnit: MeasureUnit,

@@ -2,7 +2,7 @@ import * as Jimp from "jimp";
 import * as uuid from "uuid";
 
 export class DownloadImage {
-    download(url: string) {
+    download(url: string, w: number) {
         return new Promise<string>(async (resolve, reject) => {
             if (!url) {
                 resolve("");
@@ -20,7 +20,7 @@ export class DownloadImage {
             const ext = image._originalMime.split("/")[1];
             const imageName = `${uuid.v4()}_${Date.now()}.${ext}`;
 
-            image.resize(300, Jimp.AUTO);
+            image.resize(w, Jimp.AUTO);
             await image.writeAsync(`/data/iiko/${imageName}`);
 
             resolve(`/static/shop/${imageName}`);
