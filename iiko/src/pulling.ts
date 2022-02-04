@@ -60,7 +60,7 @@ class IikoRequester {
             }
 
             const matchesAddress = organization.address.match(
-                /(?<city>[а-я]*?),\s?(?<street>.*)/i
+                /(?<city>.*?),\s?(?<street>.*)/i
             );
 
             if (matchesAddress) {
