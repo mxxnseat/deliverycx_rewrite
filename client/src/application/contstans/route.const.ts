@@ -13,6 +13,7 @@ export const ROUTE_APP = {
     CART_MAP: '/cart/map',
     CART_ORDER: '/cart/order'
   },
+  ORDER: '/success',
   PAGES: {
     ABOUT:'/about'
   }

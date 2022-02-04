@@ -19,6 +19,7 @@ import { FormBuilder } from "application/components/common/Forms";
 import CartModals from "../CartModals/CartModals";
 import React from "react";
 import { CartFormMetods } from "./CartMetods";
+import { useOrderCreate } from "domain/use-case/useCaseOrder";
 
 
 type IProps = {
@@ -62,13 +63,24 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
   const [times, setTimes] = useState<object>(timesArray[0]);
   const useCaseForm = adapterComponentUseCase(useCartForm,paths)
   const {paymentMetod,paymentOrder } = useCaseForm.data
-  const {paymentReady} = useCaseForm.status
+  const { paymentReady } = useCaseForm.status
   
   const formik = useFormik({
     initialValues,
     validationSchema: schema,
     onSubmit: (values, meta) => {
-      
+      submitHandler<ISubmitData>(
+        {
+          ...values,
+          payment_method: paymentMetod.id,
+          paymentOrderCard:paymentOrder,
+          times,
+          city: city.name,
+          orderType
+        },
+        meta
+      );
+      /*
       if (!paymentReady && paymentMetod.id === CartFormMetods.paymentsMetod[1].id) {
         history.push(paths + '/card')
       } else {
@@ -83,7 +95,9 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
           },
           meta
         );
+        
       }
+      */
       
     },
   });
@@ -99,9 +113,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
     orderError.status && dispatch(setErrors({errors:{}}))
     
   },[])
-  useEffect(() => {
-    orderNumber && history.push(ROUTE_APP.CART.CART_ORDER)
-  },[orderNumber])
+  
 
   return (
     <FormikProvider value={formik}>

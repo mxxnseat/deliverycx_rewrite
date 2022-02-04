@@ -1,8 +1,10 @@
 /* eslint-disable no-async-promise-executor */
 
+import { useOrderCreate } from "domain/use-case/useCaseOrder";
 import { FormikHelpers } from "formik";
 import { store } from "servises/redux/createStore";
 import { fetchAllCart, fetchOrderCart } from "servises/redux/slice/cartSlice";
+import { useHistory } from 'react-router-dom';
 
 const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
     const storage = store.getState();
@@ -34,8 +36,11 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
             ...values.paymentOrderCard
         };
         
-        await store.dispatch(fetchOrderCart(val) as any);
-        resolve(true);
+      const url = await store.dispatch(fetchOrderCart(val) as any);
+      resolve(true);
+      if (url.payload) {
+        window.location.href = url.payload
+      }
     }).then(() => {
         meta.setSubmitting(false);
     });

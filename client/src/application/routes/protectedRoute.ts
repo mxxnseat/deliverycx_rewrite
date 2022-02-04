@@ -38,10 +38,11 @@ const protectedRoutes: IRoute[] = [
     component:lazy(() => import('application/components/core/Cart/CartYmap')),
     
   },
+  
   {
-    exact: true,
-    path: ROUTE_APP.CART.CART_ORDER,
-    component: lazy(() => import('application/components/core/Cart/CheckOut')),
+    exact: false,
+    path: ROUTE_APP.ORDER,
+    component: lazy(() => import('application/components/core/Order/Ordering')),
     
   },
   
