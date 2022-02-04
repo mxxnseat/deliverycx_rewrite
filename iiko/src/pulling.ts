@@ -171,6 +171,8 @@ class IikoRequester {
                         ? images[images.length - 1]?.imageUrl
                         : "";
 
+                    console.log(await downloader.download(image, 70));
+
                     const category = {
                         _id: new Types.ObjectId(),
                         id,
