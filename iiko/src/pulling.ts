@@ -171,9 +171,9 @@ class IikoRequester {
                 }
 
                 for (let i = 0; i < groups.length; i++) {
-                    const { name, order, images, id, parentGroup } = groups[i];
+                    const { name, order, images, id, description } = groups[i];
 
-                    if (!parentGroup) {
+                    if (description.match("HIDDEN")) {
                         continue;
                     }
 
