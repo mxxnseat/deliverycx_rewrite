@@ -64,7 +64,6 @@ class IikoRequester {
             );
 
             if (matchesAddress) {
-                const organizationId = new Types.ObjectId();
                 const { city, street } = matchesAddress.groups;
 
                 const { position } = await geoCoder.resolve(
@@ -74,7 +73,6 @@ class IikoRequester {
                 const organizationInArray = {
                     street,
                     guid: organization.id,
-                    objectId: organizationId,
                     longitude: position[0],
                     latitude: position[1],
                     workTime: organization.workTime.split(";")[0],
@@ -98,22 +96,12 @@ class IikoRequester {
             const organizations = [];
 
             for (let i = 0; i < this.cities[city].length; i++) {
-                const {
-                    objectId,
-                    guid,
-                    longitude,
-                    latitude,
-                    street,
-                    workTime,
-                    phone
-                } = this.cities[city][i];
+                const { guid, longitude, latitude, street, workTime, phone } =
+                    this.cities[city][i];
 
-                await OrganizationModel.updateOne(
+                const objectId = await OrganizationModel.findOneAndUpdate(
                     { id: guid },
                     {
-                        $set: {
-                            _id: objectId
-                        },
                         $setOnInsert: {
                             id: guid,
                             city: cityId,
@@ -129,7 +117,7 @@ class IikoRequester {
                     { upsert: true }
                 );
 
-                organizations.push(this.cities[city][i].objectId);
+                organizations.push(objectId);
             }
 
             await CityModel.updateOne(
