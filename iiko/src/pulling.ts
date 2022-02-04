@@ -270,12 +270,10 @@ class IikoRequester {
     }
 }
 
-const envFromTerminal = process.argv[2];
-
 const iikoRequester = new IikoRequester(
     process.env.SERVICE_LOGIN,
     process.env.SERVICE_PASSWORD,
-    envFromTerminal
+    process.env.ENV_FLAG
 );
 
 connection().then(async () => {
