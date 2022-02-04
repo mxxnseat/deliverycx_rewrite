@@ -173,7 +173,7 @@ class IikoRequester {
                 for (let i = 0; i < groups.length; i++) {
                     const { name, order, images, id, description } = groups[i];
 
-                    if (description?.match("HIDDEN")) {
+                    if (description === "HIDDEN") {
                         continue;
                     }
 
