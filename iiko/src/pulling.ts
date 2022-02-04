@@ -117,6 +117,11 @@ class IikoRequester {
                     { upsert: true, new: true }
                 );
 
+                this.cities[city][i] = {
+                    ...this.cities[city][i],
+                    objectId
+                };
+
                 organizations.push(objectId);
             }
 
@@ -148,10 +153,12 @@ class IikoRequester {
                 const { data } = await _axios.get(
                     `/api/0/nomenclature/${guid}?access_token=${this.token}`
                 );
+
                 const revisionFromDatabase = await OrganizationModel.findOne(
                     { id: guid },
                     { revision: 1 }
                 ).lean();
+
                 const { groups, products, revision } = data;
 
                 console.log(revisionFromDatabase, revision);
@@ -219,6 +226,8 @@ class IikoRequester {
                     const image = images
                         ? images[images.length - 1]?.imageUrl
                         : "";
+
+                    console.log(objectId);
 
                     const product = {
                         category: category._id,
