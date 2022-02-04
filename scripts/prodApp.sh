@@ -1,1 +1,1 @@
-cd ../ && sudo docker-compose -f docker-compose.prod.yml up -d
+cd ../ && docker-compose -f docker-compose.prod.yml up -d

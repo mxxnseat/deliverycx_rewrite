@@ -82,11 +82,11 @@ class IikoRequester {
                 };
 
                 if (city in this.cities) {
-                    this.cities[city].push(organizationInArray);
+                    this.cities[city.trim()].push(organizationInArray);
                 } else {
                     this.cities = {
                         ...this.cities,
-                        [city]: [organizationInArray]
+                        [city.trim()]: [organizationInArray]
                     };
                 }
             }
