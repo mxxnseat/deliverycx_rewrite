@@ -16,7 +16,7 @@ const Ordering: FC = (): JSX.Element => {
  
 
   return (
-    <div className="cart">
+    <div className="cart order-container">
       <HeaderBack onClickCb={handleBacktoShop}>
         Вернутся в магазин
       </HeaderBack>
