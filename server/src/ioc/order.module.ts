@@ -19,6 +19,10 @@ import { RedisModule } from "src/modules/redis/redis.module";
 import { IOrderUtilsService } from "src/components/order/services/order/interface.service";
 import { OrderUtilsService } from "src/components/order/services/order/base.service";
 import { BotAxiosProvider } from "src/services/duplicateBot/bot.axios";
+import { OrderCreateBuilder } from "src/components/order/usecases/builders/orderCreate.builder";
+import { OrderCheckBuilder } from "src/components/order/usecases/builders/orderCheck.builder";
+import { BotService } from "src/services/duplicateBot/bot.service";
+import { IBotService } from "src/services/duplicateBot/bot.abstract";
 
 @Module({
     imports: [IikoModule, RedisModule],
@@ -49,6 +53,18 @@ import { BotAxiosProvider } from "src/services/duplicateBot/bot.axios";
         {
             provide: ValidationCount,
             useClass: ValidationCount
+        },
+        {
+            provide: OrderCreateBuilder,
+            useClass: OrderCreateBuilder
+        },
+        {
+            provide: OrderCheckBuilder,
+            useClass: OrderCheckBuilder
+        },
+        {
+            provide: IBotService,
+            useClass: BotService
         },
         paymasterProvider,
         BotAxiosProvider,

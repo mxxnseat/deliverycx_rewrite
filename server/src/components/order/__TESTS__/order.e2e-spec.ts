@@ -20,11 +20,14 @@ import { UserClass } from "src/database/models/user.model";
 import { BaseErrorsFilter } from "src/filters/base.filter";
 import { OrderModule } from "src/ioc/order.module";
 import { REDIS } from "src/modules/redis/redis.constants";
+import { IBotService } from "src/services/duplicateBot/bot.abstract";
+import { BotService } from "src/services/duplicateBot/bot.service";
 import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { PaymentMethods } from "src/services/payment/payment.abstract";
 import { Paymaster } from "src/services/payment/sdk/common/paymaster";
 import * as request from "supertest";
+import { IOrderUtilsService } from "../services/order/interface.service";
 import { OrderUsecase } from "../usecases/order.usecase";
 import {
     cartStub,
@@ -35,6 +38,10 @@ import {
     userId
 } from "./stubs";
 import { paymentInfoStub } from "./stubs/paymentInfo.stub";
+
+const bot = {
+    sendDuplicate: () => []
+};
 
 describe("Order Module", () => {
     let app: INestApplication;
@@ -73,7 +80,29 @@ describe("Order Module", () => {
                     useClass: BaseErrorsFilter
                 }
             ]
-        }).compile();
+        })
+            .overrideProvider("BOT_AXIOS")
+            .useValue(bot)
+            .overrideProvider("IIKO_AXIOS")
+            .useValue({
+                token: () => 2,
+                orderTypes: () => ({
+                    items: [
+                        {
+                            id: "some",
+                            name: "sone",
+                            orderServiceType: "soke",
+                            externalRevision: "sope"
+                        }
+                    ]
+                }),
+                orderCreate: () => ({}),
+                checkOrder: () => ({
+                    numState: 0,
+                    message: "some error or not message"
+                })
+            })
+            .compile();
 
         iikoService = moduleRef.get<IikoService>("IIiko");
         orderUsecase = moduleRef.get<OrderUsecase>(OrderUsecase);
@@ -127,6 +156,11 @@ describe("Order Module", () => {
             jest.spyOn<any, "create">(iikoService, "create").mockImplementation(
                 () => 777
             );
+            // console.log(botService);
+            // jest.spyOn<any, "sendDuplicate">(
+            //     botService,
+            //     "sendDuplicate"
+            // ).mockImplementation(() => 777);
 
             const sendData = {
                 organization: organizationId,
@@ -216,29 +250,6 @@ describe("Order Module", () => {
 
                     done();
                 });
-        });
-
-        it("should return order number", (done) => {
-            redis.set("bccds", "3333");
-            request(app.getHttpServer())
-                .get("/order/number/bccds")
-                .expect(200)
-                .then((res) => {
-                    expect(res.body.number).toBe("3333");
-
-                    done();
-                });
-        });
-
-        it("should remove key", (done) => {
-            redis.set("key", "4444");
-
-            orderUsecase.getOrderNumber("key").then(() => {
-                redis.get("key", (err, res) => {
-                    expect(res).not.toBeTruthy();
-                    done();
-                });
-            });
         });
     });
 });

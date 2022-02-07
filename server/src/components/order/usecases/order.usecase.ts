@@ -1,63 +1,43 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { ICartRepository } from "src/components/cart/repositories/interface.repository";
-import { IDeliveryService } from "src/services/delivery/delivery.abstract";
-import { IIiko } from "src/services/iiko/iiko.abstract";
+import { Injectable } from "@nestjs/common";
 import { OrderDTO } from "../dto/order.dto";
-import { OrderEntity } from "../entities/order.entity";
-import { RedirectEntity } from "../entities/redirect.entity";
-import { IOrderRepository } from "../repositores/interface.repository";
 import { IOrderUtilsService } from "../services/order/interface.service";
+import { OrderCheckBuilder } from "./builders/orderCheck.builder";
+import { OrderCreateBuilder } from "./builders/orderCreate.builder";
 
 @Injectable()
 export class OrderUsecase {
     constructor(
-        @Inject("IIiko")
-        private readonly orderService: IIiko,
-
-        private readonly orderRepository: IOrderRepository,
-        private readonly cartRepository: ICartRepository,
-
         private readonly OrderUtilsService: IOrderUtilsService,
-        private readonly DeliveryService: IDeliveryService
+
+        private readonly orderCreateBuilder: OrderCreateBuilder,
+        private readonly orderCheckBuilder: OrderCheckBuilder
     ) {}
 
     async create(userId: UniqueId, orderInfo: OrderDTO) {
-        const cart = await this.cartRepository.getAll(userId);
+        await this.orderCreateBuilder.initialize(userId, orderInfo);
 
-        const orderNumber = await this.orderService.create(
-            userId,
-            cart,
-            orderInfo
-        );
+        await this.orderCreateBuilder.createOrder();
+        this.orderCreateBuilder.duplicateOrder();
 
-        const deliveryPrice = await this.DeliveryService.calculatingPrices(
-            userId,
-            orderInfo.orderType
-        );
-
-        await this.orderRepository.create(
-            userId,
-            deliveryPrice.totalPrice,
-            orderNumber
-        );
-
-        await this.cartRepository.removeAll(userId);
-
-        return new OrderEntity(orderNumber);
+        return this.orderCreateBuilder.getOrderEntity();
     }
 
     async checkOrder(userId, orderInfo: OrderDTO) {
-        const cart = await this.cartRepository.getAll(userId);
+        await this.orderCheckBuilder.initialize(userId, orderInfo);
 
-        const result = await this.orderService.check(userId, cart, orderInfo);
+        await this.orderCheckBuilder.validateCart();
 
-        return result;
+        await this.orderCheckBuilder.validateCount();
+
+        await this.orderCheckBuilder.serviceValidate();
+
+        await this.orderCheckBuilder.getResult();
     }
 
     async getOrderNumber(hash: string) {
         const orderNumber = await this.OrderUtilsService.getOrderNumber(hash);
-        this.OrderUtilsService.removeOrderNumber(hash);
-
+        // this.OrderUtilsService.removeOrderNumber(hash);
+        // console.log(orderNumber);
         return orderNumber;
     }
 }

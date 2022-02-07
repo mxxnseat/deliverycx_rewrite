@@ -112,7 +112,12 @@ export class PaymentService extends IPaymentService {
     async _byCash(body: OrderDTO, userId: UniqueId): Promise<RedirectEntity> {
         const orderHash = createOrderHash();
         const orderEntity = await this.orderUsecase.create(userId, body);
-        this.redis.set(orderHash, orderEntity.getNumber.toString());
+        this.redis.set(
+            orderHash,
+            orderEntity.getNumber.toString(),
+            "EX",
+            60 * 10
+        );
         const redirectUri = `/success/${orderHash}`;
 
         return new RedirectEntity(redirectUri);

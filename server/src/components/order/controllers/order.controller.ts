@@ -47,9 +47,7 @@ import { RedirectEntity } from "../entities/redirect.entity";
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,
-        private readonly CartRepository: ICartRepository,
-        private readonly PaymentService: PaymentService,
-        private readonly validationCountService: ValidationCount
+        private readonly PaymentService: PaymentService
     ) {}
 
     @ApiResponse({
@@ -88,22 +86,9 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-        const cart = await this.CartRepository.getAll(session.user);
-        if (!cart.length) {
-            throw new EmptyCartError();
-        }
+        await this.OrderUsecase.checkOrder(session.user, body);
 
-        this.validationCountService.validate(cart);
-
-        const result = await this.OrderUsecase.checkOrder(session.user, body);
-
-        if (result.numState !== iiko.ResultStateEnum.Success) {
-            throw new CannotDeliveryError(
-                `Доставка не может быть совершена по причине ${result.message}`
-            );
-        }
-
-        response.status(200).json("OK");
+        response.status(200).json({ message: "Order can be send" });
     }
 
     @ApiResponse({

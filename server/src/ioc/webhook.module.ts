@@ -7,7 +7,6 @@ import { OrderUsecase } from "src/components/order/usecases/order.usecase";
 import { IOrderRepository } from "src/components/order/repositores/interface.repository";
 import { OrderRepository } from "src/components/order/repositores/base.repository";
 import { orderProviders } from "src/components/order/providers/order.provider";
-import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoService } from "src/services/iiko/iiko.service";
 import { MailService } from "src/services/mail/mail.service";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
@@ -20,6 +19,11 @@ import { RedisModule } from "src/modules/redis/redis.module";
 import { IOrderUtilsService } from "src/components/order/services/order/interface.service";
 import { OrderUtilsService } from "src/components/order/services/order/base.service";
 import { BotAxiosProvider } from "src/services/duplicateBot/bot.axios";
+import { OrderCreateBuilder } from "src/components/order/usecases/builders/orderCreate.builder";
+import { OrderCheckBuilder } from "src/components/order/usecases/builders/orderCheck.builder";
+import { ValidationCount } from "src/components/order/services/validationCount/validationCount.service";
+import { IBotService } from "src/services/duplicateBot/bot.abstract";
+import { BotService } from "src/services/duplicateBot/bot.service";
 
 @Module({
     imports: [IikoModule, RedisModule],
@@ -48,6 +52,22 @@ import { BotAxiosProvider } from "src/services/duplicateBot/bot.axios";
         {
             provide: "IIiko",
             useClass: IikoService
+        },
+        {
+            provide: OrderCreateBuilder,
+            useClass: OrderCreateBuilder
+        },
+        {
+            provide: OrderCheckBuilder,
+            useClass: OrderCheckBuilder
+        },
+        {
+            provide: ValidationCount,
+            useClass: ValidationCount
+        },
+        {
+            provide: IBotService,
+            useClass: BotService
         },
         BotAxiosProvider,
         paymasterProvider,

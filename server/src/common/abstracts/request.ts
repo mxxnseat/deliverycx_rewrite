@@ -18,6 +18,7 @@ export abstract class Axios {
         this._axios.interceptors.response.use(
             (response) => response,
             (error) => {
+                console.log(error);
                 return Promise.reject(this.errorCallback(error));
             }
         );

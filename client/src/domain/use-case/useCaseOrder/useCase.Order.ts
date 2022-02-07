@@ -20,7 +20,7 @@ export function useOrder() {
                 const request = await RequestOrder.OrderNumber(url);
 
                 if (request.data) {
-                    console.log(`request data`, request.data);
+                    console.log(`request data`, request);
                     setOrderNumber(request.data.number);
                     clearInterval(ref.current as any);
                 }

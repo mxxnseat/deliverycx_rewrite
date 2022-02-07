@@ -219,7 +219,7 @@ class IikoRequester {
                         price,
                         tags,
                         images,
-                        MeasureUnit,
+                        measureUnit,
                         weight
                     } = products[i];
 
@@ -239,7 +239,7 @@ class IikoRequester {
                         image: await downloader.download(image, 300),
                         additionalInfo,
                         tags,
-                        measureUnit: MeasureUnit,
+                        measureUnit: measureUnit,
                         price,
                         weight
                     };

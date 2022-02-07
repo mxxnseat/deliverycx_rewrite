@@ -13,8 +13,8 @@ export class IIkoAxios extends Axios {
             process.env.SERVICE_URL,
             (error) =>
                 new IikoError(
-                    error.response.data?.description ||
-                        error.response.data?.message
+                    error.response?.data?.description ||
+                        error.response?.data?.message
                 )
         );
     }
