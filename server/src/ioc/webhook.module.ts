@@ -19,6 +19,7 @@ import { paymasterProvider } from "src/services/payment/sdk/provider/paymaster.p
 import { RedisModule } from "src/modules/redis/redis.module";
 import { IOrderUtilsService } from "src/components/order/services/order/interface.service";
 import { OrderUtilsService } from "src/components/order/services/order/base.service";
+import { BotAxiosProvider } from "src/services/duplicateBot/bot.axios";
 
 @Module({
     imports: [IikoModule, RedisModule],
@@ -48,6 +49,7 @@ import { OrderUtilsService } from "src/components/order/services/order/base.serv
             provide: "IIiko",
             useClass: IikoService
         },
+        BotAxiosProvider,
         paymasterProvider,
         IikoWebsocketGateway,
         ...productProviders,

@@ -10,6 +10,10 @@ const Ordering: FC = (): JSX.Element => {
   const {orderNumber} = useCaseCart.data
   const {handleBacktoShop} = useCaseCart.handlers
 
+  console.log(useCaseCart);
+
+
+
   return (
     <div className="cart">
       <HeaderBack onClickCb={handleBacktoShop}>
