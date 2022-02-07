@@ -12,7 +12,6 @@ const Ordering: FC = (): JSX.Element => {
   const { handleBacktoShop } = useCaseOrder.handlers
   const {orderLoad} = useCaseOrder.status
 
-  console.log(orderLoad);
  
 
   return (

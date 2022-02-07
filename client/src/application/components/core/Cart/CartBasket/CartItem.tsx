@@ -44,7 +44,6 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
     }
     
   }, [errorSchema])
-  console.log(error);
 
   const changeCountHandler = ({ id, type, code}: any) => {
       if (typeof changeCount === 'number') {
