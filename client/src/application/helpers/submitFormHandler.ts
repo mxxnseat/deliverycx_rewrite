@@ -1,6 +1,5 @@
 /* eslint-disable no-async-promise-executor */
 
-import { useOrderCreate } from "domain/use-case/useCaseOrder";
 import { FormikHelpers } from "formik";
 import { store } from "servises/redux/createStore";
 import { fetchAllCart, fetchOrderCart } from "servises/redux/slice/cartSlice";
