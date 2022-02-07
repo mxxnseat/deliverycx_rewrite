@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { fetchAllCart, setOrderType } from "servises/redux/slice/cartSlice";
 import { useSelector } from 'react-redux';
@@ -17,6 +17,13 @@ const CartChoise: FC = () => {
     const pickupCN = cn("cart__choice__item", { active: activeChoice === CART_CHOICE.PICKUP }); //activeChoice === CART_CHOICE.PICKUP
     const onspotCN = cn("cart__choice__item", { active: false }); // activeChoice === CART_CHOICE.ONSPOT
 
+    useEffect(() => {
+      if (activeChoice === CART_CHOICE.COURIER) {
+        history.push(ROUTE_APP.CART.CART_DELIVERY)
+      } else if (activeChoice === CART_CHOICE.PICKUP) {
+        history.push(ROUTE_APP.CART.CART_PICKUP)
+      }
+    },[activeChoice])
     
     const handlerChoice = useCallback((choise:string) => {
         dispatch(setOrderType(choise))
@@ -27,11 +34,9 @@ const CartChoise: FC = () => {
         <div className="cart__choice">
         <div className={deliveryCN} onClick={() => {
           handlerChoice(CART_CHOICE.COURIER)
-          history.push(ROUTE_APP.CART.CART_DELIVERY)
         }}>Доставка</div>
         <div className={pickupCN} onClick={() => {
           handlerChoice(CART_CHOICE.PICKUP)
-          history.push(ROUTE_APP.CART.CART_PICKUP)
         }}>Самовывоз</div>
             <div className={onspotCN} >На месте</div>
         </div>

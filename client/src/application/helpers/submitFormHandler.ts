@@ -15,14 +15,14 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
 
         // Разделение адреса на улицу и дом
         const prepareAddress: { street: string; home: number } =
-            values.address.match(/(?<street>.*?),\s?(?<home>.*)/).groups;
+          values.address && values.address.match(/(?<street>.*?),\s?(?<home>.*)/).groups;
 
         const val = {
             organization: storage.location.point.id,
             name: values.name,
             address: {
                 city: storage.location.point.city,
-                street: prepareAddress.street,
+                street: prepareAddress.street || "",
                 home: prepareAddress.home || 1,
                 flat: values.flat,
                 intercom: values.intercom,

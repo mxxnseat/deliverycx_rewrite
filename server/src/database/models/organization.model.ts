@@ -26,7 +26,6 @@ export class OrganizationClass {
     @prop({ type: () => Object })
     public address!: {
         street: string;
-        home: number;
         latitude: number;
         longitude: number;
     };

@@ -67,7 +67,7 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
   
   const formik = useFormik({
     initialValues,
-    validationSchema: schema,
+    validationSchema: schema(orderType),
     onSubmit: (values, meta) => {
       submitHandler<ISubmitData>(
         {
