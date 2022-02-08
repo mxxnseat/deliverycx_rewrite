@@ -41,6 +41,26 @@ export class OrganizationRepository
         return organizationEntity;
     }
 
+    public async getOne(id: UniqueId) {
+        const organizationDoc = await this.OrganizationModel.findById(
+            id
+        ).lean();
+
+        return new OrganizationEntity(
+            organizationDoc._id,
+            organizationDoc.address.street,
+            (organizationDoc.city as CityClass)?.name,
+            [
+                organizationDoc.address.latitude,
+                organizationDoc.address.longitude
+            ],
+            organizationDoc.phone,
+            organizationDoc.workTime,
+            !!organizationDoc.yopay?.isActive,
+            organizationDoc.id
+        );
+    }
+
     public async getPaymentsInfo(organizationId: UniqueId) {
         const paymentDoc = await this.PaymentServiceDataModel.findOne({
             organization: organizationId

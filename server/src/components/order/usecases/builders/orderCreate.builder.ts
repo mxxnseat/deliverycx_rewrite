@@ -1,6 +1,7 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
+import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { IIiko } from "src/services/iiko/iiko.abstract";
@@ -25,6 +26,8 @@ export class OrderCreateBuilder {
 
         private readonly orderRepository: IOrderRepository,
         private readonly CartRepository: ICartRepository,
+
+        private readonly OrganizationRepository: IOrganizationRepository,
 
         private readonly DeliveryService: IDeliveryService,
 
@@ -66,7 +69,7 @@ export class OrderCreateBuilder {
         await this.CartRepository.removeAll(user);
     }
 
-    duplicateOrder() {
+    async duplicateOrder() {
         const {
             address: { city, street, home },
             name,
@@ -80,10 +83,14 @@ export class OrderCreateBuilder {
             phone
         };
 
+        const { getGuid } = await this.OrganizationRepository.getOne(
+            organization
+        );
+
         this.botService.sendDuplicate(
             address,
             customer,
-            organization,
+            getGuid,
             this._state.cart
         );
     }

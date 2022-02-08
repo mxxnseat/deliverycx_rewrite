@@ -17,7 +17,7 @@ export class OrderUsecase {
         await this.orderCreateBuilder.initialize(userId, orderInfo);
 
         await this.orderCreateBuilder.createOrder();
-        this.orderCreateBuilder.duplicateOrder();
+        await this.orderCreateBuilder.duplicateOrder();
 
         return this.orderCreateBuilder.getOrderEntity();
     }

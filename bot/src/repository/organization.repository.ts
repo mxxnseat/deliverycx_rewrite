@@ -8,4 +8,8 @@ export class OrganizationRepository {
     static async register(chat: number, organization: string) {
         return await OrganizationModel.create({ organization, chat });
     }
+
+    static async removeOne(chat: number, organization: string) {
+        return await OrganizationModel.deleteOne({ organization, chat });
+    }
 }

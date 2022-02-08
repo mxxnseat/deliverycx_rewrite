@@ -16,9 +16,9 @@ app.use(bodyParser());
 app.post("/sendDuplicate/:organizationId", async (req, res) => {
     const organization = req.params.organizationId;
     const body = req.body;
-
+    console.log(body);
     const organizationDoc = await OrganizationRepository.getOne(organization);
-
+    console.log(organizationDoc);
     if (!organizationDoc) {
         return res.status(200).json({
             haveProblem: true,
@@ -48,6 +48,21 @@ bot.onText(/\/reg (.+)/i, async (msg, match) => {
     await OrganizationRepository.register(chatId, match[1]);
 
     bot.sendMessage(chatId, "Ваше заведение успешно зарегистрированно");
+});
+
+bot.onText(/\/del (.+)/i, async (msg, match) => {
+    const chatId = msg.chat.id;
+    const organization = match[1];
+
+    if (!organization) {
+        return bot.sendMessage(chatId, "Заданная организация пуста");
+    }
+
+    const result = await OrganizationRepository.removeOne(chatId, match[1]);
+    if (result.deletedCount === 0) {
+        return bot.sendMessage(chatId, "Нечего удалять");
+    }
+    bot.sendMessage(chatId, "Успешно удалено");
 });
 
 connection().then(() => {
