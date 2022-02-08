@@ -5,6 +5,8 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import { useHistory } from "react-router-dom";
+import { actionThunk } from "servises/redux/action/actionThunkBuilder";
+import { useDispatch } from 'react-redux';
 
 export function useCaseShop() {
   const [id,setId] = useState(true)
@@ -18,8 +20,11 @@ export function useCaseShop() {
     category && setId(false)  
   }, [category])
 
+  const dispatch = useDispatch()
+  const q = new actionThunk()
+  dispatch(q.fetchOrderCart())
   
-
+  
 
   this.data({
     category,

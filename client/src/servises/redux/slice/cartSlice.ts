@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 import CartEntities from "domain/entities/CartEntities/Cart.entities";
 import { RequestCart } from "servises/repository/Axios/Request";
 import { RTKCart } from "servises/repository/RTK/RTKCart";
+import { actionThunk } from "../action/actionThunkBuilder";
 import { AppDispatch, RootState } from "../createStore";
 import { actionPaymentAccsess, actionPaymentReady } from "./bankCardSlice";
 
@@ -24,11 +25,12 @@ const helperOrderType = (getState: any) : {orderType:string} => {
     return {orderType:state.cart.orderType}
 }
 
+
 export const fetchAllCart = createAsyncThunk(
     "cart/getAll",
     async (_, { dispatch, getState,rejectWithValue }) => {
         try {
-            
+          
             const request = await RequestCart.allCart(helperOrderType(getState));
               
             if (request.status == 200 && request.data) {
