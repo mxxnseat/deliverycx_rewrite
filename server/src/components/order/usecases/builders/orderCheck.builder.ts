@@ -42,7 +42,7 @@ export class OrderCheckBuilder {
 
     async validateCart() {
         if (!this._state.cart.length) {
-            throw new EmptyCartError();
+            this._state.errors.push(new EmptyCartError());
         }
     }
 
