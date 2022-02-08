@@ -4,6 +4,7 @@ export namespace Bot {
             name: string;
             amount: number;
         }>;
+        comment: string;
         name: string;
         phone: string;
         address: string;

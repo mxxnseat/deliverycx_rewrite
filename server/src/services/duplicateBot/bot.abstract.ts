@@ -9,6 +9,7 @@ export abstract class IBotService {
     abstract sendDuplicate(
         address: string,
         customer: ICustomer,
+        comment: string,
         organization: UniqueId,
         cart: Array<CartEntity>
     ): void;

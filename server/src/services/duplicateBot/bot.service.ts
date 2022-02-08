@@ -15,12 +15,14 @@ export class BotService extends IBotService {
     public sendDuplicate(
         address: string,
         customer: ICustomer,
+        comment: string,
         organization: UniqueId,
         cart: Array<CartEntity>
     ) {
         this.botRequest.sendDuplicate(organization, {
             address: address,
             name: customer.name,
+            comment,
             phone: customer.phone,
             items: cart.map((el) => {
                 return {

@@ -12,7 +12,8 @@ export function generateMessage(body: CreateMessage.IRecivedBody): string {
     result += `Данные о пользователе: \n`;
     result += `Адрес: ${body.address}\n`;
     result += `Телефон: ${body.phone}\n`;
-    result += `Имя: ${body.name}`;
+    result += `Имя: ${body.name}\n`;
+    result += `Комментарий: ${body.comment}`;
 
     return result;
 }
