@@ -12,11 +12,10 @@ const Ordering: FC = (): JSX.Element => {
   const { handleBacktoShop } = useCaseOrder.handlers
   const {orderLoad} = useCaseOrder.status
 
-  console.log(orderLoad);
  
 
   return (
-    <div className="cart">
+    <div className="cart order-container">
       <HeaderBack onClickCb={handleBacktoShop}>
         Вернутся в магазин
       </HeaderBack>
