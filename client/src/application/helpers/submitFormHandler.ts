@@ -3,6 +3,7 @@
 import { FormikHelpers } from "formik";
 import { store } from "servises/redux/createStore";
 import { fetchAllCart, fetchOrderCart } from "servises/redux/slice/cartSlice";
+import { useHistory } from "react-router-dom";
 
 const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
     const storage = store.getState();
@@ -13,7 +14,8 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
 
         // Разделение адреса на улицу и дом
         const prepareAddress: { street: string; home: number } =
-          values.address && values.address.match(/(?<street>.*?),\s?(?<home>.*)/).groups;
+            values.address &&
+            values.address.match(/(?<street>.*?),\s?(?<home>.*)/).groups;
 
         const val = {
             organization: storage.location.point.id,
@@ -27,15 +29,18 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
                 entrance: values.entrance,
                 floor: values.floor
             },
-            orderType:values.orderType,
+            orderType: values.orderType,
             phone: values.phone,
             comment: values.comment,
             paymentMethod: values.payment_method,
             ...values.paymentOrderCard
         };
-        
-        await store.dispatch(fetchOrderCart(val) as any);
+
+        const url = await store.dispatch(fetchOrderCart(val) as any);
         resolve(true);
+        if (url.payload) {
+            window.location.href = url.payload;
+        }
     }).then(() => {
         meta.setSubmitting(false);
     });

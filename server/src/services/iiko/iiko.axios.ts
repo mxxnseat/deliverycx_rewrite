@@ -1,8 +1,8 @@
 import { iiko } from "src/services/iiko/interfaces";
 import { Injectable } from "@nestjs/common";
-import { IikoError } from "./iiko.error";
 import { Axios } from "src/common/abstracts/request";
 import { AxiosInstance } from "axios";
+import { IikoError } from "./iiko.error";
 
 @Injectable()
 export class IIkoAxios extends Axios {
@@ -12,9 +12,31 @@ export class IIkoAxios extends Axios {
         super(
             process.env.SERVICE_URL,
             (error) =>
-                error.response.data?.description || error.response.data?.message
+                new IikoError(
+                    error.response?.data?.description ||
+                        error.response?.data?.message
+                )
         );
     }
+
+    // private init() {
+    //     this.axios = axios.create({
+    //         baseURL: process.env.SERVICE_URL
+    //     });
+
+    //     this.axios.interceptors.response.use(
+    //         (response) => response,
+    //         (error) => {
+    //             console.log(error);
+    //             return Promise.reject(
+    //                 new IikoError(
+    //                     error.response.data?.description ||
+    //                         error.response.data?.message
+    //                 )
+    //             );
+    //         }
+    //     );
+    // }
 
     private async token() {
         const { data } = await this._axios.get<string>(

@@ -165,9 +165,10 @@ export const fetchOrderCart = createAsyncThunk(
         try {
             const request = await RequestCart.OrderCheckCart(value);
             if (request.data && request.status === 200) {
-                const order = await RequestCart.OrderCart(value);
-                dispatch(actionPaymentAccsess());
-                return order.data.number;
+              const order = await RequestCart.OrderCart(value);
+              
+                //dispatch(actionPaymentAccsess());
+                return order.data.redirectUrl 
             }
         } catch (error: any) {
             // Ошибка валидации по количеству
@@ -216,7 +217,6 @@ const cartSlice = createSlice({
             state.loadingOrder = true;
         }),
         builder.addCase(fetchOrderCart.fulfilled, (state, action) => {
-            state.orderNumber = action.payload;
             state.loadingOrder = false;
         }),
         builder.addCase(fetchOrderCart.rejected, (state, action) => {

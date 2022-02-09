@@ -47,8 +47,6 @@ export class ValidationCount {
             }
         });
 
-        if (Object.keys(errors).length) {
-            throw new ValidationCountError(errors);
-        }
+        return errors;
     }
 }

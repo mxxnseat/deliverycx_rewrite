@@ -1,6 +1,6 @@
-// import axios, { Axios } from "axios";
 import { AxiosInstance } from "axios";
 import { Axios } from "src/common/abstracts/request";
+import { PaymentError } from "../models/error.model";
 import { PaymasterRequest } from "../types/request.type";
 
 import { PaymasterResponse } from "../types/response.type";
@@ -9,7 +9,7 @@ export class PaymasterRequests extends Axios {
     public _axios: AxiosInstance;
 
     constructor() {
-        super("https://paymaster.ru", (error) => error);
+        super("https://paymaster.ru", (error) => new PaymentError(error));
     }
 
     public async invoices(
