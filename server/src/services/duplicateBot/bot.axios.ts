@@ -20,7 +20,9 @@ export class BotAxios {
         organization: UniqueId,
         data: Bot.IRequestBody
     ): Promise<void> {
-        this.axios.post(`/sendDuplicate/${organization}`, data);
+        if (process.env.NODE_ENV !== "development") {
+            this.axios.post(`/sendDuplicate/${organization}`, data);
+        }
     }
 }
 

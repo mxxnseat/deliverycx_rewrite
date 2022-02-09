@@ -102,6 +102,7 @@ export class OrderController {
         @Param("hash") hash: string
     ) {
         const result = await this.OrderUsecase.getOrderNumber(hash);
+
         response.status(200).json(result);
     }
 }

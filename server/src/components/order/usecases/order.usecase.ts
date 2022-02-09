@@ -17,12 +17,13 @@ export class OrderUsecase {
         await this.orderCreateBuilder.initialize(userId, orderInfo);
 
         await this.orderCreateBuilder.createOrder();
+
         await this.orderCreateBuilder.duplicateOrder();
 
         return this.orderCreateBuilder.getOrderEntity();
     }
 
-    async checkOrder(userId, orderInfo: OrderDTO) {
+    async checkOrder(userId: UniqueId, orderInfo: OrderDTO) {
         await this.orderCheckBuilder.initialize(userId, orderInfo);
 
         await this.orderCheckBuilder.validateCart();
@@ -36,8 +37,7 @@ export class OrderUsecase {
 
     async getOrderNumber(hash: string) {
         const orderNumber = await this.OrderUtilsService.getOrderNumber(hash);
-        // this.OrderUtilsService.removeOrderNumber(hash);
-        // console.log(orderNumber);
+
         return orderNumber;
     }
 }
