@@ -5,7 +5,6 @@ const PointRecvisites = () => {
     const useCasePoints = useContext(PointsContext);
     const { statePoint, recvisites } = useCasePoints.data;
     const { recvisitesHandler } = useCasePoints.handlers;
-    console.log(recvisites);
 
     return (
         <div className="recvisites_container">
