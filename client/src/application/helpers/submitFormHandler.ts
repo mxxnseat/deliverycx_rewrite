@@ -36,11 +36,16 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
             ...values.paymentOrderCard
         };
 
-        const url = await store.dispatch(fetchOrderCart(val) as any);
-        resolve(true);
-        if (url.payload) {
-            window.location.href = url.payload;
+      const url = await store.dispatch(fetchOrderCart(val) as any);
+      //'errors' in url.payload !== true
+      if (url.payload && url.payload.redirectUrl) {
+        if (typeof url.payload.redirectUrl === 'string') {
+          resolve(true);
+          window.location.href = url.payload.redirectUrl;
         }
+        
+      }
+      /* */
     }).then(() => {
         meta.setSubmitting(false);
     });

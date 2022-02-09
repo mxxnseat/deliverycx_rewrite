@@ -35,7 +35,7 @@ const Ordering: FC = (): JSX.Element => {
             <div className="checkout__order">№ {orderNumber}</div>
             <p className="checkout__dash">
             Ваш заказ оформлен. <br />
-            С вами свяжится администратор.</p>
+            С вами свяжется администратор.</p>
           </div>
           
         }
@@ -43,7 +43,7 @@ const Ordering: FC = (): JSX.Element => {
             (!orderNumber && !orderLoad) &&
             <div className="checkout">
               <div className="checkout__title">Ошибка при заказе</div>
-              <p className="checkout__dash">С вами свяжится администратор</p>
+              <p className="checkout__dash">С вами свяжется администратор</p>
             </div>
         }
         

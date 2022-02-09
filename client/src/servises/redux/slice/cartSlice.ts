@@ -165,10 +165,10 @@ export const fetchOrderCart = createAsyncThunk(
         try {
             const request = await RequestCart.OrderCheckCart(value);
             if (request.data && request.status === 200) {
-              const order = await RequestCart.OrderCart(value);
+                const order = await RequestCart.OrderCart(value);
               
-                //dispatch(actionPaymentAccsess());
-                return order.data.redirectUrl 
+                dispatch(actionPaymentAccsess());
+                return order.data 
             }
         } catch (error: any) {
             // Ошибка валидации по количеству
@@ -178,6 +178,7 @@ export const fetchOrderCart = createAsyncThunk(
             } else {
                 return rejectWithValue(error.response.data);
             }
+            
         }
     }
 );
