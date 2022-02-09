@@ -75,7 +75,8 @@ export class OrderCreateBuilder {
             name,
             phone,
             organization,
-            comment
+            comment,
+            orderType
         } = this._state.orderInfo;
 
         const address = `${city}, улица ${street}, д. ${home}`;
@@ -88,12 +89,18 @@ export class OrderCreateBuilder {
             organization
         );
 
+        const { name: orderTypeName } = await this.orderService.getOrderTypesId(
+            organization,
+            orderType
+        );
+
         this.botService.sendDuplicate(
             address,
             customer,
             comment,
             getGuid,
-            this._state.cart
+            this._state.cart,
+            orderTypeName
         );
     }
 

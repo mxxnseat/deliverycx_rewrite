@@ -14,7 +14,6 @@ import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { OrganizationClass } from "src/database/models/organization.model";
-import { BotAxios } from "../duplicateBot/bot.axios";
 
 export class IikoService implements IIiko {
     constructor(
@@ -47,7 +46,7 @@ export class IikoService implements IIiko {
         /*
             Получение айдишнка типа заказа
         */
-        const orderTypeId = await this.getOrderTypesId(
+        const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
             orderInfo.orderType
         );
@@ -123,7 +122,7 @@ export class IikoService implements IIiko {
     }
 
     /*-----------------| getOrderTypesId |-----------------------*/
-    private async getOrderTypesId(
+    public async getOrderTypesId(
         organizationId: UniqueId,
         orderType: OrderTypesEnum
     ) {
@@ -138,7 +137,7 @@ export class IikoService implements IIiko {
             return orderTypeEl.orderServiceType.includes(orderType);
         });
 
-        return result?.id;
+        return { name: result?.name, id: result?.id };
     }
 
     /*-----------------|      create     |-----------------------*/

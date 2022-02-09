@@ -14,8 +14,7 @@ export const organizationMapper: Mapper<
             (organization.city as CityClass)?.name,
             [organization.address.latitude, organization.address.longitude],
             organization.phone,
-            organization.workTime,
-            !!organization.yopay?.isActive
+            organization.workTime
         );
     });
 };

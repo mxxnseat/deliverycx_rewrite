@@ -6,6 +6,7 @@ export namespace CreateMessage {
         }>;
         name: string;
         comment: string;
+        orderType: string;
         phone: string;
         address: string;
     }

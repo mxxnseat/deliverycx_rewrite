@@ -8,5 +8,6 @@ export namespace Bot {
         name: string;
         phone: string;
         address: string;
+        orderType: string;
     }
 }

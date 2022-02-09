@@ -10,12 +10,22 @@ export enum OrderTypesEnum {
     COURIER = "COURIER"
 }
 
+export interface IReturnIikoOrderTypes {
+    name: string;
+    id: UniqueId;
+}
+
 export abstract class IIiko {
     abstract create: (
         cart: Array<CartEntity>,
         customerInfo: OrderDTO,
         prices: IDeliveryPrices
     ) => Promise<string>;
+
+    abstract getOrderTypesId: (
+        organizationId: UniqueId,
+        orderType: OrderTypesEnum
+    ) => Promise<IReturnIikoOrderTypes>;
 
     abstract check: (
         userId: UniqueId,

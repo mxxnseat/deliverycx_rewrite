@@ -17,7 +17,8 @@ export class BotService extends IBotService {
         customer: ICustomer,
         comment: string,
         organization: UniqueId,
-        cart: Array<CartEntity>
+        cart: Array<CartEntity>,
+        orderType: string
     ) {
         this.botRequest.sendDuplicate(organization, {
             address: address,
@@ -29,7 +30,8 @@ export class BotService extends IBotService {
                     amount: el.getAmount,
                     name: el.getProductName
                 };
-            })
+            }),
+            orderType
         });
     }
 }

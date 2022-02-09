@@ -41,7 +41,6 @@ export class OrganizationEntity {
         cords?: [number, number],
         phone?: string,
         workTime?: string,
-        cardPay?: boolean,
         guid?: UniqueId
     ) {
         this.id = id;
@@ -50,7 +49,6 @@ export class OrganizationEntity {
         this.cords = cords;
         this.phone = phone;
         this.workTime = workTime;
-        this.cardPay = cardPay;
         this.guid = guid;
     }
 
@@ -80,9 +78,5 @@ export class OrganizationEntity {
 
     public get getWorkTime() {
         return this.workTime;
-    }
-
-    public get getCardPay() {
-        return this.cardPay;
     }
 }

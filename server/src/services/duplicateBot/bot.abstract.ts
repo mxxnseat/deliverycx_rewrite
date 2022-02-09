@@ -11,6 +11,7 @@ export abstract class IBotService {
         customer: ICustomer,
         comment: string,
         organization: UniqueId,
-        cart: Array<CartEntity>
+        cart: Array<CartEntity>,
+        orderType: string
     ): void;
 }

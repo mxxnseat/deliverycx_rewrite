@@ -73,7 +73,6 @@ export class OrganizationRepository
             ],
             organizationDoc.phone,
             organizationDoc.workTime,
-            !!organizationDoc.yopay?.isActive,
             organizationDoc.id
         );
     }
