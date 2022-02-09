@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { useDispatch } from "react-redux";
 
 import { useHistory } from "react-router-dom";
-import { useGetPointsQuery } from "servises/repository/RTK/RTKLocation";
+import { useGetPointsQuery, useGetRecvisitesMutation } from "servises/repository/RTK/RTKLocation";
 import { IPoint } from "@types";
 import {
     initialStatePoints,
@@ -26,6 +26,7 @@ export function usePoints() {
     );
     const { id } = adapterSelector.useSelectors((selector) => selector.point);
     const { data: addresses, isFetching } = useGetPointsQuery(selectedCity.id);
+    const [getRec, { data: recvisites}] = useGetRecvisitesMutation()
 
     const [statePoint, dispatchPoint] = useReducer(
         PointsReducer,
@@ -34,6 +35,10 @@ export function usePoints() {
 
     //const addresses = mokPoint
     /**/
+    console.log(recvisites);
+    useEffect(() => {
+      id && getRec(id)
+    },[id])
     useEffect(() => {
         if (Object.keys(selectedCity).length) {
             addresses && !isFetching && nearPoint(addresses);
@@ -95,6 +100,7 @@ export function usePoints() {
                 payload: index
             });
         }
+        
     };
 
     const selectPointHandler = async (address: IPoint) => {
@@ -120,17 +126,26 @@ export function usePoints() {
         }
     };
 
+    const recvisitesHandler = (change:boolean) => {
+      dispatchPoint({
+        type: ReducerActionTypePoints.recvisitesModal,
+        payload: change
+    });
+    }
+
     this.data({
         selectedCity,
         addresses,
-        statePoint
+        statePoint,
+        recvisites
     });
     this.handlers({
         placemarkClickHandler,
         buttonClickHandler,
         SlidePointsHandler,
         selectPointHandler,
-        nearPoint
+        nearPoint,
+        recvisitesHandler
     });
     this.status({
         isFetching

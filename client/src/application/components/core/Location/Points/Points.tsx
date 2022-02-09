@@ -8,6 +8,7 @@ import { adapterComponentUseCase, TadapterCaseCallback } from "adapters/adapterC
 import HeadMap from "presentation/viewModel/viewLocation/HeadMap";
 import PopupPoint from "./PopupPoint";
 import { useGetPointsQuery } from "servises/repository/RTK/RTKLocation";
+import PointRecvisites from "./PointRecvisites";
 
 
 
@@ -18,9 +19,8 @@ export const PointsContext = React.createContext<TadapterCaseCallback>({
 });
 const Points = () => {
   const useCasePoints = adapterComponentUseCase(usePoints)
-  const { selectedCity } = useCasePoints.data
+  const { selectedCity, statePoint } = useCasePoints.data
   const { isLoading} = useCasePoints.status
-  
   
   const welcomeHeaderCN = cn("welcome__header", { transparent: Object.keys(selectedCity).length });
   
@@ -33,9 +33,14 @@ const Points = () => {
         <PointsContext.Provider value={useCasePoints}>
           <HeadMap welcomeHeader={welcomeHeaderCN} />
           <YMapPoint />
+          {
+            statePoint.recvisites &&
+            <PointRecvisites />
+          }
           <PopupPoint />
         </PointsContext.Provider>
       }
+      
       
     </div>  
   )
