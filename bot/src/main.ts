@@ -16,9 +16,8 @@ app.use(bodyParser());
 app.post("/sendDuplicate/:organizationId", async (req, res) => {
     const organization = req.params.organizationId;
     const body = req.body;
-    console.log(body);
     const organizationDoc = await OrganizationRepository.getOne(organization);
-    console.log(organizationDoc);
+
     if (!organizationDoc) {
         return res.status(200).json({
             haveProblem: true,

@@ -4,6 +4,14 @@ networks:
         name: production_net
         driver: bridge
 services:
+    deliverycx_bot:
+        container_name: deliverycx_bot
+        build:
+            context: ./bot
+        depends_on:
+            - mongodb
+        networks:
+            - production_net
     deliverycx_client:
         container_name: production_client
         build:

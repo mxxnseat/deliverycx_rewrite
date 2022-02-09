@@ -51,11 +51,11 @@ export class OrganizationRepository
         }).lean();
 
         return new RecvisitesEntity(
-            recvisitesDoc.postcode,
-            recvisitesDoc.address,
-            recvisitesDoc.ogrn,
-            recvisitesDoc.inn,
-            recvisitesDoc.name
+            recvisitesDoc?.postcode,
+            recvisitesDoc?.address,
+            recvisitesDoc?.ogrn,
+            recvisitesDoc?.inn,
+            recvisitesDoc?.name
         );
     }
     public async getOne(id: UniqueId) {
