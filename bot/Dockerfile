@@ -5,4 +5,6 @@ COPY . .
 
 RUN npm install
 
+RUN npm i -g ts-node
+
 CMD ["ts-node", "./src/main.ts"]
