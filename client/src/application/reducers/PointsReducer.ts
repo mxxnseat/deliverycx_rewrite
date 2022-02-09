@@ -4,6 +4,7 @@ export const initialStatePoints = {
   isOpen: false,
   selectedPoint: null,
   slideIndex: 0,
+  recvisites:false
 };
 type typeinitialState = typeof initialStatePoints
 
@@ -11,7 +12,8 @@ export enum ReducerActionTypePoints {
   placemarkClick,
   buttonClick,
   nearPoint,
-  slidePoint
+  slidePoint,
+  recvisitesModal
 }
 
 
@@ -36,6 +38,11 @@ export function PointsReducer(state: typeinitialState, action: ReducerAction<Red
         ...state,
         slideIndex:action.payload
       }
+     case ReducerActionTypePoints.recvisitesModal:
+        return {
+          ...state,
+          recvisites:action.payload
+        }
     default:
       return state
   }

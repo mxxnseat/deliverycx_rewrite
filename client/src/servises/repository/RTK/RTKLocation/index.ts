@@ -19,7 +19,13 @@ export const RTKLocation = createApi({
                 method: "get",
                 url: `organization/all?cityId=${cityId}`
             })
-        })
+        }),
+        getRecvisites: builder.mutation<IPoint[], string>({
+          query: (cityId) => ({
+              method: "get",
+              url: `organization/recvisites?organizationId=${cityId}`
+          })
+      })
     })
 });
-export const { useGetCitiQuery, useGetPointsQuery } = RTKLocation;
+export const { useGetCitiQuery, useGetPointsQuery,useGetRecvisitesMutation } = RTKLocation;

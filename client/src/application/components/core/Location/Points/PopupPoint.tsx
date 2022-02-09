@@ -5,8 +5,8 @@ import cn from "classnames";
 /* eslint-disable @typescript-eslint/no-var-requires */
 const PopupPoint = () => {
   const useCasePoints = useContext(PointsContext)
-  const { addresses,statePoint} = useCasePoints.data
-  const { selectPointHandler, buttonClickHandler, SlidePointsHandler } = useCasePoints.handlers
+  const { addresses,statePoint,recvisites} = useCasePoints.data
+  const { selectPointHandler, buttonClickHandler, SlidePointsHandler,recvisitesHandler } = useCasePoints.handlers
 
   const address = addresses && addresses[statePoint.slideIndex]
   const selectAdressCN = cn("welcome__select-adress", { opened: statePoint.isOpen });
@@ -59,7 +59,9 @@ const PopupPoint = () => {
                   {address.phone}
                </a>
             </div>
-
+            {
+              recvisites && <div className="recvisites" onClick={()=>recvisitesHandler(true)}>Реквизиты компании</div>
+            }
             <div
                className="btn welcome__select-adress__btn"
                onClick={() => selectPointHandler(address)}
