@@ -8,6 +8,7 @@ export const organizationStubs = [
         phone: "+799999999999",
         workTime: "10:00-22:00",
         address: {
+            street: "test street",
             longitude: 45.345214,
             latitude: 55.555555
         },
