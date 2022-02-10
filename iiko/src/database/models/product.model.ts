@@ -49,7 +49,7 @@ export class ProductClass {
     @prop()
     public image!: ImagePath;
 
-    @prop({ enum: MeasureUnit })
+    @prop()
     public measureUnit!: "шт" | "порц";
 }
 
