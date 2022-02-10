@@ -16,7 +16,7 @@ const PointRecvisites = () => {
                 <h3 className="recvisites_box-title">{recvisites.name}</h3>
                 <div className="recvisites_box-ur">Юридический адрес:</div>
                 <div className="recvisites_box-content">
-                    <span>{recvisites.postcode}</span>
+                    <span>{recvisites.postcode}, {recvisites.address}</span>
                     <span>ОГРН {recvisites.ogrn}</span>
                     <span>ИНН {recvisites.inn}</span>
                 </div>
