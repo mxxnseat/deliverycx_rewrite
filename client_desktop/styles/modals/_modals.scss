@@ -1,0 +1,67 @@
+.close{
+	position: absolute;
+	right: 25px;
+	top: 25px;
+	cursor: pointer;
+}
+.modals-top_box{
+	margin-top: 30px;
+	display: flex;
+	justify-content: space-between;
+}
+.modals_title{
+	font-size: 26px;
+	color: #132A3E;
+	font-family: $manrope;
+	span{
+		color: #8D191D;
+	}
+}
+.modals_second-title{
+	color: #333333;
+	font-size: 17px;
+	font-weight: 700;
+}
+.modals{
+	display: block;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 25%;
+	margin: 0 auto;
+	box-shadow: 0px 31px 60px rgba(0, 0, 0, 0.05), 0px 11.9407px 19.1111px rgba(0, 0, 0, 0.0303704), 0px 2.52593px 4.88889px rgba(0, 0, 0, 0.0196296);
+	border-radius: 30px;
+	background: #FFFFFF;
+	.modals-container{
+		position: relative;
+		padding:5%;
+	}
+	.serch_box{
+		border: 1px solid #666666;
+		border-radius: 100px;
+		width: 100%;
+		padding-left: 25px;
+		padding-right: 15px;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+		input{
+			color: #fff;
+			border: none;
+			color: #666666;
+			font-size: 15px;
+			height: 48px;
+			line-height: 48px;
+			width: 100%;
+		}
+		button{
+			border: none;
+			width: 25px;
+			height: 48px;
+			background-color: transparent;
+			@include bgImage('/images/icon/serch-icon.png');
+			background-position: center center;
+		}
+	}
+}

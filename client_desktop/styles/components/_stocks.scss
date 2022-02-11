@@ -1,0 +1,23 @@
+.stocks{
+	margin-top: 30px;
+	height: 400px;
+	position: relative;
+	img{
+		width: 100%;
+	}
+	.arr{
+		position: absolute;
+		top: 50%;
+		width: 48px;
+		height: 48px;
+		
+	}
+	.arr_left{
+		@include bgImage('/images/icon/slide-left.png');
+		left: - 60px;
+	}
+	.arr_right{
+		@include bgImage('/images/icon/slide-right.png');
+		right: - 60px;
+	}
+}

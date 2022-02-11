@@ -1,0 +1,96 @@
+
+.cart_page-title{
+	font-size: 32px;
+	color: #132A3E;
+	font-family: $manrope;
+	text-align: center;
+}
+.back_shop{
+	background: #EFEFEF;
+	border-radius: 200px;
+	font-size: 13px;
+	width: 175px;
+	height: 30px;
+	line-height: 30px;
+	color: #132A3E;
+	text-align: center;
+	margin-top: 25px;
+	cursor: pointer;
+}
+.cart_page-container{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 50px;
+	.cart_page__order{
+		width: 48%;
+	}
+	.cart_page__basked{
+		width: 48%;
+	}
+}
+// оформление
+.cart_order-top{
+	margin-bottom: 20px;
+}
+.cart_map-delivery{
+	border: 1px solid #CCCCCC;
+	border-radius: 15px;
+	.cart_map-delivery--map{
+		width: 100%;
+		height: 200px;
+		overflow: hidden;
+		img{
+			width: 100%;
+		}
+	}
+	.cart_map-delivery--name{
+		padding: 15px;
+		font-size: 13px;
+		color: #333;
+	}
+}
+
+.payment_list{
+	.payment_list-item{
+		height: 50px;
+		line-height: 50px;
+		padding-left: 15px;
+	}
+	.payment_list-item--name{
+		display: flex;
+		img{
+			margin-right: 15px;
+			margin-left: 15px;
+		}
+		span{
+			font-size: 13px;
+			color: #333333;
+		}
+	}
+	.payment_list-item.active{
+		background: #EFEFEF;
+		border-radius: 100px;
+		.payment_list-item--name span{
+			font-weight: 600;
+		}
+	}
+	
+}
+.card_subscrub{
+	.custom-checkbox+label::before{
+		border: 1px solid #CCCCCC;
+	}
+	.custom-checkbox:checked+label::before {
+		border: 1px solid #CCCCCC;
+		@include bgImage('/images/icon/ok-icon-red.png');
+		background-size: 12px 9px;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+}
+// товары
+.cart_page__basked{
+	border: 1px solid #CCCCCC;
+	border-radius: 30px;
+	padding: 30px;
+}

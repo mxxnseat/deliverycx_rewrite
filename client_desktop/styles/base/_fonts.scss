@@ -1,0 +1,87 @@
+/* src/assets/styles/base/_fonts.scss  */
+
+@font-face{
+	font-family: 'sf-ui';
+	font-weight: 300;
+	font-display: swap;
+	src: url("../fonts/sf/sf-ui-display-thin.woff") format("woff");
+}
+
+@font-face{
+	font-family: 'sf-ui';
+	font-display: swap;
+	font-weight: 400;
+	src: url("../fonts/sf/sf-ui-display-light.woff") format("woff");
+}
+@font-face{
+	font-family: 'sf-ui';
+	font-weight: 500;
+	font-display: swap;
+	src: url("../fonts/sf/sf-ui-display-medium.woff") format("woff");
+}
+@font-face{
+	font-family: 'sf-ui';
+	font-weight: 600;
+	font-display: swap;
+	src: url("../fonts/sf/sf-ui-display-semibold.woff") format("woff");
+}
+@font-face{
+	font-family: 'sf-ui';
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/sf/sf-ui-display-bold.woff") format("woff");
+}
+@font-face{
+	font-family: 'sf-ui';
+	font-weight: 800;
+	font-display: swap;
+	src: url("../fonts/sf/sf-ui-display-black.woff") format("woff");
+}
+
+//
+@font-face{
+	font-family: 'manrope';
+	font-weight: 300;
+	font-display: swap;
+	src: url("../fonts/manrope/Manrope-ExtraLight.woff2") format("woff2");
+}
+@font-face{
+	font-family: 'manrope';
+	font-display: swap;
+	font-weight: 400;
+	src: url("../fonts/manrope/Manrope-Light.woff2") format("woff2");
+}
+@font-face{
+	font-family: 'manrope';
+	font-weight: 500;
+	font-display: swap;
+	src: url("../fonts/manrope/Manrope-Regular.woff2") format("woff2");
+}
+@font-face{
+	font-family: 'manrope';
+	font-weight: 600;
+	font-display: swap;
+	src: url("../fonts/manrope/Manrope-Medium.woff2") format("woff2");
+}
+@font-face{
+	font-family: 'manrope';
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/manrope/Manrope-SemiBold.woff2") format("woff2");
+}
+@font-face{
+	font-family: 'manrope';
+	font-weight: 800;
+	font-display: swap;
+	src: url("../fonts/manrope/Manrope-Bold.woff2") format("woff2");
+}
+@font-face{
+	font-family: 'manrope';
+	font-weight: 900;
+	font-display: swap;
+	src: url("../fonts/manrope/Manrope-ExtraBold.woff2") format("woff2");
+}
+/**/
+
+$sf: 'sf-ui', sans-serif;
+$manrope:'manrope', sans-serif; 

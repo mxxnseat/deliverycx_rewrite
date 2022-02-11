@@ -1,0 +1,32 @@
+.auth_login{
+	display: none !important;
+	max-width: 580px;
+	.modals_second-title{
+		margin-top: 30px;
+	}
+	.fild{
+		font-size: 15px;
+		font-weight: 600;
+	}
+	.auth_login__box{
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		section{
+			width: 45%;
+		}
+		
+	}
+	p{
+		color:  #666666;
+		font-size: 13px;
+		a{
+			color:  #666666;
+			text-decoration: underline;
+			&:hover{
+				text-decoration: none;
+			}
+		}
+	}
+}
