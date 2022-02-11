@@ -7,17 +7,17 @@ import { RootState } from "../createStore";
 
 interface Iselectors {
   category: (state: RootState) => ICategory
-  point: (state: RootState) => IPoint
-  city: (state: RootState) => ICity
-  profile: (state: RootState) => IProfile
+  point: (state: RootState) => IPoint,
+  city: (state: RootState) => ICity,
   shop: (state: RootState) => IShopEntities,
   stoplist: (state: RootState) => IStopList,
-  cart: (state: RootState) => ICart,
-  bankcard:(state: RootState) => IBankCard
 }
-const selectors = {
-  point: (state:any) => state.location.point,
-  city: (state:any) => state.location.city,
+const selectors:Iselectors = {
+  point: (state) => state.location.point,
+  city: (state) => state.location.city,
+  category: (state) => state.shop.category,
+  shop: (state) => state.shop,
+  stoplist: (state) => state.shop.stoplist,
   
 }
-export const adapterSelector = new AdapterSelector(selectors)
+export const adapterSelector = new AdapterSelector<Iselectors>(selectors)

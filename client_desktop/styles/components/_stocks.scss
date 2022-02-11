@@ -12,12 +12,51 @@
 		height: 48px;
 		
 	}
-	.arr_left{
+	.slick-prev{
 		@include bgImage('/images/icon/slide-left.png');
 		left: - 60px;
+		width: 48px;
+		height: 48px;
+		font-size: 22px;
+		line-height: 100%;
+		&:hover,&:focus{
+			opacity: 1;
+			@include bgImage('/images/icon/slide-left.png');
+		}
 	}
-	.arr_right{
+	.slick-next{
 		@include bgImage('/images/icon/slide-right.png');
 		right: - 60px;
+		width: 48px;
+		height: 48px;
+		font-size: 22px;
+		line-height: normal;
+		&:hover,&:focus{
+			opacity: 1;
+			@include bgImage('/images/icon/slide-right.png');
+		}
+	}
+	
+	.stocks__points{
+		display: flex;
+		margin-top: 15px;
+		justify-content: center;
+		text-align: center;
+		li{
+				display: inline-block;
+		}
+		button{
+				font-size: 0px;
+				height: 2px;
+				cursor: pointer;
+				width: 24px;
+				margin: 0 12px;
+				background-color: #ABABAB;
+				border-radius: 1.5em;
+				border: none;
+		}
+		.slick-active button{
+				background-color: #8D191D;
+		}
 	}
 }

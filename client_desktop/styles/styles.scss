@@ -57,4 +57,18 @@
 @import './pages/cart';
 @import './pages/news';
 
-
+.q{
+	position: fixed;
+	top: 0;
+	width: 100%;
+	padding: 50px;
+	background-color: #5555;
+}
+.active{
+	color: red;
+}
+.element{
+	margin-top: 500px;
+	height: 500px;
+	margin-bottom: 1200px;
+}
