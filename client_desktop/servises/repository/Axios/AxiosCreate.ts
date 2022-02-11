@@ -8,7 +8,7 @@ import axios, {
 
 class AxiosCreate {
     static _instanse: null | AxiosCreate = null;
-    private URL: string = process.env.REACT_APP_API_URL as string;
+    private URL: string = process.env.NEXT_PUBLIC_API_URL as string;
     api: AxiosInstance;
 
     private constructor() {

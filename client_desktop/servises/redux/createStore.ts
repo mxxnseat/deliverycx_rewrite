@@ -4,6 +4,9 @@ import logger from 'redux-logger'
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import { authApi, AUTH_API_REDUCER_KEY } from 'servises/repository/RTK/RTKAuth';
+import { fetchUser } from './slice/profileSlice';
+import { LOCATION_API_REDUCER_KEY, RTKLocation } from 'servises/repository/RTK/RTKLocation';
+import locationSlice from './slice/locationSlice';
 
 
 
@@ -12,6 +15,7 @@ const persistConfig = {
   storage,
   blacklist: [
     AUTH_API_REDUCER_KEY,
+    LOCATION_API_REDUCER_KEY,
   ],
   transforms: [
     createTransform(
@@ -23,7 +27,7 @@ const persistConfig = {
       },
       {
         whitelist: [
-          
+          locationSlice.name
         ]
       }
     )
@@ -32,7 +36,8 @@ const persistConfig = {
 
 const createRootReducer = combineReducers({
   //router: connectRouter(history),
-  [authApi.reducerPath]: authApi.reducer,
+  [RTKLocation.reducerPath]: RTKLocation.reducer,
+  [locationSlice.name]: locationSlice.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
@@ -58,7 +63,7 @@ const store = configureStore({
 })
 
 const persistor = persistStore(store, undefined, async () => {
-  //await store.dispatch(fetchUser() as any)
+  await store.dispatch(fetchUser() as any)
   //await store.dispatch(fetchAllCart() as any) 
 });
 

@@ -1,5 +1,4 @@
 import { ICart } from "@types"
-import { CartFormMetods } from "application/components/core/Cart/CartForm/CartMetods"
 import Entities from "../Entities"
 
 export type ICartEntities = ICart

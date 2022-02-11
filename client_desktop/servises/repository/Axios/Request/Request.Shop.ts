@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 import { ApiSuper, methods, token } from "../AxiosApi";
 
 namespace Req{

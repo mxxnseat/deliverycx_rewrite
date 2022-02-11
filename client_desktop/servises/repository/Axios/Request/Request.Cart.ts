@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 import { ICart, IReqCart } from "@types";
 import encodeQueryData from "application/helpers/encodeQuery";
 import { string } from "yup";

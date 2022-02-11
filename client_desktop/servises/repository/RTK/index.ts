@@ -4,11 +4,11 @@ import { AuthFailAction } from 'servises/redux/slice/profileSlice';
 
 
 export const defFetchBaseQuery = fetchBaseQuery({
-  baseUrl: process.env.REACT_APP_API_URL, credentials: "include"
+  baseUrl: process.env.NEXT_PUBLIC_API_URL, credentials: "include"
 })
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.REACT_APP_API_URL,
+  baseUrl: process.env.NEXT_PUBLIC_API_URL,
   prepareHeaders: (headers) => {
       const token = localStorage.getItem("authToken");  
       if (token) {
