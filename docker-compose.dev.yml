@@ -1,0 +1,75 @@
+version: "3.9"
+networks:
+    development_net:
+        name: development_net
+        driver: bridge
+services:
+    deliverycx_bot:
+        container_name: deliverycx_bot
+        build:
+            context: ./bot
+        depends_on:
+            - mongodb
+        networks:
+            - development_net
+    deliverycx_client:
+        container_name: development_client
+        build:
+            context: .
+            dockerfile: ./Dockerfile.webserver
+        ports:
+          - "80:80"
+          - "443:443"
+        depends_on:
+          - deliverycx_backend
+        volumes:
+          - ./static:/static
+          - ./dhparam:/etc/nginx/dhparam
+          - ./certbot/conf/:/etc/nginx/ssl/:ro
+          - ./certbot/data:/etc/app/cx/letsencrypt
+          - ./nginx/logs:/etc/app/cx/logs
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+        networks:
+          - development_net
+    deliverycx_backend:
+        container_name: development_backend
+        env_file:
+            - ./server/.production.env
+        depends_on:
+            - redis
+            - mongodb
+        build:
+            context: ./server
+        networks:
+          - development_net
+        links:
+            - redis
+        volumes:
+          - "./server/pinologs:/usr/node/app/pinologs"
+    redis:
+        image: redis
+        command:
+            - "redis-server"
+            - "--loglevel ${REDIS_LOGLEVEL:-warning}"
+            - "--databases 2"
+            - "--save 900 1"
+            - "--save 300 10"
+            - "--save 60 10000"
+        volumes:
+            - ./redis/data:/data
+        networks:
+          - development_net
+    mongodb:
+        container_name: development_mongodb
+        image: mongo
+        volumes:
+            - ./mongo/data:/data/db
+        networks:
+            - development_net
+    certbot:
+        image: certbot/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+        volumes:
+            - ./certbot/logs/:/var/log/letsencrypt
+            - ./certbot/conf/:/etc/letsencrypt/:rw
+            - ./certbot/data:/etc/app/cx/letsencrypt

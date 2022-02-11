@@ -1,10 +1,8 @@
 node_modules
 *.env
 static
-redis
+redis/*
 mongo
 certbot
 nginx/*
 client/**/config.*
-docker-compose*.yml
-Dockerfile*

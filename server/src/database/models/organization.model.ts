@@ -26,7 +26,6 @@ export class OrganizationClass {
     @prop({ type: () => Object })
     public address!: {
         street: string;
-        home: number;
         latitude: number;
         longitude: number;
     };
@@ -39,13 +38,6 @@ export class OrganizationClass {
 
     @prop()
     public workTime!: string;
-
-    @prop({ type: () => Object })
-    public yopay!: {
-        isActive: boolean;
-        shopId: string;
-        token: string;
-    };
 }
 
 export const OrganizationSchema = buildSchema(OrganizationClass);

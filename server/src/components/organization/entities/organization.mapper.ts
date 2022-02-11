@@ -8,16 +8,13 @@ export const organizationMapper: Mapper<
     Array<OrganizationEntity>
 > = (p) => {
     return p.map((organization) => {
-        const address = `${organization.address.street}, ${organization.address.home}`;
-
         return new OrganizationEntity(
             organization._id,
-            address,
+            organization.address.street,
             (organization.city as CityClass)?.name,
             [organization.address.latitude, organization.address.longitude],
             organization.phone,
-            organization.workTime,
-            !!organization.yopay?.isActive
+            organization.workTime
         );
     });
 };

@@ -12,4 +12,12 @@ export class OrganizationUsecase {
 
         return result;
     }
+
+    async getRecvisites(organizationId: UniqueId) {
+        const result = await this.organizationRepository.getRecvisites(
+            organizationId
+        );
+
+        return result;
+    }
 }

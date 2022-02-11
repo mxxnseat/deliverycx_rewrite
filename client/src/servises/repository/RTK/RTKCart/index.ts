@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { ICart, ICity, IPoint, IReqCart } from '@types';
-import { config } from "servises/repository/config"
 import { defFetchBaseQuery } from '..';
 
 export const CART_API_REDUCER_KEY = 'RTK_Cart';

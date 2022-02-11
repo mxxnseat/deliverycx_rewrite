@@ -3,7 +3,10 @@ import { IIiko, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
-import { IDeliveryService } from "../delivery/delivery.abstract";
+import {
+    IDeliveryPrices,
+    IDeliveryService
+} from "../delivery/delivery.abstract";
 import { CannotDeliveryError } from "src/components/order/errors/order.error";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Model } from "mongoose";
@@ -34,7 +37,7 @@ export class IikoService implements IIiko {
     private async createOrderBody(
         orderInfo: OrderDTO,
         cart: Array<CartEntity>,
-        userId: UniqueId
+        deliveryPrice: number
     ) {
         const organization = await this.organizationModel.findById(
             orderInfo.organization
@@ -43,16 +46,10 @@ export class IikoService implements IIiko {
         /*
             Получение айдишнка типа заказа
         */
-        const orderTypeId = await this.getOrderTypesId(
+        const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
             orderInfo.orderType
         );
-
-        const { deliveryPrice, totalPrice } =
-            await this.DeliveryService.calculatingPrices(
-                userId,
-                orderInfo.orderType
-            );
 
         /*
             Берем товар "доставка" для конкретной
@@ -125,7 +122,7 @@ export class IikoService implements IIiko {
     }
 
     /*-----------------| getOrderTypesId |-----------------------*/
-    private async getOrderTypesId(
+    public async getOrderTypesId(
         organizationId: UniqueId,
         orderType: OrderTypesEnum
     ) {
@@ -140,7 +137,7 @@ export class IikoService implements IIiko {
             return orderTypeEl.orderServiceType.includes(orderType);
         });
 
-        return result.id;
+        return { name: result?.name, id: result?.id };
     }
 
     /*-----------------|      create     |-----------------------*/
@@ -149,14 +146,17 @@ export class IikoService implements IIiko {
         and return number of order from iiko db
     */
     async create(
-        userId: UniqueId,
         cart: Array<CartEntity>,
-        orderInfo: OrderDTO
+        orderInfo: OrderDTO,
+        prices: IDeliveryPrices
     ): Promise<string> {
-        const orderBody = await this.createOrderBody(orderInfo, cart, userId);
+        const orderBody = await this.createOrderBody(
+            orderInfo,
+            cart,
+            prices.deliveryPrice
+        );
 
         const orderResponseInfo = await this.axios.orderCreate(orderBody);
-
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
@@ -176,10 +176,15 @@ export class IikoService implements IIiko {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO
     ): Promise<iiko.ICheckResult> {
+        const { deliveryPrice } = await this.DeliveryService.calculatingPrices(
+            userId,
+            orderInfo.orderType
+        );
+
         const orderCheckBody = await this.createOrderBody(
             orderInfo,
             cart,
-            userId
+            deliveryPrice
         );
 
         const data = await this.axios.checkOrder(orderCheckBody);

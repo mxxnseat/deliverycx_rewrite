@@ -2,6 +2,8 @@ import { iiko } from "src/services/iiko/interfaces";
 import {
     Body,
     Controller,
+    Get,
+    Param,
     Post,
     Res,
     Session,
@@ -24,6 +26,7 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { ValidationCount } from "../services/validationCount/validationCount.service";
 import { PaymentException } from "src/filters/payment.filter";
+import { RedirectEntity } from "../entities/redirect.entity";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -44,15 +47,13 @@ import { PaymentException } from "src/filters/payment.filter";
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,
-        private readonly CartRepository: ICartRepository,
-        private readonly PaymentService: PaymentService,
-        private readonly validationCountService: ValidationCount
+        private readonly PaymentService: PaymentService
     ) {}
 
     @ApiResponse({
         status: 200,
-        type: OrderEntity,
-        description: "Возращает номер заказа"
+        type: RedirectEntity,
+        description: "Возращает урл для редиректа"
     })
     @Post("create")
     async create(
@@ -85,21 +86,23 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-        const cart = await this.CartRepository.getAll(session.user);
-        if (!cart.length) {
-            throw new EmptyCartError();
-        }
+        await this.OrderUsecase.checkOrder(session.user, body);
 
-        this.validationCountService.validate(cart);
+        response.status(200).json({ message: "Order can be send" });
+    }
 
-        const result = await this.OrderUsecase.checkOrder(session.user, body);
+    @ApiResponse({
+        status: 200,
+        type: OrderEntity,
+        description: "Возращает номер заказа"
+    })
+    @Get("number/:hash")
+    async getOrderNumber(
+        @Res() response: Response,
+        @Param("hash") hash: string
+    ) {
+        const result = await this.OrderUsecase.getOrderNumber(hash);
 
-        if (result.numState !== iiko.ResultStateEnum.Success) {
-            throw new CannotDeliveryError(
-                `Доставка не может быть совершена по причине ${result.message}`
-            );
-        }
-
-        response.status(200).json("OK");
+        response.status(200).json(result);
     }
 }

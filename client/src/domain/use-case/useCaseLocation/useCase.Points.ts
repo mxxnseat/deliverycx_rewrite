@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { useDispatch } from "react-redux";
 
 import { useHistory } from "react-router-dom";
-import { useGetPointsQuery } from "servises/repository/RTK/RTKLocation";
+import { useGetPointsQuery, useGetRecvisitesMutation } from "servises/repository/RTK/RTKLocation";
 import { IPoint } from "@types";
 import {
     initialStatePoints,
@@ -18,25 +18,28 @@ import { adapterSelector } from "servises/redux/selectors/selectors";
 import { fetchDeleteCart } from "servises/redux/slice/cartSlice";
 
 export function usePoints() {
-    const history = useHistory();
-    const dispatch = useDispatch();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-    const selectedCity = adapterSelector.useSelectors(
-        (selector) => selector.city
-    );
-    const { id } = adapterSelector.useSelectors((selector) => selector.point);
-    const { data: addresses, isFetching } = useGetPointsQuery(selectedCity.id);
+  const selectedCity = adapterSelector.useSelectors(
+    (selector) => selector.city
+  );
+  const { id } = adapterSelector.useSelectors((selector) => selector.point);
+  const { data: addresses, isFetching } = useGetPointsQuery(selectedCity.id);
+  const [getRecvisites, { data: recvisites }] = useGetRecvisitesMutation()
 
-    const [statePoint, dispatchPoint] = useReducer(
-        PointsReducer,
-        initialStatePoints
-    );
-
-    //const addresses = mokPoint
-    /**/
+  const [statePoint, dispatchPoint] = useReducer(
+    PointsReducer,
+    initialStatePoints
+  );
+     
+  useEffect(() => {
+    (addresses && !isFetching) && getRecvisites(addresses[statePoint.slideIndex].id) 
+  }, [statePoint.slideIndex]) 
+  
     useEffect(() => {
         if (Object.keys(selectedCity).length) {
-            addresses && !isFetching && nearPoint(addresses);
+          (addresses && !isFetching) && nearPoint(addresses);
         } else {
             history.goBack();
         }
@@ -74,10 +77,11 @@ export function usePoints() {
                             ? 0
                             : statePoint.slideIndex + 1
                 });
-            }
+          }
         }
     };
     const nearPoint = async (data: IPoint[]) => {
+      try {
         const cord = await getGeoLocation();
         if (data) {
             const index = data.reduce(function (r, val, i, array) {
@@ -95,6 +99,10 @@ export function usePoints() {
                 payload: index
             });
         }
+      } catch (error) {
+        console.log(error)
+      }
+        
     };
 
     const selectPointHandler = async (address: IPoint) => {
@@ -120,17 +128,27 @@ export function usePoints() {
         }
     };
 
+    const recvisitesHandler = (change:boolean) => {
+      dispatchPoint({
+        type: ReducerActionTypePoints.recvisitesModal,
+        payload: change
+    });
+    }
+
     this.data({
         selectedCity,
         addresses,
-        statePoint
+        statePoint,
+        recvisites
     });
     this.handlers({
         placemarkClickHandler,
         buttonClickHandler,
         SlidePointsHandler,
         selectPointHandler,
-        nearPoint
+        nearPoint,
+        recvisitesHandler,
+        getRecvisites
     });
     this.status({
         isFetching

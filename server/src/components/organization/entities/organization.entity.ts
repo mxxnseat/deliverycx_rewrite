@@ -8,6 +8,9 @@ export class OrganizationEntity {
     private readonly id: Types.ObjectId;
 
     @ApiProperty()
+    private readonly guid: UniqueId;
+
+    @ApiProperty()
     private readonly address?: string;
 
     @ApiProperty()
@@ -38,7 +41,7 @@ export class OrganizationEntity {
         cords?: [number, number],
         phone?: string,
         workTime?: string,
-        cardPay?: boolean
+        guid?: UniqueId
     ) {
         this.id = id;
         this.address = address;
@@ -46,7 +49,11 @@ export class OrganizationEntity {
         this.cords = cords;
         this.phone = phone;
         this.workTime = workTime;
-        this.cardPay = cardPay;
+        this.guid = guid;
+    }
+
+    public get getGuid() {
+        return this.guid;
     }
 
     public get getId() {
@@ -71,9 +78,5 @@ export class OrganizationEntity {
 
     public get getWorkTime() {
         return this.workTime;
-    }
-
-    public get getCardPay() {
-        return this.cardPay;
     }
 }

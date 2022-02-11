@@ -5,6 +5,8 @@ import { Request, Response } from "express";
 import { GetAllDTO } from "../interfaces/getAll.dto";
 import { ApiTags, ApiResponse, ApiBody } from "@nestjs/swagger";
 import { OrganizationEntity } from "../entities/organization.entity";
+import { RecvisitesEntity } from "../entities/recvisites.entity";
+import { RecvisitesDTO } from "../interfaces/getRecvisites.dto";
 
 @ApiTags("Organization endpoints")
 @Controller("organization")
@@ -22,6 +24,22 @@ export class OrganizationController {
         @Req() request: Request
     ) {
         const result = await this.organizationUsecase.getAll(query.cityId);
+        response.status(HttpStatus.OK).json(result);
+    }
+
+    @ApiResponse({
+        status: 200,
+        type: [RecvisitesEntity]
+    })
+    @Get("recvisites")
+    async getRecvisites(
+        @Query() query: RecvisitesDTO,
+        @Res() response: Response
+    ) {
+        const result = await this.organizationUsecase.getRecvisites(
+            query.organizationId
+        );
+
         response.status(HttpStatus.OK).json(result);
     }
 }

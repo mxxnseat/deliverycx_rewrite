@@ -33,12 +33,12 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
   })
 
   useEffect(() => () => debouncedChangeHandler.cancel(), [product.amount]);
-
+  
   useEffect(() => {
     if (product.productTags) {
       const tag = product.productTags.find(el => el !== "HIDDEN"); //?.match(/[a-z]{2,}/i)![0]
-
-      if(tag && tag in errorSchema){
+      const tag_hi = tag ? tag.match(/[a-z]{2,}/i)![0].toUpperCase() : " "
+      if(tag && tag_hi in errorSchema){
           setError(errorSchema?.HI?.message);
       }
     }
@@ -65,7 +65,8 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
                  }  
                   break;
               default : setChangeCount(product.amount)
-          } 
+        } 
+        setError(null)
       }
   }
 

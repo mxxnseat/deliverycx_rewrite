@@ -17,7 +17,7 @@ export namespace PaymasterRequest {
         };
         receipt?: {
             client: object;
-            itmes: object;
+            itmes: Array<object>;
         };
     }
 }

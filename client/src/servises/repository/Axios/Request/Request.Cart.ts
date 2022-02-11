@@ -29,7 +29,7 @@ namespace ReqCart {
     } & Responses;
 
     export type orderCreate = {
-        number: number;
+      redirectUrl: string;
     };
 }
 // передаем
