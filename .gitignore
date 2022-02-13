@@ -6,3 +6,4 @@ mongo
 certbot
 nginx/*
 client/**/config.*
+server/.clinic

@@ -4,13 +4,14 @@ import {
     ModelOptions,
     mongoose,
     prop,
-    Ref
+    Ref,
+    Severity
 } from "@typegoose/typegoose";
 import { ProductClass } from "./product.model";
 import { UserClass } from "./user.model";
 
 @ModelOptions({
-    options: { customName: "Card" },
+    options: { customName: "Card", allowMixed: Severity.ALLOW },
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class CardClass {
