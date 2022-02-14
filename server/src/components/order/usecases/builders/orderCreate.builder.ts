@@ -41,6 +41,30 @@ export class OrderCreateBuilder {
         this._state.cart = await this.CartRepository.getAll(userId);
     }
 
+    private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
+        console.log("call method");
+
+        return new Promise<string>(async (resolve) => {
+            try {
+                const result = await this.orderService.create(
+                    cart,
+                    orderInfo,
+                    deliveryPrices
+                );
+
+                resolve(result);
+            } catch (e) {
+                resolve(
+                    await this.repeatOrderUntilSuccess(
+                        cart,
+                        orderInfo,
+                        deliveryPrices
+                    )
+                );
+            }
+        });
+    }
+
     async createOrder() {
         const user = this._state.user;
         const orderInfo = this._state.orderInfo;
@@ -52,11 +76,15 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
-        const orderNumber = await this.orderService.create(
+        console.log("before call");
+
+        const orderNumber = await this.repeatOrderUntilSuccess(
             cart,
             orderInfo,
             deliveryPrices
         );
+
+        console.log("after call");
 
         await this.orderRepository.create(
             user,
