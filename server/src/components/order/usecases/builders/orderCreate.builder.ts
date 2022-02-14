@@ -42,8 +42,6 @@ export class OrderCreateBuilder {
     }
 
     private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
-        console.log("call method");
-
         return new Promise<string>(async (resolve) => {
             try {
                 const result = await this.orderService.create(
