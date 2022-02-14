@@ -76,15 +76,11 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
-        console.log("before call");
-
         const orderNumber = await this.repeatOrderUntilSuccess(
             cart,
             orderInfo,
             deliveryPrices
         );
-
-        console.log("after call");
 
         await this.orderRepository.create(
             user,
