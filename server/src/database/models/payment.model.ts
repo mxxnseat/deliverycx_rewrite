@@ -8,7 +8,7 @@ import {
 import { OrganizationClass } from "./organization.model";
 
 @ModelOptions({
-    options: { customName: "PaymentServiceData" },
+    options: { customName: "PaymentInfo", automaticName: false },
     schemaOptions: { versionKey: false }
 })
 export class PaymentServiceDataClass {

@@ -42,4 +42,25 @@ export class OrganizationController {
 
         response.status(HttpStatus.OK).json(result);
     }
+
+    @ApiResponse({
+        status: 200,
+        schema: {
+            properties: {
+                isActivePayment: { type: "boolean", example: true },
+                organizationId: {
+                    type: "string",
+                    example: "61fdb15f942415d95559b230"
+                }
+            }
+        }
+    })
+    @Get("one")
+    async getOne(@Query() query: RecvisitesDTO, @Res() response: Response) {
+        const result = await this.organizationUsecase.getPaymentsInfoForClient(
+            query.organizationId
+        );
+
+        response.status(HttpStatus.OK).json(result);
+    }
 }

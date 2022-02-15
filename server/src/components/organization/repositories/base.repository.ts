@@ -85,7 +85,8 @@ export class OrganizationRepository
         return new PaymentInfoEntity(
             paymentDoc?.merchantId,
             paymentDoc?.token,
-            paymentDoc?.isActive
+            !!paymentDoc?.isActive,
+            organizationId
         );
     }
 }
