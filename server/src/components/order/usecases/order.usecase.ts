@@ -1,4 +1,5 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { ClientProxy } from "@nestjs/microservices";
 import { OrderDTO } from "../dto/order.dto";
 import { IOrderUtilsService } from "../services/order/interface.service";
 import { OrderCheckBuilder } from "./builders/orderCheck.builder";
@@ -25,6 +26,8 @@ export class OrderUsecase {
 
     async checkOrder(userId: UniqueId, orderInfo: OrderDTO) {
         await this.orderCheckBuilder.initialize(userId, orderInfo);
+
+        await this.orderCheckBuilder.checkCardPaymentAviables();
 
         await this.orderCheckBuilder.validateCart();
 

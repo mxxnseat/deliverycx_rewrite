@@ -21,7 +21,8 @@ export class CityRepository implements ICityRepository {
                     $options: "i"
                 }
             })
-            .populate("organizations");
+            .populate("organizations")
+            .lean();
 
         return cityMapper(result);
     }

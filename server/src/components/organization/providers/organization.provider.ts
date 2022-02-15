@@ -14,7 +14,7 @@ export const organizationProviders = [
     {
         provide: "PaymentServiceData",
         useFactory: (connection: Connection) =>
-            connection.model("PaymentServiceData", PaymentServiceDataSchema),
+            connection.model("PaymentInfo", PaymentServiceDataSchema),
         inject: [getConnectionToken("DatabaseConnection")]
     }
 ];

@@ -51,10 +51,6 @@ export class PaymentService extends IPaymentService {
                 body.organization
             );
 
-        if (!organizationPaymentInfo.isActive) {
-            throw new PaymentError("Заведение не поддерживает оплату картой");
-        }
-
         const { totalPrice } = await this.DeliveryService.calculatingPrices(
             userId,
             body.orderType
