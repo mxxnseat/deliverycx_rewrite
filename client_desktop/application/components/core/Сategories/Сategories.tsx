@@ -11,62 +11,53 @@ const Categories = () => {
   const slider = useRef<typeof Slider>(null);
 
   const useCasePoints = adapterComponentUseCase(useCategories)
-  const {categories,currentSlide,category } = useCasePoints.data
-  const {handleSliderClick} = useCasePoints.handlers
+  const { categories, currentSlide, category } = useCasePoints.data
+  const { handleSliderClick } = useCasePoints.handlers
   const { isFetching } = useCasePoints.status
 
   useEffect(() => {
-    Events.scrollEvent.register('begin', function(to, element) {
-      console.log('begin', arguments);
-    });
-
-    Events.scrollEvent.register('end', function(to, element) {
-      console.log('end', arguments);
-    });
+    
 
     scrollSpy.update()
   }, [])
+
+  const handleSetActive = (e:any) => {
+    console.log(e);
+  }
   
   
   
   return (
     <div className="categories">
-      <ul className="q">
-      <li><Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} >Test 1</Link></li>
-      </ul>
+      <div className="container">
       <div className="categories_flex">
         {
           (!isFetching && categories) &&
           categories.map((category:ICategory, i:number) => {
             const CN = cn("categories__item", { active: currentSlide === i });
             return (
-              <div
+              <Link
                 key={i}
-                className={CN}
+                className="categories__item"
+                activeClass="active"
+                to={category.id} onSetActive={handleSetActive} spy={true} smooth={true} offset={-180} duration={500}
                 onClick={() => handleSliderClick(i, slider)}
                 >
-      					<div className="categories__item__content-wrapper">
+                <div className="categories__item__content-wrapper">
       						<div className="categories__item__img-wrap">
       							<div>
                       <img src={category.image} alt={category.name} />
       							</div>
       						</div>
-      						<div className="categories__item__title">{category.name}</div>
+      						<div className="categories__item__title">{category.name}</div> 
       					</div>
-              </div>
+              </Link>
             );
           })  
         }
 				
       </div>
-      <div className="stocks">
-			<div className="arr arr_left"></div>
-			<div className="arr arr_right"></div>
-			<img src="./images/stok1.png" alt=""/>
-		</div>
-      <Element name="test1" className="element" >
-            test 1
-        </Element>
+      </div>
     </div>
     
   )

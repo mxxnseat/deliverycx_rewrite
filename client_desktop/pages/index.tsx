@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import Header from "application/components/common/headers/Header";
 import Stocks from "application/components/common/Stocks/Stocks";
+import ShopLayout from "application/components/core/Shop/ShopLayout";
 import Categories from "application/components/core/Сategories/Сategories";
 import { useCitiList } from "domain/use-case/useCaseLocation";
 import type { NextPage } from "next";
@@ -13,12 +14,17 @@ const Home: NextPage = () => {
 
     
 
-    return (
+  return (
+      <>
       <div className="container">
         <Header />
         <Stocks />
-        <Categories />
-      </div>
+      </div>  
+        
+        <ShopLayout />
+      
+      
+      </>
     );
 };
 

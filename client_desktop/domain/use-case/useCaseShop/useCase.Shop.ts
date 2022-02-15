@@ -5,9 +5,8 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { useEffect } from 'react';
 import debounce from 'lodash.debounce';
 
-export function useCaseShop(this: any) {
+export function useCaseShop(this: any,category:string) {
   const [id,setId] = useState(true)
-  const { id: category } = adapterSelector.useSelectors(selector => selector.category)
   const { data: products, isFetching } = useGetProductsQuery(category, {
     skip:id,
     refetchOnMountOrArgChange:true,
