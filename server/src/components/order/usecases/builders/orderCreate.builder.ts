@@ -60,10 +60,12 @@ export class OrderCreateBuilder {
                 resolve(result);
             } catch (e) {
                 setTimeout(async () => {
-                    this.repeatOrderUntilSuccess(
-                        cart,
-                        orderInfo,
-                        deliveryPrices
+                    resolve(
+                        await this.repeatOrderUntilSuccess(
+                            cart,
+                            orderInfo,
+                            deliveryPrices
+                        )
                     );
                 }, 5000);
             }

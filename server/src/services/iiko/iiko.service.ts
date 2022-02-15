@@ -163,7 +163,9 @@ export class IikoService implements IIiko {
 
         return {
             result: orderResponseInfo.number,
-            problem: orderResponseInfo.problem?.hasProblem
+            problem:
+                orderResponseInfo.problem?.hasProblem &&
+                orderResponseInfo?.problem?.problem
         };
     }
 
