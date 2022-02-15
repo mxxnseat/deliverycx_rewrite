@@ -1,4 +1,6 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
+import { rejects } from "assert";
+import { BaseError } from "src/common/errors/base.error";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
@@ -7,6 +9,7 @@ import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { OrderDTO } from "../../dto/order.dto";
 import { OrderEntity } from "../../entities/order.entity";
+import { CannotDeliveryError } from "../../errors/order.error";
 import { IOrderRepository } from "../../repositores/interface.repository";
 
 interface IState {
@@ -42,23 +45,27 @@ export class OrderCreateBuilder {
     }
 
     private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
-        return new Promise<string>(async (resolve) => {
+        return new Promise<string>(async (resolve, reject) => {
             try {
-                const result = await this.orderService.create(
+                const { result, problem } = await this.orderService.create(
                     cart,
                     orderInfo,
                     deliveryPrices
                 );
 
+                if (problem) {
+                    reject(new CannotDeliveryError(problem));
+                }
+
                 resolve(result);
             } catch (e) {
-                resolve(
-                    await this.repeatOrderUntilSuccess(
+                setTimeout(async () => {
+                    this.repeatOrderUntilSuccess(
                         cart,
                         orderInfo,
                         deliveryPrices
-                    )
-                );
+                    );
+                }, 5000);
             }
         });
     }
