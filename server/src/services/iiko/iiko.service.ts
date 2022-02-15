@@ -1,5 +1,5 @@
 import { iiko } from "src/services/iiko/interfaces";
-import { IIiko, OrderTypesEnum } from "./iiko.abstract";
+import { IIiko, IReturnCreateOrder, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
@@ -149,7 +149,7 @@ export class IikoService implements IIiko {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO,
         prices: IDeliveryPrices
-    ): Promise<string> {
+    ): Promise<IReturnCreateOrder> {
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
@@ -161,10 +161,10 @@ export class IikoService implements IIiko {
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
 
-        if (orderResponseInfo.problem?.hasProblem)
-            throw new CannotDeliveryError(orderResponseInfo?.problem?.problem);
-
-        return orderResponseInfo.number;
+        return {
+            result: orderResponseInfo.number,
+            problem: orderResponseInfo.problem?.hasProblem
+        };
     }
 
     /*-----------------|       check      |-----------------------*/
