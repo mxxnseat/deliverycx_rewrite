@@ -1,6 +1,5 @@
 import { Controller, Get, HttpStatus, Query, Req, Res } from "@nestjs/common";
 import { OrganizationUsecase } from "../usecases/organization.usecase";
-import { Types } from "mongoose";
 import { Request, Response } from "express";
 import { GetAllDTO } from "../interfaces/getAll.dto";
 import { ApiTags, ApiResponse, ApiBody } from "@nestjs/swagger";

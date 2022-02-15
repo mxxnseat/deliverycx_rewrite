@@ -23,6 +23,7 @@ export class StopListUsecase {
         const organizationID = organization.getId.toString();
 
         await this.stopListRepository.update(organizationID, stopList);
+
         const stopListEntity = await this.stopListRepository.getAll(
             organizationID
         );

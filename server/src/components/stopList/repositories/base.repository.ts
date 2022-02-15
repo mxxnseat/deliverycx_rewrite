@@ -8,17 +8,38 @@ import { StopListClass } from "src/database/models/stopList.model";
 import { StopListEntity } from "../entities/stopList.entity";
 import { stopListMapper } from "../entities/stopList.mapper";
 import { IStopListRepository } from "./interface.repository";
+import { ProductClass } from "src/database/models/product.model";
 
 @Injectable()
-export class StopListRepository
-    extends BaseRepository<StopListClass, StopListEntity>
-    implements IStopListRepository
-{
+export class StopListRepository implements IStopListRepository {
     constructor(
         @Inject("StopList")
-        private readonly StopListModel: Model<StopListClass>
-    ) {
-        super(StopListModel, stopListMapper, "organization");
+        private readonly StopListModel: Model<StopListClass>,
+
+        @Inject("Product")
+        private readonly ProductModel: Model<ProductClass>
+    ) {}
+
+    async getAll(organizationId: UniqueId) {
+        const { stoplist, organization } = await this.StopListModel.findOne({
+            id: organizationId
+        });
+
+        return new StopListEntity(
+            organization.toString(),
+            await Promise.all(
+                stoplist.map(async (el) => {
+                    const productInStopList = await this.ProductModel.findOne({
+                        id: el.product
+                    });
+
+                    return {
+                        balance: el.balance,
+                        productId: productInStopList._id.toString()
+                    };
+                })
+            )
+        );
     }
 
     async update(

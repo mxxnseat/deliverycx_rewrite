@@ -18,5 +18,4 @@ async function bootstrap() {
 
     await app.listen(process.env.PORT);
 }
-// bootstrap();
 WorkerProccess.clusterizing(bootstrap);
