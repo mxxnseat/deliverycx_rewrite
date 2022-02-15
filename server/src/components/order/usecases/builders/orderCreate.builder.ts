@@ -67,6 +67,8 @@ export class OrderCreateBuilder {
                     );
                 }, 5000);
             }
+        }).catch((E) => {
+            throw E;
         });
     }
 
