@@ -4,6 +4,8 @@ import { useGetProductsQuery, useSearchProductsMutation } from "servises/reposit
 import { ChangeEvent, useRef, useState } from 'react';
 import { useEffect } from 'react';
 import debounce from 'lodash.debounce';
+import { useDispatch } from 'react-redux';
+import { setProductItem } from "servises/redux/slice/shopSlice";
 
 export function useCaseShop(this: any,category:string) {
   const [id,setId] = useState(true)
@@ -31,7 +33,8 @@ export function useCaseShop(this: any,category:string) {
   })
 }
 
-export function useCaseShopItem(this: any, id:string) {
+export function useCaseShopItem(this: any, id: string) {
+  const dispatch = useDispatch()
   const stoplists = adapterSelector.useSelectors(selector => selector.stoplist)
   
   const cardRef = useRef<HTMLDivElement>(null);
@@ -40,24 +43,12 @@ export function useCaseShopItem(this: any, id:string) {
   const clickItemHandler = (e: any, id: string) => {
       if(disableItem) return
       
-      if ((e.target as HTMLButtonElement).type !== 'submit') {
-          
-          
-          localStorage.setItem("prod", cardRef.current?.dataset.id as string)
-      }
+    if ((e.target as HTMLButtonElement).type !== 'submit') {
+        dispatch(setProductItem(id))
+    }
   }
 
-  useEffect(() => {
-      const id = localStorage.getItem('prod')
-      new Promise((resolve, reject) => {
-          if (cardRef.current?.dataset.id == id) {
-              resolve(cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
-          }
-      })
-          //.then(() => localStorage.removeItem('prod'))
-          //.catch(() => localStorage.removeItem('prod'))
-      
-  }, [])
+  
 
   useEffect(() => {
     if (stoplists) {
@@ -108,5 +99,25 @@ export function useCaseSearchShop(this: any) {
   this.status({
     isSuccess,
     isUninitialized
+  })
+}
+
+
+export function useCaseShopAddToCard(this: any) {
+  const dispatch = useDispatch();
+  const AnimateHandle = () => {
+    
+    //dispatch(fetchAddToCart(id))
+}
+  const debouncedChangeHandler = debounce(AnimateHandle, 400)
+
+
+  this.data({
+    
+  })
+  this.handlers({
+    debouncedChangeHandler
+  })
+  this.status({
   })
 }

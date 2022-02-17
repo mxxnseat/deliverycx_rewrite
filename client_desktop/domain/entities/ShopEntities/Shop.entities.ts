@@ -5,7 +5,9 @@ export interface IShopEntities{
   isSearch: boolean
   category: ICategory
   favorites: IFavorites,
-  stoplist:IStopList
+  stoplist: IStopList,
+  productid:string
+  
 }
 /**
  * @description синглтон
@@ -16,13 +18,15 @@ class ShopEntities extends Entities<IShopEntities>{
   protected category = {}
   protected favorites = {}
   protected stoplist = null
+  protected productid = null
   constructor() {
     super()
     this.entities = {
       isSearch: this.isSearch,
       category: this.category,
       favorites: this.favorites,
-      stoplist:this.stoplist
+      stoplist: this.stoplist,
+      productid:this.productid
     }
   }
 

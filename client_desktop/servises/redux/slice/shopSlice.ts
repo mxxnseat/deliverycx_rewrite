@@ -12,13 +12,7 @@ const ShopSlice = createSlice({
   name: 'shop',
   initialState:ShopEntities.getEntities as IShopEntities,
   reducers: ShopuseCase.getReduserAction,
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(RTKCategories.endpoints.getCategori.matchFulfilled, (state, action) => {
-        state.category = action.payload[0]
-      }) 
-      
-  },
+   
 })
-export const { setCategories,setStopList} = ShopSlice.actions
+export const { setCategories,setStopList,setProductItem} = ShopSlice.actions
 export default ShopSlice

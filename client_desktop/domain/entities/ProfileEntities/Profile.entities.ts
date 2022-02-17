@@ -22,9 +22,7 @@ class ProfileEntities extends Entities<IProfileEntities>{
       phone:this.phone
     }
   }
-  init() { 
-   this.entities.name = "Peta"
-  }
+  
   
 
 }

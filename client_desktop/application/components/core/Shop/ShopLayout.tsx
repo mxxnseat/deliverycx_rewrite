@@ -1,5 +1,6 @@
 import Categories from '../Сategories/Сategories'
 import ShopList from './HOC/HOC.ShopList'
+import ShopProductCard from './HOC_ProductCard/HOC.ShopProductCard'
 const ShopLayout = () => {
   return (
     <>
@@ -10,6 +11,7 @@ const ShopLayout = () => {
           <ShopList />
         </div>  
       </div>
+      <ShopProductCard />
     </>
   )
 }

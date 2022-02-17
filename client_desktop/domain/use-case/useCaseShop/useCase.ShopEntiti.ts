@@ -1,3 +1,4 @@
+import { IShopEntities } from "domain/entities/ShopEntities/Shop.entities";
 import { IShopEntitiesMetod, ShopEntitiesMetod } from "domain/entities/ShopEntities/ShopMetod.entities";
 
 
@@ -11,8 +12,10 @@ export class useCaseShopEntiti implements IuseCaseShopEntiti{
   get getReduserAction() {
     return {
       ['setCategories']: ShopEntitiesMetod.setCategories, 
-      ['setStopList']: ShopEntitiesMetod.setStopList
+      ['setStopList']: ShopEntitiesMetod.setStopList,
+      ['setProductItem']:ShopEntitiesMetod.setProductItem
       
     }
   }
+  
 }
