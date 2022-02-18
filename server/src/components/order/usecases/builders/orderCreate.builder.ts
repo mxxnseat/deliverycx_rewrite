@@ -61,7 +61,7 @@ export class OrderCreateBuilder {
 
                 resolve(result);
             } catch (e) {
-                if (counter === 3) {
+                if (counter >= 3) {
                     reject(
                         new CannotDeliveryError(
                             "Возникла не предвиденная ошибка"
@@ -95,11 +95,17 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
-        const orderNumber = await this.repeatOrderUntilSuccess(
+        const { result: orderNumber, problem } = await this.orderService.create(
             cart,
             orderInfo,
             deliveryPrices
         );
+
+        // const orderNumber = await this.repeatOrderUntilSuccess(
+        //     cart,
+        //     orderInfo,
+        //     deliveryPrices
+        // );
 
         await this.orderRepository.create(
             user,
