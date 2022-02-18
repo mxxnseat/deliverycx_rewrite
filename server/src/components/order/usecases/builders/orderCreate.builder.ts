@@ -101,6 +101,10 @@ export class OrderCreateBuilder {
             deliveryPrices
         );
 
+        if (problem) {
+            throw new CannotDeliveryError(problem);
+        }
+
         // const orderNumber = await this.repeatOrderUntilSuccess(
         //     cart,
         //     orderInfo,
