@@ -3,7 +3,9 @@ import Entities from "../Entities"
 
 export interface ILocationEntities{
   city: ICity
-  point:IPoint
+  point: IPoint,
+  locationModal:boolean
+  locationMap:boolean
 }
 /**
  * @description синглтон
@@ -12,11 +14,15 @@ export interface ILocationEntities{
 class LocationEntities extends Entities<ILocationEntities>{
   protected city = {}
   protected point = {}
+  protected locationModal = false
+  protected locationMap = false
   constructor() {
     super()
     this.entities = {
       city: this.city,
-      point:this.point
+      point: this.point,
+      locationModal: this.locationModal,
+      locationMap:this.locationMap
     }
   }
 

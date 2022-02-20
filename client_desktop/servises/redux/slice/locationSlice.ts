@@ -1,19 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import LocationEntities, { ILocationEntities } from "domain/entities/locationEntities/Location.entities";
+import { LocationContainerMetod } from "domain/ioc/Location.container";
 
-
+const LocationAction = new LocationContainerMetod()
 
 const locationSlice = createSlice({
   name: 'location',
   initialState:LocationEntities.getEntities,
-  reducers: {
-    setCiti(state:ILocationEntities,action){
-      state.city = action.payload
-    },
-    setPoint(state:ILocationEntities,action){
-      state.point = action.payload
-    }
-  }
+  reducers: LocationAction.getReduserAction
 })
-export const {setCiti,setPoint} = locationSlice.actions
+export const {setCiti,setPoint, setModal,setMapModal} = locationSlice.actions
 export default locationSlice

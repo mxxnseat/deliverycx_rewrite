@@ -1,17 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import ShopEntities, { IShopEntities } from "domain/entities/ShopEntities/Shop.entities";
-import { useCaseShopEntiti } from "domain/use-case/useCaseShop";
-import {RTKCategories } from "servises/repository/RTK/RTKCategories";
+import { ShopContainerMetod } from "domain/ioc/Shop.container";
 
 
 
-const ShopuseCase = new useCaseShopEntiti()
+const ShopContainer = new ShopContainerMetod()
 
 
 const ShopSlice = createSlice({
   name: 'shop',
   initialState:ShopEntities.getEntities as IShopEntities,
-  reducers: ShopuseCase.getReduserAction,
+  reducers: ShopContainer.getReduserAction,
    
 })
 export const { setCategories,setStopList,setProductItem} = ShopSlice.actions

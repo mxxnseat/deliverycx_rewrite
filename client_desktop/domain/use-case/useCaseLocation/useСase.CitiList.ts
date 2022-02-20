@@ -6,7 +6,7 @@ import { setCiti } from "servises/redux/slice/locationSlice";
 import { useGetCitiQuery } from "servises/repository/RTK/RTKLocation";
 import { adapterSelector } from "servises/redux/selectors/selectors";
 
-export function useCitiList(){
+export function useCitiList(this: any,show:any){
   const dispatch = useDispatch()
   const selectedCity = adapterSelector.useSelectors(selector => selector.city)
   const [serchCiti, setSerchCiti] = useState('');
@@ -14,20 +14,21 @@ export function useCitiList(){
     
   const selectCiti = (city: ICity)=>{
     dispatch(setCiti(city));
+    show(false)
   }
+
+  this.data({
+    serchCiti,
+    cities,
+    selectedCity
+  })
+  this.handlers({
+    selectCiti,
+    setSerchCiti
+  })
+  this.status({
+    isLoading
+  })
     
-  return {
-    data: {
-      serchCiti,
-      cities,
-      selectedCity,
-    },
-    handlers: {
-      selectCiti,
-      setSerchCiti
-    },
-    status: {
-      isLoading
-    }
-  }
+ 
 }

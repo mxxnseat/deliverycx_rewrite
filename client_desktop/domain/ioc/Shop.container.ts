@@ -1,5 +1,5 @@
 import { IShopEntities } from "domain/entities/ShopEntities/Shop.entities";
-import { IShopEntitiesMetod, ShopEntitiesMetod } from "domain/entities/ShopEntities/ShopMetod.entities";
+import { IShopEntitiesMetod, ShopEntitiesMetod } from "domain/entities/ShopEntities/Shop.metods";
 
 
 interface IuseCaseShopEntiti{
@@ -8,7 +8,7 @@ interface IuseCaseShopEntiti{
 /**
  * @method getReduserAction содержит методы редьюсора slice
  */
-export class useCaseShopEntiti implements IuseCaseShopEntiti{
+export class ShopContainerMetod implements IuseCaseShopEntiti{
   get getReduserAction() {
     return {
       ['setCategories']: ShopEntitiesMetod.setCategories, 

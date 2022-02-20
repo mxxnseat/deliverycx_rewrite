@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, HttpException, HttpStatus, Query } from "@nestjs/common";
 import { CityUsecase } from "../usecases/city.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CityEntity } from "../entities/city.entity";
@@ -21,7 +21,7 @@ export class CityController {
         const result = this.cityUsecase.getAll(
             query.search ? query.search : ""
         );
-
+        //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         return result;
     }
 }

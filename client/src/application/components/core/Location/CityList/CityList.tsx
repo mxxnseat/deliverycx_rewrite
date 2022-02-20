@@ -19,7 +19,7 @@ const CityList = () => {
             <div className="welcome__search">
                 <img src={require("assets/i/search-sm.svg").default} alt="Поиск города" />
 
-                <input type="text" className="welcome__search__input" placeholder="Поиск"onChange={(e) => setSerchCiti(e.target.value)} />
+                <input type="text" className="welcome__search__input" placeholder="Поиск" onChange={(e) => setSerchCiti(e.target.value)} />
             </div>
 
             {

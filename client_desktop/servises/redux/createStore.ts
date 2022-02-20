@@ -1,5 +1,5 @@
 import { combineReducers, Middleware } from 'redux'
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware, isRejectedWithValue } from '@reduxjs/toolkit';
 import logger from 'redux-logger'
 import { createTransform, persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
@@ -22,6 +22,7 @@ const persistConfig = {
     CATEGORIES_API_REDUCER_KEY,
     SHOP_API_REDUCER_KEY,
     ShopSlice.name,
+    locationSlice.name
   ],
   transforms: [
     createTransform(
@@ -33,7 +34,7 @@ const persistConfig = {
       },
       {
         whitelist: [
-          locationSlice.name
+          
         ]
       }
     )
@@ -52,7 +53,9 @@ const createRootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
 
 const customMiddleware: Middleware<Record<string, unknown>, RootState> = store => next => action => {
-  
+  if (isRejectedWithValue(action)) {
+    console.log(action);
+  }
   
   const res = next(action);
   return res;

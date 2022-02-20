@@ -4,11 +4,11 @@ import ShopProductCard from './HOC_ProductCard/HOC.ShopProductCard'
 const ShopLayout = () => {
   return (
     <>
-      <Categories />
+      
       <div className="space">
         
         <div className="container">
-          <ShopList />
+          
         </div>  
       </div>
       <ShopProductCard />
