@@ -11,20 +11,21 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "Title": {
+    "title": {
       "type": "string"
     },
     "description": {
       "type": "richtext"
     },
-    "image": {
+    "images": {
       "allowedTypes": [
         "images",
         "files",
-        "videos"
+        "videos",
+        "audios"
       ],
       "type": "media",
-      "multiple": false
+      "multiple": true
     }
   }
 }
