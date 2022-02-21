@@ -1,10 +1,16 @@
-import { adapterComponentUseCase } from "adapters/adapterComponents"
+import { adapterComponentUseCase, TadapterCaseCallback } from "adapters/adapterComponents"
 import Modals from "application/components/common/Modals/Modals"
 import { useLocations } from "domain/use-case/useCaseLocation"
+import React from "react"
 import CityList from "./HOC_City/HOC.CityList"
 import Points from "./HOC_Points/HOC.Points"
 import PointsMap from "./HOC_Points/HOC.PointsMap"
 
+export const LocationPointsContext = React.createContext<TadapterCaseCallback>({
+  data: {},
+  handlers: {},
+  status:{}
+});
 const LocationLayout = () => {
   const useCaseLocation = adapterComponentUseCase(useLocations)
   const { modal,showCiti,modalMap } = useCaseLocation.data
@@ -12,13 +18,14 @@ const LocationLayout = () => {
 
   return (
     <>
+      <LocationPointsContext.Provider value={useCaseLocation}>
       {
         modal &&
         <Modals onClose={handlerCloseModal}>
             {
               showCiti
-                ? <CityList show={setShow} onClose={handlerCloseModal} />
-                : <Points show={setShow} onClose={handlerCloseModal} />
+                ? <CityList />
+                : <Points />
             }
             
         </Modals>
@@ -31,7 +38,7 @@ const LocationLayout = () => {
         </Modals>
           
       }
-      
+      </LocationPointsContext.Provider>
     </>
   )
 }

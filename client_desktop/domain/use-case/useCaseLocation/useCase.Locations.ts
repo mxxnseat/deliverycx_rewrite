@@ -18,6 +18,19 @@ export function useLocations(this: any){
     dispatch(setMapModal(false))
   }
 
+  const handlerModal = (value: boolean) => {
+    dispatch(setMapModal(value))
+  }
+  const handlerMapModal = (value:boolean) => {
+    dispatch(setMapModal(value))
+  }
+  const handlerGoToCity = () => {
+    dispatch(setModal(true))
+    dispatch(setMapModal(false))
+    setShow(true)
+  }
+    
+
   useEffect(() => {
     if (Object.keys(selectedCity).length) {
       setShow(false)
@@ -33,6 +46,9 @@ export function useLocations(this: any){
   this.handlers({
     handlerCloseModal,
     handlerCloseMapModal,
+    handlerMapModal,
+    handlerModal,
+    handlerGoToCity,
     setShow
   })
   this.status({
