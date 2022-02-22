@@ -22,7 +22,7 @@ const persistConfig = {
     CATEGORIES_API_REDUCER_KEY,
     SHOP_API_REDUCER_KEY,
     ShopSlice.name,
-    locationSlice.name
+    
   ],
   transforms: [
     createTransform(
@@ -34,7 +34,7 @@ const persistConfig = {
       },
       {
         whitelist: [
-          
+          locationSlice.name
         ]
       }
     )

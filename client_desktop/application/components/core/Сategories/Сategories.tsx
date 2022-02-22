@@ -40,7 +40,7 @@ const Categories = () => {
                 key={i}
                 className="categories__item"
                 activeClass="active"
-                to={category.id} onSetActive={handleSetActive} spy={true} smooth={true} offset={-180} duration={500}
+                to={category.id} spy={true} smooth={true} offset={-160} duration={500}
                 onClick={() => handleSliderClick(i, slider)}
                 >
                 <div className="categories__item__content-wrapper">

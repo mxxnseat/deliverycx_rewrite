@@ -23,9 +23,9 @@ const PointsMap = () => {
   const useCaseLocationPoints = useContext(LocationPointsContext);
   const { handlerCloseMapModal,handlerGoToCity} = useCaseLocationPoints.handlers;
 
-  const useCasePoints = adapterComponentUseCase(usePointsMaps)
+  const useCasePoints = adapterComponentUseCase(usePointsMaps,handlerGoToCity)
   const { addresses,statePoint} = useCasePoints.data
-  const { placemarkClickHandler, buttonClickHandler, SlidePointsHandler } = useCasePoints.handlers
+  const { placemarkClickHandler} = useCasePoints.handlers
 
   return (
     <div className="location_city location_Maps">

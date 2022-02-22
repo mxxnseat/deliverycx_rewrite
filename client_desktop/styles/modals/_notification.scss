@@ -1,0 +1,55 @@
+.notification_modal{
+	display: block;
+	position: fixed;
+	left: 5%;
+	top: 5%;
+	box-shadow: 0px 16px 29px rgba(0, 0, 0, 0.1), 0px 6.16296px 9.23704px rgba(0, 0, 0, 0.0607407), 0px 1.3037px 2.36296px rgba(0, 0, 0, 0.0392593);
+	border-radius: 15px;
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	.notification_modal-container{
+		position: relative;
+		padding:5%;
+	}
+}
+
+
+.notification_city{
+	width: 320px;
+	.you_city{
+		margin-top: 10px;
+	}
+	.notification_city__change{
+		
+	}
+	.notification_city-btn-succses{
+			display: inline-block;
+			width: 130px;
+			background-color: #8D191D;
+			height: 36px;
+			cursor: pointer;
+			border-radius: 15px;
+			font-size: 14px;
+			line-height: 36px;
+			text-align: center;
+			color: #fff;
+			font-weight: 500;
+			&:hover{
+				opacity: 0.9;
+			}
+	}
+	.notification_city-swap{
+		display: inline-block;
+		font-size: 13px;
+		line-height: 16px;
+		color: #132A3E;
+		margin-top: 10px;
+		margin-left: 20px;
+		padding-bottom: 3px;
+		cursor: pointer;
+		border-bottom: 1px dotted #132A3E;
+		&:hover{
+			border-bottom:none;
+		}
+	}
+}

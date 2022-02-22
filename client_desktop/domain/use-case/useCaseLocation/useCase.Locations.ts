@@ -9,7 +9,8 @@ export function useLocations(this: any){
   const modal = useSelector((state: RootState) => state.location.locationModal)
   const modalMap = useSelector((state: RootState) => state.location.locationMap)
   const selectedCity = adapterSelector.useSelectors((selector) => selector.city);
-  const [showCiti,setShow] = useState(true)
+  const [showCiti, setShow] = useState(true)
+  const [youSity,setYouSyty] = useState(false)
 
   const handlerCloseModal = () => {
     dispatch(setModal(false))
@@ -19,7 +20,7 @@ export function useLocations(this: any){
   }
 
   const handlerModal = (value: boolean) => {
-    dispatch(setMapModal(value))
+    dispatch(setModal(value))
   }
   const handlerMapModal = (value:boolean) => {
     dispatch(setMapModal(value))
@@ -37,11 +38,19 @@ export function useLocations(this: any){
     }
   }, [selectedCity]);
 
+  useEffect(() => {
+    if (Object.keys(selectedCity).length) {
+      setYouSyty(true)
+    }
+  }, []);
+
+
 
   this.data({
     modal,
     showCiti,
-    modalMap
+    modalMap,
+    youSity
   })
   this.handlers({
     handlerCloseModal,
@@ -49,8 +58,39 @@ export function useLocations(this: any){
     handlerMapModal,
     handlerModal,
     handlerGoToCity,
-    setShow
+    setShow,
+    setYouSyty
   })
   this.status({
+  })
+}
+
+export function useHeaderLocations(this: any) {
+  const dispatch = useDispatch()
+  const [show, setShow] = useState(false)
+  const selectedCity = adapterSelector.useSelectors(selector => selector.city)
+  const selectedPoint = adapterSelector.useSelectors(selector => selector.point)
+  
+  useEffect(() => {
+    if (Object.keys(selectedCity).length) {
+      setShow(true)
+    } else {
+      setShow(false)
+    }
+  }, [])
+
+  const handlerHeader = () => {
+    dispatch(setModal(true))
+  }
+
+
+  
+  this.data({
+    show,
+    selectedCity,
+    selectedPoint
+  })
+  this.handlers({
+    handlerHeader
   })
 }

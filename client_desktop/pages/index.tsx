@@ -17,8 +17,7 @@ const Home: NextPage = () => {
                 <Header />
                 <Stocks />
             </div>
-        <div onClick={() => dispatch(setModal(true))}>wwwwwwww</div>
-        <div onClick={()=> dispatch(setMapModal(true))}>qqqqqq</div>
+        
             <ShopLayout />
         </>
     );

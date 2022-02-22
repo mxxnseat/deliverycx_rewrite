@@ -40,7 +40,7 @@ export function usePoints(this: any) {
   })
 }
 
-export function usePointsMaps(this: any) {
+export function usePointsMaps(this: any,handlerGoToCity:any) {
   const dispatch = useDispatch();
 
   const selectedCity = adapterSelector.useSelectors(
@@ -65,7 +65,7 @@ export function usePointsMaps(this: any) {
         if (Object.keys(selectedCity).length) {
           (addresses && !isFetching) && nearPoint(addresses);
         } else {
-            
+          handlerGoToCity()
         }
     }, [addresses]);
 

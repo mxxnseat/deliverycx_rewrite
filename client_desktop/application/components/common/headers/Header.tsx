@@ -1,5 +1,11 @@
+import { useDispatch } from "react-redux";
+import { setMapModal } from "servises/redux/slice/locationSlice";
+import HeaderLocation from "./HeaderLocation";
+
 /* eslint-disable react/no-unknown-property */
 const Header = () => {
+  const dispatch = useDispatch()
+  
     return (
         <div className="header">
             <div className="header__left">
@@ -10,14 +16,7 @@ const Header = () => {
                 />
             </div>
             <div className="header__center">
-                <div className="header_adress-info">
-                    <span className="header_adress-info-active">
-                        Симферополь
-                    </span>
-                    <span>ул.Турецкая 25</span>
-                    <span>+7 978 228 72 20</span>
-                    
-                </div>
+                <HeaderLocation />
                 <div className="header_menu">
                     <a className="header_menu_link" href="">
                         Меню
@@ -25,7 +24,7 @@ const Header = () => {
                     <a className="header_menu_link" href="">
                         Новинки и акции
                     </a>
-                    <a className="header_menu_link" href="">
+                    <a className="header_menu_link" onClick={()=> dispatch(setMapModal(true))}>
                         Старик Хинкалыч на карте
                     </a>
                 </div>

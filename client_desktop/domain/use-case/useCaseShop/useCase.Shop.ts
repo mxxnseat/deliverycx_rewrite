@@ -108,7 +108,7 @@ export function useCaseShopAddToCard(this: any) {
   const AnimateHandle = () => {
     
     //dispatch(fetchAddToCart(id))
-}
+  }
   const debouncedChangeHandler = debounce(AnimateHandle, 400)
 
 
