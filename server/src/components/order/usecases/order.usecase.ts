@@ -1,5 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { ClientProxy } from "@nestjs/microservices";
+import { Injectable } from "@nestjs/common";
 import { OrderDTO } from "../dto/order.dto";
 import { IOrderUtilsService } from "../services/order/interface.service";
 import { OrderCheckBuilder } from "./builders/orderCheck.builder";
