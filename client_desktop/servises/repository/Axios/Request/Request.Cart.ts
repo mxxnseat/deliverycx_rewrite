@@ -32,7 +32,7 @@ namespace ReqCart {
     };
 }
 // передаем
-namespace ResCart {
+export namespace ResCart {
     export type orderType = {
         orderType:string
     }

@@ -10,6 +10,7 @@ import locationSlice from './slice/locationSlice';
 import { CATEGORIES_API_REDUCER_KEY, RTKCategories } from 'servises/repository/RTK/RTKCategories';
 import ShopSlice from './slice/shopSlice';
 import { RTKShop, SHOP_API_REDUCER_KEY } from 'servises/repository/RTK/RTKShop';
+import cartSlice, { fetchAllCart } from './slice/cartSlice';
 
 
 
@@ -22,7 +23,7 @@ const persistConfig = {
     CATEGORIES_API_REDUCER_KEY,
     SHOP_API_REDUCER_KEY,
     ShopSlice.name,
-    
+    cartSlice.name
   ],
   transforms: [
     createTransform(
@@ -48,6 +49,7 @@ const createRootReducer = combineReducers({
   [RTKShop.reducerPath]: RTKShop.reducer,
   [locationSlice.name]: locationSlice.reducer,
   [ShopSlice.name]: ShopSlice.reducer,
+  [cartSlice.name]:cartSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);
@@ -76,7 +78,7 @@ const store = configureStore({
 
 const persistor = persistStore(store, undefined, async () => {
   await store.dispatch(fetchUser() as any)
-  //await store.dispatch(fetchAllCart() as any) 
+  await store.dispatch(fetchAllCart() as any) 
 });
 
 export { store, persistor }

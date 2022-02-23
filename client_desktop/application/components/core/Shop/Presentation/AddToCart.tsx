@@ -16,18 +16,14 @@ interface IProps {
 }
 
 const AddToCart: FC<IProps> = ({ id, _class, groupImage, children }) => {
-  const useCaseProductCard = adapterComponentUseCase(useCaseShopAddToCard)
+  const useCaseProductCard = adapterComponentUseCase(useCaseShopAddToCard,id)
   const {debouncedChangeHandler} = useCaseProductCard.handlers
     
     return (
         <>
         <div className="hot_box"  onClick={debouncedChangeHandler}>  
             <animated.div className="hot" />
-            {
-              children ? children : <img src="/images/icon/add-item.png" alt=""/>
-              
-            }
-            
+            <button className={_class}></button>
         </div>    
         </>
     )

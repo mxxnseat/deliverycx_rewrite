@@ -1,12 +1,12 @@
 .cart_modals{
-	display: none;
+	display: block;
 	position: fixed;
 	right: 0;
 	top: 0;
-	width: 580px;
+	width: 520px;
 	height:100%;
 	background-color: #fff;
-	z-index: 999;
+	z-index: 9999;
 	.close{
 		top: 35px;
 		right: 35px;

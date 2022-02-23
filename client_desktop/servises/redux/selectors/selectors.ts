@@ -11,6 +11,7 @@ interface Iselectors {
   city: (state: RootState) => ICity,
   shop: (state: RootState) => IShopEntities,
   stoplist: (state: RootState) => IStopList,
+  cart: (state: RootState) => ICart,
 }
 const selectors:Iselectors = {
   point: (state) => state.location.point,
@@ -18,6 +19,7 @@ const selectors:Iselectors = {
   category: (state) => state.shop.category,
   shop: (state) => state.shop,
   stoplist: (state) => state.shop.stoplist,
+  cart: (state) => state.cart,
   
 }
 export const adapterSelector = new AdapterSelector<Iselectors>(selectors)

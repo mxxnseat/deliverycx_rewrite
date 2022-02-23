@@ -20,6 +20,7 @@
 }
 .cart_bottom{
 	background: #fff;
+	border-top: 1px solid #EFEFEF;
 }
 
 .cart_title-box{
@@ -60,6 +61,8 @@
 	overflow-y: auto;
 	padding-right: 10px;
 	height: 100%;
+	padding-bottom: 30px;
+	
 }
 .cart_item{
 	display: flex;
@@ -86,6 +89,14 @@
 					margin-top: 10px;
 				}
 			}
+		}
+		.cart_item-name{
+			flex-grow: 2;
+		}
+		.cart_item-price{
+			flex-grow: 1;
+			min-width: 50px;
+			text-align: right;
 		}
 		.cart_item--title{
 			font-size: 17px;

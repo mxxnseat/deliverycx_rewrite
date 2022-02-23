@@ -114,6 +114,7 @@
 	justify-content: space-between;
 	align-items: center;
 	width: 84px;
+	cursor: pointer;
 	.count-option__middle {
 		display: flex;
 		width: 160px;
@@ -124,6 +125,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		padding: 5px 0;
 	}
 	.count-option__increment{
 		display: flex;
@@ -136,6 +138,7 @@
 	}
 	.count-option__disable {
 			cursor: no-drop;
+			margin-bottom: 5px;
 			img {
 					opacity: 0.3;
 			}
