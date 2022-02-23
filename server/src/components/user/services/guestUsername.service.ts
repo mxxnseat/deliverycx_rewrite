@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { UserClass } from "src/database/models/user.model";
 import { Model } from "mongoose";
 import { IGuestGenerateService } from "./guestUsername.stub";
+import { generateString } from "src/common/utils/generateString.util";
 
 @Injectable()
 export class GenerateUsernameService implements IGuestGenerateService {
@@ -11,7 +12,7 @@ export class GenerateUsernameService implements IGuestGenerateService {
     ) {}
 
     async generate(): Promise<string> {
-        const username = "u_" + Math.random().toString(36).substr(2, 9);
+        const username = "u_" + generateString(36, -8);
 
         const isFind = await this.UserModel.findOne({ username });
 

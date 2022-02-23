@@ -9,8 +9,10 @@ import { IUserRepository } from "src/components/user/repositories/interface.repo
 import { GenerateUsernameService } from "src/components/user/services/guestUsername.service";
 import { IGuestGenerateService } from "src/components/user/services/guestUsername.stub";
 import { UserUsecase } from "src/components/user/usecases/user.usecase";
+import { RedisModule } from "src/modules/redis/redis.module";
 
 @Module({
+    imports: [RedisModule],
     controllers: [UserController],
     providers: [
         GenerateUsernameService,

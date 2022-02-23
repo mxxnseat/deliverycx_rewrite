@@ -5,11 +5,19 @@ import {
     prop,
     Ref
 } from "@typegoose/typegoose";
-import { warnMixed } from "@typegoose/typegoose/lib/internal/utils";
 import { Types } from "mongoose";
+import { ProductClass } from "./product.model";
 import { UserClass } from "./user.model";
 
+class NestedItemClass {
+    @prop()
+    product: UniqueId;
+}
+
 class NestedOrderClass {
+    @prop({ type: NestedItemClass, default: [], required: true })
+    items: [NestedItemClass];
+
     @prop({ type: Number })
     price!: number;
     @prop({ type: String })

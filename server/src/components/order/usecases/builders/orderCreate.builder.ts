@@ -44,46 +44,6 @@ export class OrderCreateBuilder {
         this._state.cart = await this.CartRepository.getAll(userId);
     }
 
-    private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
-        let counter = 0;
-        return new Promise<string>(async (resolve, reject) => {
-            try {
-                counter++;
-                const { result, problem } = await this.orderService.create(
-                    cart,
-                    orderInfo,
-                    deliveryPrices
-                );
-
-                if (problem) {
-                    reject(new CannotDeliveryError(problem));
-                }
-
-                resolve(result);
-            } catch (e) {
-                if (counter >= 3) {
-                    reject(
-                        new CannotDeliveryError(
-                            "Возникла не предвиденная ошибка"
-                        )
-                    );
-                } else {
-                    setTimeout(async () => {
-                        resolve(
-                            await this.repeatOrderUntilSuccess(
-                                cart,
-                                orderInfo,
-                                deliveryPrices
-                            )
-                        );
-                    }, 5000);
-                }
-            }
-        }).catch((E) => {
-            throw E;
-        });
-    }
-
     async createOrder() {
         const user = this._state.user;
         const orderInfo = this._state.orderInfo;
@@ -105,10 +65,17 @@ export class OrderCreateBuilder {
             throw new CannotDeliveryError(problem);
         }
 
+        const orderItems = cart.map((cartEl) => {
+            return {
+                product: cartEl.getProductId
+            };
+        });
+
         await this.orderRepository.create(
             user,
             deliveryPrices.totalPrice,
-            orderNumber
+            orderNumber,
+            orderItems
         );
 
         this._state.orderNumber = orderNumber;

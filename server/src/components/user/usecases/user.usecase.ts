@@ -12,22 +12,26 @@ export class UserUsecase {
         private readonly generateUsernameService: IGuestGenerateService
     ) {}
 
-    async create(
-        username: string,
-        name?: string,
-        phone?: string,
-        address?: string
-    ) {
-        return await this.userRepository.create(username, name, phone);
+    async create(user?: UniqueId, phone?: string) {
+        const userEntity = await this.userRepository.getUser({ phone });
+        console.log(userEntity, userEntity.check());
+        if (userEntity.check()) {
+            return userEntity;
+        }
+
+        const username = await this.generateUsernameService.generate();
+
+        return await this.userRepository.create(username, username, phone);
     }
 
     async createGuest() {
         const username = await this.generateUsernameService.generate();
-        return await this.create(username);
+
+        return await this.userRepository.create(username, username, "");
     }
 
     async getUser(userId: UniqueId) {
-        return await this.userRepository.getUser(userId);
+        return await this.userRepository.getUser({ _id: userId });
     }
 
     async updateUser(userId: UniqueId, updateProps: any) {

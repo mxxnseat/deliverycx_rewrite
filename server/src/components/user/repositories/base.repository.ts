@@ -1,7 +1,7 @@
 import { UserEntity } from "../entities/user.entity";
 import { Model } from "mongoose";
 import { UserClass } from "../../../database/models/user.model";
-import { IUserRepository } from "./interface.repository";
+import { IFindProps, IUserRepository } from "./interface.repository";
 import { Inject, Injectable } from "@nestjs/common";
 import { IUpdateProps } from "../interfaces/update.interface";
 
@@ -23,16 +23,37 @@ export class UserRepository implements IUserRepository {
             user._id,
             user.username,
             user.name,
-            user.phone
+            user.phone,
+            null,
+            null
         );
 
         return result;
     }
 
-    async getUser(userId: UniqueId) {
-        const result = await this.userModel.findOne({ _id: userId });
+    async getUser(findProps: IFindProps) {
+        const result = await this.userModel.findOne({
+            $or: [
+                {
+                    _id: findProps._id
+                },
+                {
+                    phone: findProps.phone
+                },
+                {
+                    username: findProps.username
+                }
+            ]
+        });
 
-        return new UserEntity(result?._id, result?.username);
+        return new UserEntity(
+            result?._id,
+            result?.username,
+            result?.name,
+            result?.phone,
+            null,
+            result?.selectedOrganization?.toString() || null
+        );
     }
 
     async updateUser(userId: UniqueId, updateProps: IUpdateProps) {
@@ -49,7 +70,7 @@ export class UserRepository implements IUserRepository {
             user.name,
             user.phone,
             null,
-            user.selectedOrganization?.toString()
+            user.selectedOrganization?.toString() || null
         );
     }
 }
