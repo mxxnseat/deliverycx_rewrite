@@ -36,6 +36,9 @@ export class UserController {
         private readonly RegisterService: RegisterService
     ) {}
 
+    @ApiResponse({
+        status: 204
+    })
     @Post("sendCode")
     async sendCode(@Res() response: Response, @Body() body: SendCodeDTO) {
         await this.SendCodeService.sendSMSCode(body.phone);
@@ -43,6 +46,10 @@ export class UserController {
         response.status(204).json();
     }
 
+    @ApiResponse({
+        status: 200,
+        type: UserEntity
+    })
     @Post("register")
     async register(
         @Session() session: Record<string, string>,
