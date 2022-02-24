@@ -20,6 +20,13 @@ class NestedOrderClass {
 
     @prop({ type: Number })
     price!: number;
+
+    @prop({ type: String })
+    address!: string;
+
+    @prop({ type: String })
+    organization!: string;
+
     @prop({ type: String })
     orderNum!: string;
 }

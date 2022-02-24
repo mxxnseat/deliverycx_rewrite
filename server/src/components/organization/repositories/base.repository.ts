@@ -12,10 +12,7 @@ import { PaymentInfoEntity } from "../entities/payments.entity";
 import { PaymentServiceDataClass } from "src/database/models/payment.model";
 
 @Injectable()
-export class OrganizationRepository
-    extends BaseRepository<Array<OrganizationClass>, Array<OrganizationEntity>>
-    implements IOrganizationRepository
-{
+export class OrganizationRepository implements IOrganizationRepository {
     constructor(
         @Inject("Organization")
         private readonly OrganizationModel: Model<OrganizationClass>,
@@ -24,8 +21,14 @@ export class OrganizationRepository
         private readonly RecvisitesModel: Model<RecvisitesClass>,
         @Inject("PaymentServiceData")
         private readonly PaymentServiceDataModel: Model<PaymentServiceDataClass>
-    ) {
-        super(OrganizationModel, organizationMapper, "city", "city");
+    ) {}
+
+    public async getAll(cityId: string) {
+        const organiztionDocs = await this.OrganizationModel.find({
+            $and: [{ city: cityId }, { isHidden: false }]
+        }).populate("city");
+
+        return organizationMapper(organiztionDocs);
     }
 
     public async getOneByGUID(id: UniqueId): Promise<OrganizationEntity> {

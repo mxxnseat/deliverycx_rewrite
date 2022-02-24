@@ -38,6 +38,9 @@ export class OrganizationClass {
 
     @prop()
     public workTime!: string;
+
+    @prop({ type: Boolean, default: false, required: true })
+    isHidden: boolean;
 }
 
 export const OrganizationSchema = buildSchema(OrganizationClass);

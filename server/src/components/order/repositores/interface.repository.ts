@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { OrderDTO } from "../dto/order.dto";
 
 export interface IOrderItem {
     product: UniqueId;
@@ -10,6 +11,7 @@ export abstract class IOrderRepository {
         userId: UniqueId,
         cartPrice: number,
         orderNumber: string,
-        orderItems: Array<IOrderItem>
+        orderItems: Array<IOrderItem>,
+        orderInfo: OrderDTO
     ): Promise<void>;
 }

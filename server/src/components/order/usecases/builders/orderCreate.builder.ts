@@ -75,7 +75,8 @@ export class OrderCreateBuilder {
             user,
             deliveryPrices.totalPrice,
             orderNumber,
-            orderItems
+            orderItems,
+            orderInfo
         );
 
         this._state.orderNumber = orderNumber;
