@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { adapterSelector } from "servises/redux/selectors/selectors";
 import { setAdress } from "servises/redux/slice/cartSlice";
 
-export function useCartMap(this: any) {
+export function useCartMap(this: any,close:any) {
     const dispatch = useDispatch();
     const pointCords = adapterSelector.createSelectors(
         (selector) => selector.point,
@@ -143,8 +143,8 @@ export function useCartMap(this: any) {
             !stateReduceMap.disclaimer
         ) {
             dispatch(setAdress(stateReduceMap.valueMap));
-            
             onMapTyping().setValueMap("");
+            close()
         }
     };
 

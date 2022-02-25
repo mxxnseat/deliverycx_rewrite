@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { CartFormMetods } from "application/components/core/Cart/HOC_CartForm/CartMetods";
 
 const initState = {
-  paymentMetod: null,
+  paymentMetod: CartFormMetods.paymentsMetod[0],
   paymentOrder:null,
   paymentReady:true
 }
@@ -13,7 +13,7 @@ const bankCardSlice = createSlice({
   reducers: {
     actionSelectPayment: (state, action) => {
       
-      if (action.payload.id ) {
+      if (action.payload.id === CartFormMetods.paymentsMetod[1].id) {
         state.paymentMetod = action.payload;
         state.paymentReady = false
       }else{

@@ -5,7 +5,8 @@ export interface IBankCard {
 }
 export interface IPayment{
   id: string,
-  value: string
+  value: string,
+  icon:string
 }
 type IpaymentOrder = {
   cardNumber:string,

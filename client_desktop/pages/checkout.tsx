@@ -1,3 +1,5 @@
+import BasketLayout from "application/components/core/Cart/BasketLayout";
+import CheckOutLayout from "application/components/core/Cart/CheckoutLayout";
 import { NextPage } from "next";
 
 const CheckOut: NextPage = () => {
@@ -17,10 +19,10 @@ const CheckOut: NextPage = () => {
       </div>
       <div className="cart_page-container">
         <div className="cart_page__order">
-          
+          <CheckOutLayout />
         </div>
         <div className="cart_page__basked">
-
+          <BasketLayout />
         </div>
       </div>
     </div>

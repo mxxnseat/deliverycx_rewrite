@@ -1,3 +1,4 @@
+import Link from "next/link"
 import CartList from "../../HOC_Basket/view/CartList"
 import CartTotal from "../../HOC_Basket/view/CartTotal"
 
@@ -9,8 +10,9 @@ const CartSmallList = ({onClose}:any) => {
 				<img src="/images/icon/close.png" alt="" />
 			</div>
       
-			<CartList />
+			<CartList empty={() => onClose()} />
 			<CartTotal />
+      <a className="cart__order-btn btn" href="/checkout">Оформить заказ </a>
 		</div>
 	</div>
   )

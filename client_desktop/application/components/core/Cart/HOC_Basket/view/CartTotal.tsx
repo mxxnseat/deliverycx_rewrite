@@ -1,4 +1,5 @@
 import { adapterSelector } from 'servises/redux/selectors/selectors';
+import CartPriceInfo from '../../Presentation/CartPriceInfo';
 
 const CartTotal = () => {
   const {totalPrice} = adapterSelector.useSelectors(selector => selector.cart)
@@ -6,15 +7,15 @@ const CartTotal = () => {
     <div className="cart_bottom">
 				
 				<div className="cart-info">
-					<div className="cart-info__box">
-						
+					<div className="cart-info__box price_info">
+						<CartPriceInfo />
 					</div>
 					<div className="cart-info__box cart-info__box--end">
 						<span className="cart-info--total">Итого:</span>
 						<span className="cart-info--price">{totalPrice} ₽</span>
 					</div>
 				</div>
-				<button className="fild_btn">Оформить заказ</button>
+				
 			</div>
   )
 }

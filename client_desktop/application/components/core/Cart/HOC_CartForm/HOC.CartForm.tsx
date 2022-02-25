@@ -18,6 +18,8 @@ import { FormBuilder } from "application/components/common/Forms";
 
 import React from "react";
 import { CartFormMetods } from "./CartMetods";
+import Modals from "application/components/common/Modals/Modals";
+import CartYmap from "../Presentation/CartYmap";
 
 
 type IProps = {
@@ -33,27 +35,19 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
 
   const dispatch = useDispatch()
   
-  const { city } = useSelector((state: RootState) => state.location.point);
-  const {address:selectAddress,orderError,orderNumber,loadingOrder,orderType} = useSelector((state: RootState) => state.cart);
-
-  const initialValues: IInitialValues = {
-    comment: "",
-    address: "",
-    flat: "",
-    intercom: "",
-    entrance: "",
-    floor: "",
-    name: "",
-    phone: "",
-    notCall: false,
-  };
-  
-
-
   const useCaseForm = adapterComponentUseCase(useCartForm,paths)
-  const {paymentMetod,paymentOrder } = useCaseForm.data
-  const { paymentReady } = useCaseForm.status
-  
+  const {
+    city,
+    selectAddress,
+    orderError,
+    loadingOrder,
+    orderType,
+    initialValues,
+    paymentMetod,
+    showMap
+  } = useCaseForm.data
+  const {setShowMap} = useCaseForm.handlers
+
   const formik = useFormik({
     initialValues,
     validationSchema: schema(orderType),
@@ -62,7 +56,6 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
         {
           ...values,
           payment_method: paymentMetod.id,
-          paymentOrderCard:paymentOrder,
           city: city.name,
           orderType
         },
@@ -92,15 +85,11 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
   const formWrapper = new FormBuilder(formik,useCaseForm);
   
   
-  const debounceClearHandler = debounce(() => {
-    dispatch(fetchDeleteCart()) 
-  }, 400);
+  
 
   useEffect(() => {
     selectAddress && formik.setFieldValue("address", selectAddress)
-    orderError.status && dispatch(setErrors({errors:{}}))
-    
-  },[])
+  },[selectAddress])
   
 
   return (
@@ -109,6 +98,12 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
         <div className="cart__form">
           {
             formWrapper.getInitinal(builder)
+          }
+          {
+            showMap &&
+            <Modals onClose={() => setShowMap(false)}>
+              <CartYmap close={() => setShowMap(false)} />
+            </Modals>
           }
           
           <textarea
@@ -137,23 +132,22 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
           )}
 
           <div className="row align-center form__create">
-            <div className="clear" onClick={debounceClearHandler}>
-              <img
-                src={require("assets/i/clear_cart.svg").default}
-                alt="Очистить корзину"
-              />
-            </div>
-            <button
+            
+            
+          </div>
+          
+          
+        </div>
+        <div className="cart__order-btnbox">
+          <button
               type="submit"
               className="cart__order-btn btn"
               disabled={loadingOrder}
             >
               Заказать
             </button>
-          </div>
-          
-          
         </div>
+        
       </form>
     </FormikProvider>
   );

@@ -12,23 +12,15 @@ interface IProps{
 }
 
 const FormFieldWrapper: FC<IProps> = ({ placeholderIco, placeholderValue, children, isValid, error,errorValue,addfild }) => {
-    const validCN = cn("form__field-wrapper", {
+    const validCN = cn("fild__box", {
         "not-valid": isValid !== undefined ? isValid : false,
         "error": error !== undefined ? error : false,
         "addfild": addfild
     });
     return (
         <div className={validCN}>
-            <div className="row">
-                <div className="form__field-wrapper__placeholder">
-                    <div className="form__field-wrapper__placeholder__ico">
-                        <img src={placeholderIco} alt="" />
-                    </div>
-                    <div className="form__field-wrapper__placeholder__title">{placeholderValue}</div>
-                </div>
-
-                {children}
-            </div>
+          <div className="fild-lable">{placeholderValue}</div>
+          {children}
             {
                 error && 
                 <div className="form__field-wrapper__error">

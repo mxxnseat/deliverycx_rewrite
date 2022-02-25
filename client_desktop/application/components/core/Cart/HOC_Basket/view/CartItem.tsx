@@ -124,6 +124,9 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
 										<img src="/images/icon/delete.png" alt="" />
 									</div>
             </section>
+            
+							</div>
+						</div>
             {error && 
                 <div className="cart__item__validate">
                     {
@@ -131,9 +134,6 @@ const CartItem: FC<IProps> = ({ product, errorSchema }) => {
                     }
                 </div>
             }
-							</div>
-						</div>
-            
         </div>
     );
 };

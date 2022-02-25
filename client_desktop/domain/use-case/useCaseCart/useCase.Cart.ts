@@ -1,11 +1,12 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { cartSelector } from "servises/redux/slice/cartSlice";
+import { cartSelector, fetchDeleteCart } from "servises/redux/slice/cartSlice";
 import cn from "classnames";
 import { useOutside } from "application/hooks/useOutside";
 import { useDeepCompareEffect } from "application/hooks/useDeepCompareEffect";
 import { ROUTE_APP } from "application/contstans/route.const";
 import { RootState } from "servises/redux/createStore";
+import debounce from "lodash.debounce";
 
 
 export function useCartSmall(this: any) {
@@ -49,18 +50,26 @@ export function useCartSmallButton(this: any) {
 
 
 
-export function useCartItems(this: any) {
+export function useCartItems(this: any,empty:any) {
+  const dispatch = useDispatch()
     const cartList = useSelector(cartSelector.selectAll);
     const orderError = useSelector((state: RootState) => state.cart.orderError);
-    useEffect(() => {
+  useEffect(() => {
+      console.log(cartList);
         if (cartList.length === 0) {
-            
+          //empty()
         }
     }, [cartList]);
+
+    const debounceClearHandler = debounce(() => {
+      dispatch(fetchDeleteCart()) 
+    }, 400);
 
     this.data({
         cartList,
         orderError: orderError
     });
-    this.handlers({});
+  this.handlers({
+    debounceClearHandler
+    });
 }

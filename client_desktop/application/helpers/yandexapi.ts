@@ -1,5 +1,7 @@
+declare var window: any
 declare const ymaps: any;
 function getGeoLocation() {
+    
     const ymaps = (window.ymaps as any);
 
     if(ymaps.geolocation){

@@ -11,6 +11,7 @@ import { CATEGORIES_API_REDUCER_KEY, RTKCategories } from 'servises/repository/R
 import ShopSlice from './slice/shopSlice';
 import { RTKShop, SHOP_API_REDUCER_KEY } from 'servises/repository/RTK/RTKShop';
 import cartSlice, { fetchAllCart } from './slice/cartSlice';
+import bankCardSlice from './slice/bankCardSlice';
 
 
 
@@ -23,7 +24,7 @@ const persistConfig = {
     CATEGORIES_API_REDUCER_KEY,
     SHOP_API_REDUCER_KEY,
     ShopSlice.name,
-    cartSlice.name
+    bankCardSlice.name
   ],
   transforms: [
     createTransform(
@@ -35,7 +36,8 @@ const persistConfig = {
       },
       {
         whitelist: [
-          locationSlice.name
+          locationSlice.name,
+          cartSlice.name,
         ]
       }
     )
@@ -49,7 +51,8 @@ const createRootReducer = combineReducers({
   [RTKShop.reducerPath]: RTKShop.reducer,
   [locationSlice.name]: locationSlice.reducer,
   [ShopSlice.name]: ShopSlice.reducer,
-  [cartSlice.name]:cartSlice.reducer
+  [cartSlice.name]: cartSlice.reducer,
+  [bankCardSlice.name]:bankCardSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, createRootReducer);

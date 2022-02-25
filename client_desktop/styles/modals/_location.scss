@@ -190,7 +190,48 @@
 	height: 400px;
 	border-radius: 25px;
 	overflow: hidden;
+	.welcome{
+		background-color: #fff;
+		width: 100%;
+		padding-bottom: 15px;
+	}
+	.welcome__header{
+		display: flex;
+		justify-content: space-between;
+		.serch_city{
+			width: 70%;
+			margin-top: 0;
+		}
+		
+		.mapsPopup__value{
+			width: 100%;
+			line-height: 48px;
+		}
+		.mapsPopup__button{
+			width: 25%;
+			height: 50px;
+			line-height: 50px;
+			color: #fff;
+			background-color: #8d191d;
+			cursor: pointer;
+			border-radius: 25px;
+			font-size: 15px;
+			font-weight: 500;
+			text-align: center;
+			&:hover{
+				opacity: 0.9;
+			}
+		}
+	}
+	.disclaimer{
+		color:#FF0000;
+		font-weight: 300;
+		font-size: 11px;
+		margin-top: 10px;
+		margin-left: 15px;
+	}
 }
+
 
 .welcome__select-adress{
 	position: absolute;

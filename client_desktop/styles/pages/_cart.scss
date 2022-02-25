@@ -21,11 +21,29 @@
 	display: flex;
 	justify-content: space-between;
 	margin-top: 50px;
+	height: 600px;
 	.cart_page__order{
 		width: 48%;
 	}
 	.cart_page__basked{
 		width: 48%;
+	}
+	.cart__form{
+		height: 460px;
+		padding-right: 10px;
+		padding-bottom:20px;
+		overflow: auto;
+	}
+	.cart__order-btnbox{
+		background-color: #fff;
+		padding: 5px 0;
+	}
+	.server-error{
+		background-color: rgba(255,0,0,.1);
+		border: 1px solid red;
+		padding: 10px 5px;
+		color: red;
+		font-size:11px;
 	}
 }
 // оформление

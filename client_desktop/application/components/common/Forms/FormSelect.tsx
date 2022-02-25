@@ -41,7 +41,7 @@ const FormSelect:FC<IProps> = ({ options, selected, setter }) => {
                 }
             </div>
             <div className={dynamycCN("form__field__open")}>
-                <img src={require("assets/i/angle.svg").default} alt="стрелка" />
+                <img src="/images/i/angle.svg" alt="стрелка" />
             </div>
         </div>
     )

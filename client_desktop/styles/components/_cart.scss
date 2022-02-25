@@ -13,14 +13,36 @@
 	.fild_btn{
 		margin-top: 20px;
 	}
+	
 }
+.cart__memo{
+	margin-top: 15px;
+	font-size: 11px;
+	color:#666666;
+	font-weight: 300;
+	width: 100%;
+	.cart__memo__banner{
+		font-size: 14px;
+		
+		color: #333;
+	}
+	.free-deliv{
+		font-weight: 500;
+	}
+	.price{
+		color:green;
+	}
+}
+
 .cart_head{
 	height: 80%;
 	overflow: hidden;
 }
 .cart_bottom{
+	
 	background: #fff;
 	border-top: 1px solid #EFEFEF;
+	margin-bottom: 15px;
 }
 
 .cart_title-box{
@@ -66,17 +88,19 @@
 }
 .cart_item{
 	display: flex;
-	padding: 20px 0;
+	flex-wrap: wrap;
+	padding: 20px 5px;
 	border-bottom: 1px solid #CCCCCC;
 	.cart_item-img{
+		width: 90px;
 		margin-right: 10px;
 		img{
-			width: 96px;
-			height: 96px;
+			width: 75px;
+			height: 75px;
 		}
 	}
 	.cart_item__container{
-		width: 100%;
+		width: calc(100% - 100px);
 		.cart_item-box{
 			display: flex;
 			justify-content: space-between;
@@ -115,6 +139,59 @@
 		}
 	}
 }
+.cart_item.error{
+	background-color: rgba(255,0,0,.1);
+	border-bottom: 1px solid red;
+	.cart__item__validate{
+		font-size: 11px;
+		color: red;
+	}
+}
+
+.cart__order-btn.btn{
+	width: 100%;
+	background: #8D191D;
+	border-radius: 100px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	color: #fff;
+	font-size: 17px;
+	font-weight: 700;
+	border: none;
+	transition: all 0.3s;
+	cursor: pointer;
+	&:hover{
+		opacity: 0.9;
+	}
+}
+.fild_btn-disabled{
+	opacity: 0.5;
+}
+
+.cart__choice {
+	padding: 6px;
+	border-radius: 25px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+	margin-top: 28px;
+	background-color:#efefef;
+	margin: 0 25px;
+	margin-bottom: 35px;
+	&__item {
+			flex: 1;
+			cursor: pointer;
+			padding: 13px 0;
+			text-align: center;
+			color: #666;
+			border-radius: 25px;
+			&.active {
+					background-color: #8d191d;
+					color: #fff;
+			}
+	}
+}
 .cart-info{
 	display: flex;
 	width: 100%;
@@ -129,6 +206,11 @@
 			display: block;
 			margin-top: 10px;
 		}
+	}
+	.price_info{
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
 	}
 	.cart-info--infotime{
 		color: #132A3E;

@@ -8,14 +8,18 @@
 		width: 45%;
 	}
 }
-.fild__grid-foo{
+.adress_fild{
+	margin-bottom: 35px;
+}
+.from__box-adress{
 	display: flex;
 	justify-content: space-between;
-	section{
+	margin-top: -15px;
+	.form__field-wrapper__input{
 		width: 22%;
 	}
 }
-.fild{
+.form__field-wrapper__input,.adress_fild__address{
 	width: 100%;
 	height: 50px;
 	background: #FFFFFF;
@@ -25,13 +29,41 @@
 	font-size: 13px;
 	font-feature-settings: 'liga' off;
 	color: #333333;
-	line-height: 40px;
+	line-height: 50px;
 	padding:0 15px;
+}
+.form__textarea{
+	width: 100%;
+	height: 120px;
+	background: #FFFFFF;
+	border: 1px solid #CCCCCC;
+	box-sizing: border-box;
+	border-radius: 25px;
+	font-size: 13px;
+	font-feature-settings: 'liga' off;
+	color: #333333;
+	line-height: 50px;
+	padding:0 15px;
+}
+.adress_fild__address{
+	cursor: pointer;
 }
 .fild-lable{
 	font-size: 17px;
 	color: #333333;
 	margin-bottom: 15px;
+	margin-left: 15px;
+}
+.not-valid.error{
+	.form__field-wrapper__input,.adress_fild__address{
+		border-color: red;
+	}
+}
+.form__field-wrapper__error{
+	margin-top: 10px;
+	margin-left: 15px;
+	font-size: 11px;
+	color: red;
 }
 .fild-short{
 	margin-top: 15px;
@@ -52,24 +84,4 @@
 		font-size: 15px;
 		color: #8D191D;
 	}
-}
-.fild_btn{
-	width: 100%;
-	background: #8D191D;
-	border-radius: 100px;
-	height: 50px;
-	line-height: 50px;
-	text-align: center;
-	color: #fff;
-	font-size: 15px;
-	border: none;
-	transition: all 0.3s;
-	cursor: pointer;
-	&:hover{
-		background-color:  #FDC935;
-		color: #fff;
-	}
-}
-.fild_btn-disabled{
-	opacity: 0.5;
 }
