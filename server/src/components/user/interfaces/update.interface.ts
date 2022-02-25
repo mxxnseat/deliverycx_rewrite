@@ -5,5 +5,6 @@ export interface IUpdateProps {
         street: string;
         home: number;
     };
+    email?: string;
     organizationId?: string;
 }

@@ -33,4 +33,7 @@ export class UpdateDTO {
         home: number;
         street: string;
     };
+
+    @ApiProperty()
+    email?: string;
 }

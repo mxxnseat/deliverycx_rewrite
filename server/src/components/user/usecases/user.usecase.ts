@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
 import { UserEntity } from "../entities/user.entity";
+import { IUpdateProps } from "../interfaces/update.interface";
 import { IUserRepository } from "../repositories/interface.repository";
 import { IGuestGenerateService } from "../services/guestUsername.stub";
 
@@ -34,10 +35,13 @@ export class UserUsecase {
         return await this.userRepository.getUser({ _id: userId });
     }
 
-    async updateUser(userId: UniqueId, updateProps: any) {
+    async updateUser(userId: UniqueId, updateProps: IUpdateProps) {
         const user = await this.userRepository.updateUser(userId, updateProps);
 
-        if (user.getOrganization !== updateProps.organizationId) {
+        if (
+            updateProps.organizationId &&
+            user.getOrganization !== updateProps.organizationId
+        ) {
             await this.favoriteRepository.clear(userId);
         }
     }

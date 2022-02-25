@@ -24,6 +24,8 @@ import { OrderCheckBuilder } from "src/components/order/usecases/builders/orderC
 import { BotService } from "src/services/duplicateBot/bot.service";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { ClientsModule, Transport } from "@nestjs/microservices";
+import { userProviders } from "src/components/user/providers/user.provider";
+import { favoriteProviders } from "src/components/favorites/providers/favorite.provider";
 
 @Module({
     imports: [IikoModule, RedisModule],
@@ -34,7 +36,6 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
             provide: IDeliveryService,
             useClass: DeliveryService
         },
-        OrderUsecase,
         {
             provide: IOrderRepository,
             useClass: OrderRepository
@@ -67,9 +68,15 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
             provide: IBotService,
             useClass: BotService
         },
+        {
+            provide: OrderUsecase,
+            useClass: OrderUsecase
+        },
         paymasterProvider,
         BotAxiosProvider,
+        ...userProviders,
         ...productProviders,
+        ...favoriteProviders,
         ...cartProviders,
         ...orderProviders
     ]

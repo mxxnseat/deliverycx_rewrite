@@ -18,6 +18,8 @@ import { UserEntity } from "../entities/user.entity";
 import { SendCodeService } from "../services/sendCode/sendCode.service";
 import { RegisterDTO, SendCodeDTO, UpdateDTO } from "../dto";
 import { RegisterService } from "../services/register/register.service";
+import { UpdateOptionsService } from "../services/updateUserOptions/updateOptions.service";
+import { InjectTokenEnum } from "../providers/constants";
 
 @ApiTags("User endpoints")
 @Controller("user")
@@ -29,10 +31,13 @@ import { RegisterService } from "../services/register/register.service";
 export class UserController {
     constructor(
         private readonly userUsecase: UserUsecase,
-        @Inject("SEND_CODE_SERVICE")
+        @Inject(InjectTokenEnum.SEND_CODE_SERVICE)
         private readonly SendCodeService: SendCodeService,
 
-        @Inject("REGISTER_SERVICE")
+        @Inject(InjectTokenEnum.UPDATE_OPTIONS_SERVICE)
+        private readonly UpdateOptionsService: UpdateOptionsService,
+
+        @Inject(InjectTokenEnum.REGISTER_SERVICE)
         private readonly RegisterService: RegisterService
     ) {}
 
@@ -98,7 +103,7 @@ export class UserController {
         @Body() body: UpdateDTO,
         @Res() response: Response
     ) {
-        await this.userUsecase.updateUser(session.user, body);
+        await this.UpdateOptionsService.update(session.user, body);
 
         response.status(201).json();
     }

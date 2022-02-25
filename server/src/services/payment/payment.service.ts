@@ -110,7 +110,7 @@ export class PaymentService extends IPaymentService {
         const orderEntity = await this.orderUsecase.create(userId, body);
         this.redis.set(
             orderHash,
-            orderEntity.getNumber.toString(),
+            orderEntity.getNumber?.toString() || "0000",
             "EX",
             60 * 10
         );

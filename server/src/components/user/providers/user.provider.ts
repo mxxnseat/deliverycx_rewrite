@@ -1,22 +1,51 @@
 import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection, connect } from "mongoose";
+import { FavoriteRepository } from "src/components/favorites/repositories/base.repository";
+import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
 import { UserSchema } from "../../../database/models/user.model";
+import { UserRepository } from "../repositories/base.repository";
+import { IUserRepository } from "../repositories/interface.repository";
+import { GenerateUsernameService } from "../services/guestUsername.service";
+import { IGuestGenerateService } from "../services/guestUsername.stub";
 import { RegisterService } from "../services/register/register.service";
 import { SendCodeService } from "../services/sendCode/sendCode.service";
+import { UpdateOptionsService } from "../services/updateUserOptions/updateOptions.service";
+import { UserUsecase } from "../usecases/user.usecase";
+import { InjectTokenEnum } from "./constants";
 
 export const userProviders = [
     {
-        provide: "User",
+        provide: InjectTokenEnum.USER,
         useFactory: (connection: Connection) =>
             connection.model("User", UserSchema),
         inject: [getConnectionToken("DatabaseConnection")]
     },
     {
-        provide: "SEND_CODE_SERVICE",
+        provide: InjectTokenEnum.SEND_CODE_SERVICE,
         useClass: SendCodeService
     },
     {
-        provide: "REGISTER_SERVICE",
+        provide: InjectTokenEnum.REGISTER_SERVICE,
         useClass: RegisterService
+    },
+    {
+        provide: InjectTokenEnum.UPDATE_OPTIONS_SERVICE,
+        useClass: UpdateOptionsService
+    },
+    {
+        provide: UserUsecase,
+        useClass: UserUsecase
+    },
+    {
+        provide: IUserRepository,
+        useClass: UserRepository
+    },
+    {
+        provide: IFavoriteRepository,
+        useClass: FavoriteRepository
+    },
+    {
+        provide: IGuestGenerateService,
+        useClass: GenerateUsernameService
     }
 ];

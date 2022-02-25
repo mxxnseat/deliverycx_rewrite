@@ -5,12 +5,21 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { INestApplication } from "@nestjs/common";
 import { UserModule } from "src/ioc/user.module";
+import { UpdateOptionsService } from "../services/updateUserOptions/updateOptions.service";
+import { InjectTokenEnum } from "../providers/constants";
+import { UpdateDTO } from "../dto";
+import { Model, Types } from "mongoose";
+import { UserClass } from "src/database/models/user.model";
+import { RedisModule } from "src/modules/redis/redis.module";
 import { RedisClient } from "redis";
 import { REDIS } from "src/modules/redis/redis.constants";
 
 describe("User Module", () => {
     let app: INestApplication;
     let mongoConnection: MongoMemoryServer;
+    let updateOptionsService: UpdateOptionsService;
+    let id: Types.ObjectId;
+    let userModel: Model<UserClass>;
     let redis: RedisClient;
 
     beforeAll(async () => {
@@ -30,7 +39,19 @@ describe("User Module", () => {
             ]
         }).compile();
 
+        updateOptionsService = moduleRef.get<UpdateOptionsService>(
+            InjectTokenEnum.UPDATE_OPTIONS_SERVICE
+        );
+
         redis = moduleRef.get<RedisClient>(REDIS);
+        userModel = moduleRef.get<Model<UserClass>>(InjectTokenEnum.USER);
+
+        const userDoc = await userModel.create({
+            username: "test",
+            phone: "+66666666"
+        });
+
+        id = userDoc._id;
 
         app = moduleRef.createNestApplication();
         app.use(
@@ -45,21 +66,28 @@ describe("User Module", () => {
 
     describe("User creation test", () => {
         it("should return created user", (done) => {
-            request(app.getHttpServer())
-                .post("/user/create")
-                .expect(200)
-                .then((res) => {
-                    expect(res.body).toHaveProperty("id");
-                    expect(res.body).toHaveProperty("username");
+            const data: UpdateDTO = {
+                email: "test@test.test",
+                name: "test",
+                phone: "+777777777777"
+            };
 
-                    done();
-                });
+            updateOptionsService.update(id.toString(), data).then(async () => {
+                const userDoc2 = await userModel.findOne({ _id: id });
+
+                expect(userDoc2.email).toBe(data.email);
+                expect(userDoc2.name).toBe(data.name);
+                expect(userDoc2.phone).toBe("+66666666");
+
+                done();
+            });
         });
     });
 
     afterAll(async () => {
         await mongoConnection.stop();
         await app.close();
+
         redis.quit();
     });
 });

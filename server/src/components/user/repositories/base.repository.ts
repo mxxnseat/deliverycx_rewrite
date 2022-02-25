@@ -59,18 +59,16 @@ export class UserRepository implements IUserRepository {
     async updateUser(userId: UniqueId, updateProps: IUpdateProps) {
         const user = await this.userModel.findByIdAndUpdate(userId, {
             selectedOrganization: updateProps.organizationId,
-            name: updateProps.name,
-            phone: updateProps.phone,
-            address: { ...updateProps.address }
+            ...updateProps
         });
 
         return new UserEntity(
-            user._id,
-            user.username,
-            user.name,
-            user.phone,
+            user?._id,
+            user?.username,
+            user?.name,
+            user?.phone,
             null,
-            user.selectedOrganization?.toString() || null
+            user?.selectedOrganization?.toString() || null
         );
     }
 }

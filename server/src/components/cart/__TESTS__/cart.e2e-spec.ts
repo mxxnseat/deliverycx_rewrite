@@ -18,11 +18,14 @@ import {
     cartSecondUserStub
 } from "./stubs/cart.stub";
 import { CartClass } from "src/database/models/cart.model";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 describe("Cart Module", () => {
     let app: INestApplication;
     let mongo: MongoMemoryServer;
     let cartModel: Model<CartClass>;
+    let redis: RedisClient;
 
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -45,7 +48,7 @@ describe("Cart Module", () => {
         const productModel = moduleRef.get<Model<ProductClass>>("Product");
         const userModel = moduleRef.get<Model<UserClass>>("User");
         cartModel = moduleRef.get<Model<CartClass>>("Cart");
-
+        redis = moduleRef.get<RedisClient>(REDIS);
         await productModel.insertMany(productsStub);
         await userModel.insertMany([userStub]);
         await cartModel.insertMany([cartFirstUserStub, cartSecondUserStub]);
@@ -63,6 +66,7 @@ describe("Cart Module", () => {
     afterEach(async () => {
         await app.close();
         await mongo.stop();
+        redis.quit();
     });
 
     describe("Cart Actions", () => {

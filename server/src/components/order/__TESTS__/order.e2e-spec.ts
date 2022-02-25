@@ -9,6 +9,9 @@ import { Model } from "mongoose";
 import { LoggerModule } from "nestjs-pino";
 import { RedisClient } from "redis";
 import { cartProviders } from "src/components/cart/providers/cart.provider";
+import { favoriteProviders } from "src/components/favorites/providers/favorite.provider";
+import { FavoriteRepository } from "src/components/favorites/repositories/base.repository";
+import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
 import { organizationProviders } from "src/components/organization/providers/organization.provider";
 import { productProviders } from "src/components/product/providers/product.provider";
 import { userProviders } from "src/components/user/providers/user.provider";
@@ -19,7 +22,9 @@ import { ProductClass } from "src/database/models/product.model";
 import { UserClass } from "src/database/models/user.model";
 import { BaseErrorsFilter } from "src/filters/base.filter";
 import { OrderModule } from "src/ioc/order.module";
+import { UserModule } from "src/ioc/user.module";
 import { REDIS } from "src/modules/redis/redis.constants";
+import { RedisModule } from "src/modules/redis/redis.module";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { BotService } from "src/services/duplicateBot/bot.service";
 import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
@@ -54,6 +59,8 @@ describe("Order Module", () => {
     beforeEach(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [
+                RedisModule,
+                UserModule,
                 MongooseModule.forRootAsync({
                     useFactory: async () => {
                         mongo = await MongoMemoryServer.create();
@@ -75,6 +82,7 @@ describe("Order Module", () => {
                 ...productProviders,
                 ...userProviders,
                 ...organizationProviders,
+                ...favoriteProviders,
                 {
                     provide: APP_FILTER,
                     useClass: BaseErrorsFilter
@@ -139,17 +147,16 @@ describe("Order Module", () => {
     afterEach(async () => {
         await app.close();
         await mongo.stop();
+        redis.quit();
     });
 
-    afterAll(async () => {
-        await new Promise((resolve, reject) => {
-            redis.quit(() => {
-                resolve(1);
-            });
-        });
-
-        await new Promise((resolve) => setImmediate(resolve));
-    });
+    // afterAll(async () => {
+    //     await new Promise((resolve, reject) => {
+    //         redis.quit(() => {
+    //             resolve(1);
+    //         });
+    //     });
+    // });
 
     describe("Order Tests", () => {
         it("should return /success/* uri", (done) => {

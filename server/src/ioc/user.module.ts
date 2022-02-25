@@ -14,17 +14,6 @@ import { RedisModule } from "src/modules/redis/redis.module";
 @Module({
     imports: [RedisModule],
     controllers: [UserController],
-    providers: [
-        GenerateUsernameService,
-        UserUsecase,
-        { provide: IUserRepository, useClass: UserRepository },
-        { provide: IFavoriteRepository, useClass: FavoriteRepository },
-        {
-            provide: IGuestGenerateService,
-            useClass: GenerateUsernameService
-        },
-        ...favoriteProviders,
-        ...userProviders
-    ]
+    providers: [...favoriteProviders, ...userProviders]
 })
 export class UserModule {}

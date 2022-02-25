@@ -34,6 +34,9 @@ export class UserClass {
     @prop()
     public phone!: string;
 
+    @prop()
+    public email!: string;
+
     @prop({ type: Types.ObjectId })
     public selectedOrganization: Types.ObjectId;
 
