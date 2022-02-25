@@ -4,7 +4,11 @@ import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { CartClass } from "src/database/models/cart.model";
 import { OrderClass } from "src/database/models/order.model";
 import { OrderDTO } from "../dto/order.dto";
-import { IOrderItem, IOrderRepository } from "./interface.repository";
+import {
+    IOrderInfo,
+    IOrderItem,
+    IOrderRepository
+} from "./interface.repository";
 
 @Injectable()
 export class OrderRepository implements IOrderRepository {
@@ -18,7 +22,7 @@ export class OrderRepository implements IOrderRepository {
         cartPrice: number,
         orderNumber: string,
         orderItems: Array<IOrderItem>,
-        orderInfo: OrderDTO
+        orderInfo: IOrderInfo
     ) {
         await this.orderModel.findOneAndUpdate(
             { user: userId },

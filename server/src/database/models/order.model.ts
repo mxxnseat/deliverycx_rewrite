@@ -3,7 +3,8 @@ import {
     getModelForClass,
     ModelOptions,
     prop,
-    Ref
+    Ref,
+    types
 } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { ProductClass } from "./product.model";
@@ -12,6 +13,9 @@ import { UserClass } from "./user.model";
 class NestedItemClass {
     @prop()
     product: UniqueId;
+
+    @prop()
+    amount: number;
 }
 
 class NestedOrderClass {
@@ -24,8 +28,8 @@ class NestedOrderClass {
     @prop({ type: String })
     address!: string;
 
-    @prop({ type: String })
-    organization!: string;
+    @prop({ type: Types.ObjectId })
+    organization!: Types.ObjectId;
 
     @prop({ type: String })
     orderNum!: string;

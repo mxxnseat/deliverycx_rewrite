@@ -54,7 +54,6 @@ export class OrderCreateBuilder {
             this._state.user,
             orderInfo.orderType
         );
-
         const { result: orderNumber, problem } = await this.orderService.create(
             cart,
             orderInfo,
@@ -67,16 +66,22 @@ export class OrderCreateBuilder {
 
         const orderItems = cart.map((cartEl) => {
             return {
-                product: cartEl.getProductId
+                product: cartEl.getProductId,
+                amount: cartEl.getAmount
             };
         });
+
+        const { city, home, street } = orderInfo.address;
 
         await this.orderRepository.create(
             user,
             deliveryPrices.totalPrice,
             orderNumber,
             orderItems,
-            orderInfo
+            {
+                organization: orderInfo.organization,
+                address: `${city}, ${street} ${home}`
+            }
         );
 
         this._state.orderNumber = orderNumber;

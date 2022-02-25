@@ -3,7 +3,10 @@ import { OrderDTO } from "../dto/order.dto";
 
 export interface IOrderItem {
     product: UniqueId;
+    amount: number;
 }
+
+export type IOrderInfo = Pick<OrderDTO, "organization"> & { address: string };
 
 @Injectable()
 export abstract class IOrderRepository {
@@ -12,6 +15,6 @@ export abstract class IOrderRepository {
         cartPrice: number,
         orderNumber: string,
         orderItems: Array<IOrderItem>,
-        orderInfo: OrderDTO
+        orderInfo: IOrderInfo
     ): Promise<void>;
 }
