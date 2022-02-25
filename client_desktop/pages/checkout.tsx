@@ -14,7 +14,9 @@ const CheckOut: NextPage = () => {
   				<h1 className="cart_page-title">Оформление заказа</h1>
   			</div>
   			<div className="header__right">
-  				<div className="back_shop">Вернуться в меню</div>
+          <a href="/" className="back_shop">
+          Вернуться в меню
+          </a>
   			</div>
       </div>
       <div className="cart_page-container">

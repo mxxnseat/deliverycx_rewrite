@@ -47,7 +47,7 @@ export const FormWrapper = (formik: any,usecase:any): IWrapper => {
       
       return (
         <div className="fild__box">
-					<div className="fild-lable">Адрес эл. почты для отправки чека</div>
+					<div className="fild-lable">Способ оплаты</div>
           <div className="payment_list">
             {
               paymentsMetod.map((metod: IPayment, index: number) => {

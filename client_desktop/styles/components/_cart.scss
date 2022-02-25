@@ -15,6 +15,7 @@
 	}
 	
 }
+
 .cart__memo{
 	margin-top: 15px;
 	font-size: 11px;
@@ -23,7 +24,7 @@
 	width: 100%;
 	.cart__memo__banner{
 		font-size: 14px;
-		
+		padding-bottom: 10px;
 		color: #333;
 	}
 	.free-deliv{
@@ -163,6 +164,9 @@
 	cursor: pointer;
 	&:hover{
 		opacity: 0.9;
+	}
+	&[disabled] {
+		filter: grayscale(1);
 	}
 }
 .fild_btn-disabled{

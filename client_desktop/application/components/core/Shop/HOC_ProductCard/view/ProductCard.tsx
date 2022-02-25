@@ -67,11 +67,15 @@ const ProductCard:FC<IProps> = ({product,onClose}) => {
                 </div>
     						<div className="price">{product.price}</div>
     					</div>
-    					<div className="product_card__count-option">
-    						<div className="count-option__remove"><img src="/images/icon/minus.svg" alt="минус"/></div>
-    						<div className="count-option__count">1</div>
-    						<div className="count-option__increment"><img src="/images/icon/plus.svg" alt="плюс"/></div>
-    					</div>
+                  {
+                    false &&
+                    <div className="product_card__count-option">
+      						<div className="count-option__remove"><img src="/images/icon/minus.svg" alt="минус"/></div>
+      						<div className="count-option__count">1</div>
+      						<div className="count-option__increment"><img src="/images/icon/plus.svg" alt="плюс"/></div>
+      					</div>
+              }
+    					
     					
               <AddToCart id={product.id} groupImage={product.categoryImage} _class={"product-card__add"}>
                 <img className="add_to" src="/images/icon/add_to-big.svg" alt=""/>

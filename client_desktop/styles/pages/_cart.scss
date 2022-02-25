@@ -1,9 +1,13 @@
 
 .cart_page-title{
-	font-size: 32px;
+	font-size: 27px;
 	color: #132A3E;
 	font-family: $manrope;
 	text-align: center;
+	margin-top: 10px;
+	span{
+		color: #8D191D;;
+	}
 }
 .back_shop{
 	background: #EFEFEF;
@@ -45,6 +49,10 @@
 		color: red;
 		font-size:11px;
 	}
+}
+.cart_page-container--center{
+	justify-content: center !important;
+	height: auto;
 }
 // оформление
 .cart_order-top{

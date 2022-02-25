@@ -55,9 +55,9 @@ export function useCartItems(this: any,empty:any) {
     const cartList = useSelector(cartSelector.selectAll);
     const orderError = useSelector((state: RootState) => state.cart.orderError);
   useEffect(() => {
-      console.log(cartList);
+      
         if (cartList.length === 0) {
-          //empty()
+          empty()
         }
     }, [cartList]);
 

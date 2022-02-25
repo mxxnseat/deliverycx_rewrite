@@ -96,27 +96,33 @@
 	margin-bottom: 20px;
 }
 // компания 
-.about_comp-title{
-	display: inline-block;
-	background: #DEDEDE;
-	border-radius: 100px;
-	height: 60px;
-	align-items: center;
-	line-height: 60px;
-	padding: 0px 30px;
-	color: #132A3E;
-	font-size: 21px;
-	a{
-		color: #8D191D;;
+
+
+// блоки перед футером
+.about_comp-switch{
+	display: flex;
+	background: #DFDFDF;
+	border-radius: 200px;
+	padding: 10px;
+	width: 430px;
+	.link_news{
+		display: block;
+		border-radius: 100px;
+		height: 50px;
+		align-items: center;
+		line-height: 50px;
+		padding: 0px 30px;
+		color: #666666 !important;
+		cursor: pointer;
+	}
+	.active{
+		background: #fff;
+		color: #132A3E;
+		a{
+			color: #8D191D;;
+		}
 	}
 }
-.link_news{
-	display: inline-block;
-	font-size: 21px;
-	color: #666666 !important;
-	margin-left: 5%;
-}
-// блоки перед футером
 .about-comp_grind{
 	display: flex;
 	justify-content: space-between;

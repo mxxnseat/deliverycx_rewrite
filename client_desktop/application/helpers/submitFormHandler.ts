@@ -35,7 +35,8 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
             paymentMethod: values.payment_method,
             ...values.paymentOrderCard
         };
-
+      console.log('val', val)  
+      
       const url = await store.dispatch(fetchOrderCart(val) as any);
       //'errors' in url.payload !== true
       if (url.payload && url.payload.redirectUrl) {
@@ -45,7 +46,7 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
         }
         
       }
-      /* */
+       /**/
     }).then(() => {
         meta.setSubmitting(false);
     });
