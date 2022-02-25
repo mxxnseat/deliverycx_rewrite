@@ -4,13 +4,13 @@ module.exports = {
     // See https://github.com/seppevs/migrate-mongo/#creating-a-new-migration-script
     // Example:
     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-
-    await db.collection("orders").updateMany({"orders.address": {$exists: false}}, {
+    
+    db.collection("orders").updateMany({}, {
       $set: {
-        "orders.$[].address": '',
-        "orders.$[].organization": ''
+        "orders.$[elem].address": '',
+        "orders.$[elem].organization": ''
     }
-    }, );
+    }, {arrayFilters: [{"elem.address": {$exists: false}}]});
   },
 
   async down(db, client) {
