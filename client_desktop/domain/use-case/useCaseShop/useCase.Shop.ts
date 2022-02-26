@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 import { useDispatch } from 'react-redux';
 import { setProductItem } from "servises/redux/slice/shopSlice";
 import { fetchAddToCart } from "servises/redux/slice/cartSlice";
+import { checkPoint } from "application/helpers/checkPoint";
 
 export function useCaseShop(this: any,category:string) {
   const [id,setId] = useState(true)
@@ -108,8 +109,8 @@ export function useCaseSearchShop(this: any) {
 export function useCaseShopAddToCard(this: any,id:string) {
   const dispatch = useDispatch();
   const AnimateHandle = () => {
-
-    dispatch(fetchAddToCart(id))
+    
+    checkPoint() && dispatch(fetchAddToCart(id))
   }
   const debouncedChangeHandler = debounce(AnimateHandle, 400)
 

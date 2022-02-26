@@ -68,7 +68,7 @@ const customMiddleware: Middleware<Record<string, unknown>, RootState> = store =
 
 const middlewares = [customMiddleware];
 if (process.env.NODE_ENV !== 'production') {
-  middlewares.push(logger)
+  //middlewares.push(logger)
 }
 
 const store = configureStore({
@@ -81,7 +81,7 @@ const store = configureStore({
 
 const persistor = persistStore(store, undefined, async () => {
   await store.dispatch(fetchUser() as any)
-  await store.dispatch(fetchAllCart() as any) 
+  //await store.dispatch(fetchAllCart() as any) 
 });
 
 export { store, persistor }
