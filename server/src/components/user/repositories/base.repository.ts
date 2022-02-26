@@ -19,20 +19,22 @@ export class UserRepository implements IUserRepository {
             phone
         });
 
-        const result = new UserEntity(
-            user._id,
-            user.username,
-            user.name,
-            user.phone,
-            null,
-            null
-        );
+        const address =
+            user?.address && `${user?.address.street} ${user?.address.home}`;
 
-        return result;
+        return new UserEntity(
+            user?._id,
+            user?.username,
+            user?.name,
+            user?.phone,
+            address,
+            null,
+            user?.email || null
+        );
     }
 
     async getUser(findProps: IFindProps) {
-        const result = await this.userModel.findOne({
+        const user = await this.userModel.findOne({
             $or: [
                 {
                     _id: findProps._id
@@ -47,12 +49,13 @@ export class UserRepository implements IUserRepository {
         });
 
         return new UserEntity(
-            result?._id,
-            result?.username,
-            result?.name,
-            result?.phone,
+            user?._id,
+            user?.username,
+            user?.name,
+            user?.phone,
             null,
-            result?.selectedOrganization?.toString() || null
+            user?.selectedOrganization?.toString() || null,
+            user?.email
         );
     }
 
@@ -68,7 +71,8 @@ export class UserRepository implements IUserRepository {
             user?.name,
             user?.phone,
             null,
-            user?.selectedOrganization?.toString() || null
+            user?.selectedOrganization?.toString() || null,
+            user?.email
         );
     }
 }

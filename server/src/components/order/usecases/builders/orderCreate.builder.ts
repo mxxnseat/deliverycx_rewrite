@@ -81,7 +81,8 @@ export class OrderCreateBuilder {
             {
                 organization: orderInfo.organization,
                 address: `${city}, ${street} ${home}`
-            }
+            },
+            deliveryPrices.deliveryPrice
         );
 
         this._state.orderNumber = orderNumber;

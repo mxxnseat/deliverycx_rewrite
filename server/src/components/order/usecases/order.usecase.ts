@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { OrderDTO } from "../dto/order.dto";
+import { IOrderRepository } from "../repositores/interface.repository";
 import { IOrderUtilsService } from "../services/order/interface.service";
 import { OrderCheckBuilder } from "./builders/orderCheck.builder";
 import { OrderCreateBuilder } from "./builders/orderCreate.builder";
@@ -8,7 +9,7 @@ import { OrderCreateBuilder } from "./builders/orderCreate.builder";
 export class OrderUsecase {
     constructor(
         private readonly OrderUtilsService: IOrderUtilsService,
-
+        private readonly orderRepository: IOrderRepository,
         private readonly orderCreateBuilder: OrderCreateBuilder,
         private readonly orderCheckBuilder: OrderCheckBuilder
     ) {}
@@ -41,5 +42,11 @@ export class OrderUsecase {
         const orderNumber = await this.OrderUtilsService.getOrderNumber(hash);
 
         return orderNumber;
+    }
+
+    async getOrders(user: UniqueId, page: number = 0) {
+        const result = await this.orderRepository.getOrders(user, page);
+
+        return result;
     }
 }

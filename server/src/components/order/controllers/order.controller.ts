@@ -4,6 +4,7 @@ import {
     Get,
     Param,
     Post,
+    Query,
     Res,
     Session,
     UseFilters,
@@ -11,7 +12,7 @@ import {
     UsePipes,
     ValidationPipe
 } from "@nestjs/common";
-import { Response } from "express";
+import { response, Response } from "express";
 import { AuthGuard } from "src/guards/authorize.guard";
 import { ApiTags, ApiResponse, ApiCookieAuth } from "@nestjs/swagger";
 import { OrderUsecase } from "../usecases/order.usecase";
@@ -23,6 +24,7 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentException } from "src/filters/payment.filter";
 import { RedirectEntity } from "../entities/redirect.entity";
+import { GetOrderDTO } from "../dto/getOrder.dto";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -98,6 +100,23 @@ export class OrderController {
         @Param("hash") hash: string
     ) {
         const result = await this.OrderUsecase.getOrderNumber(hash);
+
+        response.status(200).json(result);
+    }
+
+    @ApiResponse({
+        status: 200
+    })
+    @Get()
+    async getOrders(
+        @Session() session: Record<string, string>,
+        @Res() response: Response,
+        @Query() query: GetOrderDTO
+    ) {
+        const result = await this.OrderUsecase.getOrders(
+            session.user,
+            query.page
+        );
 
         response.status(200).json(result);
     }

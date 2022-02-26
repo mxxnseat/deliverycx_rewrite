@@ -51,3 +51,15 @@ interface OrderTypesIiko {
         externalRevision: number;
     }>;
 }
+
+enum DeliveryStatusEnum {
+    "NEW" = "Новая",
+    "AWAITING_DELIVERY" = "Ждет отправки",
+    "ON_THE_WAY" = "В пути",
+    "CLOSED" = "Закрыта",
+    "CANCELLED" = "Отменена",
+    "DELIVERED" = "Доставлена",
+    "NOT_COMFIRMED" = "Не подтверждена",
+    "COOKING" = "Готовится",
+    "DONE" = "Готово"
+}

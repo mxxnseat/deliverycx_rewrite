@@ -25,6 +25,9 @@ class NestedOrderClass {
     @prop({ type: Number })
     price!: number;
 
+    @prop({ type: Number })
+    deliveryPrice: number;
+
     @prop({ type: String })
     address!: string;
 
@@ -33,6 +36,12 @@ class NestedOrderClass {
 
     @prop({ type: String })
     orderNum!: string;
+
+    @prop({ type: Date })
+    date: Date;
+
+    @prop({ type: String, default: "Готовится" })
+    status: string;
 }
 
 @ModelOptions({
