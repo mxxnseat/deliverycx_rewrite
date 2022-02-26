@@ -1,6 +1,7 @@
 import BasketLayout from "application/components/core/Cart/BasketLayout";
 import CheckOutLayout from "application/components/core/Cart/CheckoutLayout";
 import { NextPage } from "next";
+import Link from "next/link";
 
 const CheckOut: NextPage = () => {
   
@@ -14,9 +15,9 @@ const CheckOut: NextPage = () => {
   				<h1 className="cart_page-title">Оформление заказа</h1>
   			</div>
   			<div className="header__right">
-          <a href="/" className="back_shop">
+          <div className="back_shop"><Link href="/">
           Вернуться в меню
-          </a>
+          </Link></div>
   			</div>
       </div>
       <div className="cart_page-container">
