@@ -2,6 +2,9 @@ import { getConnectionToken } from "@nestjs/mongoose";
 import { Connection, connect } from "mongoose";
 import { FavoriteRepository } from "src/components/favorites/repositories/base.repository";
 import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
+import { orderProviders } from "src/components/order/providers/order.provider";
+import { OrderRepository } from "src/components/order/repositores/base.repository";
+import { IOrderRepository } from "src/components/order/repositores/interface.repository";
 import { UserSchema } from "../../../database/models/user.model";
 import { UserRepository } from "../repositories/base.repository";
 import { IUserRepository } from "../repositories/interface.repository";
@@ -20,6 +23,7 @@ export const userProviders = [
             connection.model("User", UserSchema),
         inject: [getConnectionToken("DatabaseConnection")]
     },
+
     {
         provide: InjectTokenEnum.SEND_CODE_SERVICE,
         useClass: SendCodeService
@@ -47,5 +51,10 @@ export const userProviders = [
     {
         provide: IGuestGenerateService,
         useClass: GenerateUsernameService
-    }
+    },
+    {
+        provide: IOrderRepository,
+        useClass: OrderRepository
+    },
+    ...orderProviders
 ];

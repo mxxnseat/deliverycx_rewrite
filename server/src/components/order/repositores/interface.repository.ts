@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
+import { DeliveryAddressEntity } from "src/components/personalCabinet/entities/addresses/deliveryAddresses.entity";
 import { OrderDTO } from "../dto/order.dto";
-import { OrderDeliveredEntity } from "../entities/orderDelivered/orderDelivered.entity";
+import { OrderDeliveredEntity } from "../../personalCabinet/entities/orderDelivered/orderDelivered.entity";
 
 export interface IOrderItem {
     product: UniqueId;
     amount: number;
 }
 
-export type IOrderInfo = Pick<OrderDTO, "organization"> & { address: string };
+export type IOrderInfo = Pick<OrderDTO, "organization"> & { address: UniqueId };
 
 @Injectable()
 export abstract class IOrderRepository {
@@ -19,9 +20,4 @@ export abstract class IOrderRepository {
         orderInfo: IOrderInfo,
         deliveryPrice: number
     ): Promise<void>;
-
-    abstract getOrders(
-        user: UniqueId,
-        page?: number
-    ): Promise<Array<OrderDeliveredEntity>>;
 }

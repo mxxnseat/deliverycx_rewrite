@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     Inject,
     Patch,
     Post,
@@ -20,6 +21,7 @@ import { RegisterDTO, SendCodeDTO, UpdateDTO } from "../dto";
 import { RegisterService } from "../services/register/register.service";
 import { UpdateOptionsService } from "../services/updateUserOptions/updateOptions.service";
 import { InjectTokenEnum } from "../providers/constants";
+import { DeliveryAddressEntity } from "../../personalCabinet/entities/addresses/deliveryAddresses.entity";
 
 @ApiTags("User endpoints")
 @Controller("user")
@@ -97,6 +99,9 @@ export class UserController {
         response.status(200).json(user);
     }
 
+    @ApiResponse({
+        status: 204
+    })
     @Patch("update")
     async update(
         @Session() session: Record<string, string>,
@@ -105,6 +110,6 @@ export class UserController {
     ) {
         await this.UpdateOptionsService.update(session.user, body);
 
-        response.status(201).json();
+        response.status(204).json();
     }
 }

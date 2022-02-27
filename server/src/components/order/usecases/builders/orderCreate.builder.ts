@@ -4,6 +4,7 @@ import { BaseError } from "src/common/errors/base.error";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
+import { IPersonalCabinetRepository } from "src/components/personalCabinet/repositories/interface.repository";
 import { IDeliveryService } from "src/services/delivery/delivery.abstract";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { IIiko } from "src/services/iiko/iiko.abstract";
@@ -34,7 +35,9 @@ export class OrderCreateBuilder {
 
         private readonly DeliveryService: IDeliveryService,
 
-        private readonly botService: IBotService
+        private readonly botService: IBotService,
+
+        private readonly personalCabinetRepository: IPersonalCabinetRepository
     ) {}
 
     async initialize(userId: UniqueId, orderInfo: OrderDTO) {
@@ -71,7 +74,16 @@ export class OrderCreateBuilder {
             };
         });
 
-        const { city, home, street } = orderInfo.address;
+        const { city, street, home } = orderInfo.address;
+        const address = `${street} ${home}`;
+
+        const addressId = await this.personalCabinetRepository.putAddress(
+            user,
+            {
+                city,
+                address
+            }
+        );
 
         await this.orderRepository.create(
             user,
@@ -80,7 +92,7 @@ export class OrderCreateBuilder {
             orderItems,
             {
                 organization: orderInfo.organization,
-                address: `${city}, ${street} ${home}`
+                address: addressId
             },
             deliveryPrices.deliveryPrice
         );

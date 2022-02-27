@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IFavoriteRepository } from "src/components/favorites/repositories/interface.repository";
+import { IOrderRepository } from "src/components/order/repositores/interface.repository";
 import { UserEntity } from "../entities/user.entity";
 import { IUpdateProps } from "../interfaces/update.interface";
 import { IUserRepository } from "../repositories/interface.repository";

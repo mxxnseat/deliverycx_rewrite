@@ -69,4 +69,8 @@ export class OrderDeliveredEntity {
     get getTotalPrice() {
         return this.totalPrice;
     }
+
+    get getDeliveryPrice() {
+        return this.deliveryPrice;
+    }
 }

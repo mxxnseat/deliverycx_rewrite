@@ -7,6 +7,7 @@ import {
     types
 } from "@typegoose/typegoose";
 import { Types } from "mongoose";
+import { DeliveredAddressClass } from "./deliveryAddresses.model";
 import { ProductClass } from "./product.model";
 import { UserClass } from "./user.model";
 
@@ -28,8 +29,8 @@ class NestedOrderClass {
     @prop({ type: Number })
     deliveryPrice: number;
 
-    @prop({ type: String })
-    address!: string;
+    @prop({ ref: "DeliveredAddress" })
+    address!: Ref<DeliveredAddressClass>;
 
     @prop({ type: Types.ObjectId })
     organization!: Types.ObjectId;

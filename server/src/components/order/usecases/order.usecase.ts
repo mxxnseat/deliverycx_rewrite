@@ -43,10 +43,4 @@ export class OrderUsecase {
 
         return orderNumber;
     }
-
-    async getOrders(user: UniqueId, page: number = 0) {
-        const result = await this.orderRepository.getOrders(user, page);
-
-        return result;
-    }
 }
