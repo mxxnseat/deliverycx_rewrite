@@ -85,6 +85,10 @@ try {
             provide: APP_FILTER,
             useClass: BaseErrorsFilter
         }
+        // {
+        //     provide: APP_FILTER,
+        //     useClass: @UseFilters(new ValidationException()
+        // }
     ]
 })
 export class AppModule implements NestModule {

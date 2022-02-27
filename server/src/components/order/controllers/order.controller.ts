@@ -24,7 +24,6 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentException } from "src/filters/payment.filter";
 import { RedirectEntity } from "../entities/redirect.entity";
-import { GetOrderDTO } from "../../personalCabinet/dto/getOrder.dto";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -33,7 +32,6 @@ import { GetOrderDTO } from "../../personalCabinet/dto/getOrder.dto";
 })
 @ApiCookieAuth()
 @Controller("order")
-@UseFilters(new ValidationException())
 @UseFilters(new PaymentException())
 @UsePipes(
     new ValidationPipe({
