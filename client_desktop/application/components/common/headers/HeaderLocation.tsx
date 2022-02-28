@@ -9,7 +9,7 @@ const HeaderLocation = () => {
         <div className="header_adress-info" onClick={handlerHeader}>
             <span className="header_adress-info-active">{selectedPoint.city}</span>
             <span>{selectedPoint.address}</span>
-            <span>{selectedPoint.phone}</span>
+            <span className="phones">{selectedPoint.phone}</span>
         </div>
     );
 };

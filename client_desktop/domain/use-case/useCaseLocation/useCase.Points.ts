@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetPointsQuery, useGetRecvisitesMutation } from "servises/repository/RTK/RTKLocation";
 import { IPoint } from "@types";
@@ -42,7 +42,7 @@ export function usePoints(this: any) {
 
 export function usePointsMaps(this: any,handlerGoToCity:any) {
   const dispatch = useDispatch();
-
+  const refMap = useRef<any>()
   const selectedCity = adapterSelector.useSelectors(
     (selector) => selector.city
   );
@@ -64,6 +64,7 @@ export function usePointsMaps(this: any,handlerGoToCity:any) {
     useEffect(() => {
         if (Object.keys(selectedCity).length) {
           (addresses && !isFetching) && nearPoint(addresses);
+          refMap.current.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
         } else {
           handlerGoToCity()
         }
@@ -163,7 +164,8 @@ export function usePointsMaps(this: any,handlerGoToCity:any) {
         selectedCity,
         addresses,
         statePoint,
-        recvisites
+        recvisites,
+        refMap
     });
     this.handlers({
         placemarkClickHandler,

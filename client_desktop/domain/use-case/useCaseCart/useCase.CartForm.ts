@@ -31,7 +31,7 @@ export function useCartForm(this: any, paths:string) {
 
   useEffect(() => {
     orderError.status && dispatch(setErrors({errors:{}}))
-  },[orderError])
+  },[])
 
   const initialValues: IInitialValues = {
     comment: "",

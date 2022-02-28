@@ -24,11 +24,11 @@ const PointsMap = () => {
   const { handlerCloseMapModal,handlerGoToCity} = useCaseLocationPoints.handlers;
 
   const useCasePoints = adapterComponentUseCase(usePointsMaps,handlerGoToCity)
-  const { addresses,statePoint} = useCasePoints.data
+  const { addresses,statePoint,refMap} = useCasePoints.data
   const { placemarkClickHandler} = useCasePoints.handlers
 
   return (
-    <div className="location_city location_Maps">
+    <div ref={refMap} className="location_city location_Maps">
   		<div className="location_city-container">
   			<div className="close" onClick={handlerCloseMapModal} >
   				<img src="/images/icon/close.png" alt="" />
