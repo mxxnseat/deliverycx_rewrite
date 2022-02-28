@@ -6,9 +6,11 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+    const allowedRequestedFromHosts = process.env.CLIENT_PATH.split(" ");
+
     app.set("trust proxy", true);
     app.enableCors({
-        origin: [process.env.CLIENT_PATH,process.env.CLIENT_DESKTOP_PATH],
+        origin: allowedRequestedFromHosts,
 
         credentials: true
     });
