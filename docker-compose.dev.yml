@@ -12,6 +12,16 @@ services:
             - mongodb
         networks:
             - development_net
+    deliverycx_client_desktop:
+        container_name: development_client_desktop
+        build:
+            context: ./client_desktop
+        depends_on:
+          - deliverycx_backend
+        networks:
+          - development_net
+        volumes:
+            - ./client_desktop/.next:/usr/apps/cx/.next
     deliverycx_client:
         container_name: development_client
         build:
