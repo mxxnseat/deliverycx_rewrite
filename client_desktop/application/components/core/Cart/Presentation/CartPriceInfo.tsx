@@ -4,9 +4,10 @@ import { adapterSelector } from "servises/redux/selectors/selectors"
 const CartPriceInfo = () => {
   const { deltaPrice, orderType } = adapterSelector.useSelectors(selector => selector.cart)
   const { city, address } = adapterSelector.useSelectors(selector => selector.point)
+  const {deliveryPrice} = adapterSelector.useSelectors(selector => selector.cart)
   return (
       <div className="cart__memo">
-        
+        <div className="cart__memo__banner ">Доставка <b className="price">{deliveryPrice} ₽</b></div>
         {
           orderType === CART_CHOICE.COURIER && (
             deltaPrice === 0

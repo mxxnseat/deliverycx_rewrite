@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     cartSelector,
     fetchAllCart,
@@ -28,8 +28,9 @@ export function useCartSmall(this: any) {
 export function useCartSmallButton(this: any) {
     const dispatch = useDispatch();
     const cartList = useSelector(cartSelector.selectAll);
+    const [fixCart, setFixCart] = useState(false);
     const [itemsCount, setItemsCount] = useState(0);
-    const emptyCN = cn("header_cart", { incart: itemsCount });
+    const emptyCN = cn("header_cart", { incart: itemsCount,fixcart:fixCart });
     const selectedCity = adapterSelector.useSelectors((selector) => selector.city);
 
     const linkHandler = (modal: any) => {
@@ -48,6 +49,26 @@ export function useCartSmallButton(this: any) {
            );
         }
     }, [cartList]);
+
+   //const scrolis = Math.round(window.scrollY)
+  const onScroll = useCallback(debounce(() => {
+    const scrolis = Math.round(window.scrollY)
+    if (scrolis > 100) {
+      !fixCart && setFixCart(true)
+    } else {
+      setFixCart(false)
+    }
+  }, 100), []);
+  
+
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [])
+  
+  
+
+  
 
     this.data({
         itemsCount,

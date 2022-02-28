@@ -1,4 +1,6 @@
-
+.checkout_page{
+	padding-bottom: 120px;
+}
 .cart_page-title{
 	font-size: 27px;
 	color: #132A3E;
@@ -40,10 +42,11 @@
 	}
 	.cart__order-btnbox{
 		background-color: #fff;
-		padding: 5px 0;
+
 	}
 	.server-error{
 		margin-top: 15px;
+		margin-bottom: 20px;
 		background-color: rgba(255,0,0,.1);
 		border: 1px solid red;
 		padding: 10px 5px;
