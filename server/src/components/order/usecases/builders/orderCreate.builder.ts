@@ -45,8 +45,10 @@ export class OrderCreateBuilder {
     }
 
     private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
+        let counter = 0;
         return new Promise<string>(async (resolve, reject) => {
             try {
+                counter++;
                 const { result, problem } = await this.orderService.create(
                     cart,
                     orderInfo,
@@ -59,15 +61,23 @@ export class OrderCreateBuilder {
 
                 resolve(result);
             } catch (e) {
-                setTimeout(async () => {
-                    resolve(
-                        await this.repeatOrderUntilSuccess(
-                            cart,
-                            orderInfo,
-                            deliveryPrices
+                if (counter >= 3) {
+                    reject(
+                        new CannotDeliveryError(
+                            "Возникла не предвиденная ошибка"
                         )
                     );
-                }, 5000);
+                } else {
+                    setTimeout(async () => {
+                        resolve(
+                            await this.repeatOrderUntilSuccess(
+                                cart,
+                                orderInfo,
+                                deliveryPrices
+                            )
+                        );
+                    }, 5000);
+                }
             }
         }).catch((E) => {
             throw E;
@@ -85,11 +95,15 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
-        const orderNumber = await this.repeatOrderUntilSuccess(
+        const { result: orderNumber, problem } = await this.orderService.create(
             cart,
             orderInfo,
             deliveryPrices
         );
+
+        if (problem) {
+            throw new CannotDeliveryError(problem);
+        }
 
         await this.orderRepository.create(
             user,

@@ -23,7 +23,6 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentException } from "src/filters/payment.filter";
 import { RedirectEntity } from "../entities/redirect.entity";
-import { EventPattern, MessagePattern } from "@nestjs/microservices";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
