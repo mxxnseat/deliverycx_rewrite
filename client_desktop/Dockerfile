@@ -1,16 +1,16 @@
 FROM node:alpine
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /etc/app/cx
 ENV PORT 3000
 
-WORKDIR /usr/src/app
+WORKDIR /etc/app/cx
 
-COPY package.json /usr/src/app
-COPY yarn.lock /usr/src/app
+COPY package.json /etc/app/cx
+COPY yarn.lock /etc/app/cx
 
 RUN yarn install --production
 
-COPY . /usr/src/app
+COPY . /etc/app/cx
 
 RUN yarn build
 
