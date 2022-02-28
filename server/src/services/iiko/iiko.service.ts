@@ -103,7 +103,7 @@ export class IikoService implements IIiko {
                     city: orderInfo.address.city,
                     street: orderInfo.address.street,
                     home: orderInfo.address.home,
-                    apartament: orderInfo.address.flat,
+                    apartment: orderInfo.address.flat,
                     entrance: orderInfo.address.entrance,
                     floor: orderInfo.address.floor,
                     doorphone: orderInfo.address.intercom
