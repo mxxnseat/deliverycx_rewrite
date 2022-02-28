@@ -1,10 +1,18 @@
-FROM node:16-alpine
+FROM node:alpine
 
-WORKDIR /usr/apps/cx
-COPY . .
+RUN mkdir -p /usr/src/app
+ENV PORT 3000
 
-RUN yarn install
-RUN yarn add @babel/plugin-proposal-decorators @babel/plugin-proposal-class-properties @babel/plugin-transform-flow-strip-types @babel/core --save
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app
+COPY yarn.lock /usr/src/app
+
+RUN yarn install --production
+
+COPY . /usr/src/app
+
 RUN yarn build
 
-CMD ["yarn", "start"]
+EXPOSE 3000
+CMD [ "yarn", "start" ]
