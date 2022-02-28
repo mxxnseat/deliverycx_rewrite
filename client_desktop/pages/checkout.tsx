@@ -1,3 +1,4 @@
+import Footer from "application/components/common/Footer/Footer";
 import BasketLayout from "application/components/core/Cart/BasketLayout";
 import CheckOutLayout from "application/components/core/Cart/CheckoutLayout";
 import { NextPage } from "next";
@@ -6,6 +7,8 @@ import Link from "next/link";
 const CheckOut: NextPage = () => {
   
   return (
+    <>
+    <section className="checkout_page">
     <div className="container">
 		  <div className="header">
   			<div className="header__left">
@@ -14,11 +17,9 @@ const CheckOut: NextPage = () => {
   			<div className="header__center">
   				<h1 className="cart_page-title">Оформление заказа</h1>
   			</div>
-  			<div className="header__right">
-          <div className="back_shop"><Link href="/">
+  			<div className="back_shop"><Link href="/">
           Вернуться в меню
           </Link></div>
-  			</div>
       </div>
       <div className="cart_page-container">
         <div className="cart_page__order">
@@ -28,7 +29,10 @@ const CheckOut: NextPage = () => {
           <BasketLayout />
         </div>
       </div>
-    </div>
+      </div>
+     </section> 
+    <Footer />
+    </>
   );
 };
 

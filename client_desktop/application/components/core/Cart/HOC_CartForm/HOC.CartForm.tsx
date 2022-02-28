@@ -114,6 +114,23 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
             placeholder="Напишите сюда, если хотите добавить еще какую-то информацию о заказе..."
           ></textarea>
 
+          
+
+          <div className="row align-center form__create">
+            
+            
+          </div>
+          
+          
+        </div>
+        <div className="cart__order-btnbox">
+          <button
+              type="submit"
+              className="cart__order-btn btn"
+              disabled={loadingOrder}
+            >
+              Заказать
+          </button>
           {orderError.status === 500 && (
             <div className="server-error">
               Что-то пошло не так
@@ -130,22 +147,6 @@ const CartFrom: FC<IProps> = ({ builder,paths }) => {
               
             </div>
           )}
-
-          <div className="row align-center form__create">
-            
-            
-          </div>
-          
-          
-        </div>
-        <div className="cart__order-btnbox">
-          <button
-              type="submit"
-              className="cart__order-btn btn"
-              disabled={loadingOrder}
-            >
-              Заказать
-            </button>
         </div>
         
       </form>

@@ -30,7 +30,7 @@ const CartChoise: FC = () => {
         <div className={pickupCN} onClick={() => {
           handlerChoice(CART_CHOICE.PICKUP)
         }}>Самовывоз</div>
-            <div className={onspotCN} >На месте</div>
+            
         </div>
     )
 }

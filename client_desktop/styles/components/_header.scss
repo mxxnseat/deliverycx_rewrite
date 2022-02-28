@@ -61,7 +61,7 @@
 		}
 	}
 	.header__right{
-		width: auto;
+		width: 75px;
 		display: flex;
 		justify-content: space-between;
 		.header_login{
@@ -89,9 +89,16 @@
 			justify-content: center;
 			align-items: center;
 			margin-top: 12px;
+			
 			.cart_icon{
 				fill:#CCCCCC
 			}
+		}
+		.fixcart{
+			position: fixed !important; 
+			bottom: 20px;
+			right: 20px;
+			z-index: 999;
 		}
 		.incart{
 			border: 2px solid #EFEFEF;
