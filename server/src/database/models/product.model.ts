@@ -54,8 +54,8 @@ export class ProductClass {
     @prop()
     public image!: ImagePath;
 
-    @prop({ enum: MeasureUnit })
-    public measureUnit!: MeasureUnit;
+    @prop()
+    public measureUnit!: "шт" | "порц";
 
     @prop()
     public isFav!: boolean;

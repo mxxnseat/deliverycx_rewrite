@@ -8,10 +8,11 @@ import { ConnectedRouter } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
+import { format } from 'date-fns'
 
 const history = createBrowserHistory()
 
-
+console.log(`${format(new Date(), 'yyyy-MM-dd')} ${new Date().toLocaleTimeString()}`)
 
 ReactDOM.render(
   <Provider store={store}>

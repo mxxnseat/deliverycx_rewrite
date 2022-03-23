@@ -18,8 +18,8 @@ export class IikoWebsocketGateway implements OnGatewayInit {
     @WebSocketServer()
     server: Server;
 
-    afterInit(server: Server) {
-        console.log("Socket initialized");
+    afterInit(server: any) {
+        console.log("Initialized socket", server);
     }
 
     async sendStopListToClient(data: StopListEntity) {

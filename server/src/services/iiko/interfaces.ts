@@ -52,7 +52,7 @@ export namespace iiko {
         city: string;
         street: string;
         home: number;
-        apartament: number;
+        apartment: number;
         doorphone: number;
         entrance: number;
         floor: number;

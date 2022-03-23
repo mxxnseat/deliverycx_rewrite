@@ -1,5 +1,5 @@
 import { iiko } from "src/services/iiko/interfaces";
-import { IIiko, OrderTypesEnum } from "./iiko.abstract";
+import { IIiko, IReturnCreateOrder, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
@@ -14,6 +14,7 @@ import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { OrganizationClass } from "src/database/models/organization.model";
+
 
 export class IikoService implements IIiko {
     constructor(
@@ -90,6 +91,7 @@ export class IikoService implements IIiko {
             }),
             deliveryProductObject
         ].filter(Boolean);
+        
 
         const result = {
             organization: organization.id,
@@ -99,11 +101,13 @@ export class IikoService implements IIiko {
             },
             order: {
                 phone: orderInfo.phone,
+                date: orderInfo.date,
+                
                 address: {
                     city: orderInfo.address.city,
                     street: orderInfo.address.street,
                     home: orderInfo.address.home,
-                    apartament: orderInfo.address.flat,
+                    apartment: orderInfo.address.flat,
                     entrance: orderInfo.address.entrance,
                     floor: orderInfo.address.floor,
                     doorphone: orderInfo.address.intercom
@@ -149,22 +153,25 @@ export class IikoService implements IIiko {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO,
         prices: IDeliveryPrices
-    ): Promise<string> {
+    ): Promise<IReturnCreateOrder> {
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
             prices.deliveryPrice
         );
 
-        const orderResponseInfo = await this.axios.orderCreate(orderBody);
+      const orderResponseInfo = await this.axios.orderCreate(orderBody);
+      console.log(orderResponseInfo);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
 
-        if (orderResponseInfo.problem?.hasProblem)
-            throw new CannotDeliveryError(orderResponseInfo?.problem?.problem);
-
-        return orderResponseInfo.number;
+        return {
+            result: orderResponseInfo.number,
+            problem:
+                orderResponseInfo.problem?.hasProblem &&
+                orderResponseInfo?.problem?.problem
+        };
     }
 
     /*-----------------|       check      |-----------------------*/
@@ -186,7 +193,7 @@ export class IikoService implements IIiko {
             cart,
             deliveryPrice
         );
-
+    
         const data = await this.axios.checkOrder(orderCheckBody);
 
         return {

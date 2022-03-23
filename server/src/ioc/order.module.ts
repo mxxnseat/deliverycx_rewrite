@@ -23,6 +23,7 @@ import { OrderCreateBuilder } from "src/components/order/usecases/builders/order
 import { OrderCheckBuilder } from "src/components/order/usecases/builders/orderCheck.builder";
 import { BotService } from "src/services/duplicateBot/bot.service";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 @Module({
     imports: [IikoModule, RedisModule],

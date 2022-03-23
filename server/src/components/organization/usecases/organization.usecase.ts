@@ -20,4 +20,14 @@ export class OrganizationUsecase {
 
         return result;
     }
+
+    async getPaymentsInfoForClient(organizationId: UniqueId) {
+        const { isActive, organizationId: id } =
+            await this.organizationRepository.getPaymentsInfo(organizationId);
+
+        return {
+            isActivePayment: isActive,
+            organizationId: id
+        };
+    }
 }

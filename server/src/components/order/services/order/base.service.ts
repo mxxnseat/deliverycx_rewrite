@@ -17,8 +17,4 @@ export class OrderUtilsService extends IOrderUtilsService {
             });
         });
     }
-
-    removeOrderNumber(hash: string): void{
-        this.redis.del(hash);
-    }
 }

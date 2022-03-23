@@ -55,10 +55,14 @@ export class WebhookController {
         @Res() response: Response
     ) {
         console.log("Iiko send data from webhook");
-        const stopListEntity = await this.IikoService.getStopList(body);
+        try {
+            const stopListEntity = await this.IikoService.getStopList(body);
 
-        this.IikoStopListGateway.sendStopListToClient(stopListEntity);
+            this.IikoStopListGateway.sendStopListToClient(stopListEntity);
 
-        response.status(200).json({});
+            response.status(200).json({});
+        } catch (e) {
+            console.log(e);
+        }
     }
 }

@@ -5,4 +5,6 @@ redis/*
 mongo
 certbot
 nginx/*
+admin/*
 client/**/config.*
+server/.clinic

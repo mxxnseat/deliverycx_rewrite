@@ -24,6 +24,7 @@ import { OrderCheckBuilder } from "src/components/order/usecases/builders/orderC
 import { ValidationCount } from "src/components/order/services/validationCount/validationCount.service";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { BotService } from "src/services/duplicateBot/bot.service";
+import { stopListProviders } from "src/components/stopList/providers/stopList.provider";
 
 @Module({
     imports: [IikoModule, RedisModule],
@@ -74,6 +75,8 @@ import { BotService } from "src/services/duplicateBot/bot.service";
         IikoWebsocketGateway,
         ...productProviders,
         ...orderProviders,
+        ...stopListProviders,
+
         OrderUsecase,
         MailService
     ]

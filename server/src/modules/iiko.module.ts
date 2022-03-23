@@ -6,12 +6,12 @@ import { organizationProviders } from "src/components/organization/providers/org
 import { recvisitesProviders } from "src/components/organization/providers/recvisites.provider";
 import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
+import { productProviders } from "src/components/product/providers/product.provider";
 import { stopListProviders } from "src/components/stopList/providers/stopList.provider";
 import { StopListRepository } from "src/components/stopList/repositories/base.repository";
 import { IStopListRepository } from "src/components/stopList/repositories/interface.repository";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
-import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
 
 @Module({
     providers: [
@@ -19,6 +19,8 @@ import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
         ...stopListProviders,
         ...cartProviders,
         ...organizationProviders,
+        ...stopListProviders,
+        ...productProviders,
         ...recvisitesProviders,
         {
             provide: IStopListRepository,
@@ -43,6 +45,8 @@ import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
         ...cartProviders,
         ...organizationProviders,
         ...recvisitesProviders,
+        ...stopListProviders,
+        ...productProviders,
         {
             provide: IStopListRepository,
             useClass: StopListRepository
@@ -55,6 +59,7 @@ import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
             provide: ICartRepository,
             useClass: CartRepository
         },
+
         {
             provide: IOrganizationRepository,
             useClass: OrganizationRepository

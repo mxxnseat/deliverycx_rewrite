@@ -2,8 +2,11 @@ import { Inject, Injectable, Scope } from "@nestjs/common";
 import { BaseError } from "src/common/errors/base.error";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
+import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { iiko } from "src/services/iiko/interfaces";
+import { PaymentMethods } from "src/services/payment/payment.abstract";
+import { PaymentError } from "src/services/payment/payment.error";
 import { OrderDTO } from "../../dto/order.dto";
 import {
     CannotDeliveryError,
@@ -29,6 +32,8 @@ export class OrderCheckBuilder {
 
         private readonly validationCountService: ValidationCount,
 
+        private readonly OrganizationRepository: IOrganizationRepository,
+
         private readonly CartRepository: ICartRepository
     ) {}
 
@@ -53,6 +58,22 @@ export class OrderCheckBuilder {
 
         if (Object.keys(validationResult).length) {
             this._state.errors.push(new ValidationCountError(validationResult));
+        }
+    }
+
+    async checkCardPaymentAviables() {
+        if (this._state.orderInfo.paymentMethod !== PaymentMethods.CARD) {
+            return;
+        }
+
+        const { isActive } = await this.OrganizationRepository.getPaymentsInfo(
+            this._state.orderInfo.organization
+        );
+
+        if (!isActive) {
+            this._state.errors.push(
+                new PaymentError("Заведение не поддерживает оплату картой")
+            );
         }
     }
 

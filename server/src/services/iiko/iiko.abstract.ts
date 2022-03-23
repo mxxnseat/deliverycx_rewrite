@@ -14,13 +14,17 @@ export interface IReturnIikoOrderTypes {
     name: string;
     id: UniqueId;
 }
+export interface IReturnCreateOrder {
+    result: string;
+    problem: any;
+}
 
 export abstract class IIiko {
     abstract create: (
         cart: Array<CartEntity>,
         customerInfo: OrderDTO,
         prices: IDeliveryPrices
-    ) => Promise<string>;
+    ) => Promise<IReturnCreateOrder>;
 
     abstract getOrderTypesId: (
         organizationId: UniqueId,
