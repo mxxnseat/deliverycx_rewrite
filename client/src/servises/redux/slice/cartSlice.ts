@@ -162,11 +162,12 @@ export const fetchDeleteCart = createAsyncThunk(
 export const fetchOrderCart = createAsyncThunk(
     "cart/order",
     async (value: any, { dispatch, rejectWithValue }) => {
-        try {
+      try {
+        
             const request = await RequestCart.OrderCheckCart(value);
             if (request.data && request.status === 200) {
                 const order = await RequestCart.OrderCart(value);
-              
+                
                 dispatch(actionPaymentAccsess());
                 return order.data 
             }

@@ -15,6 +15,7 @@ import { IIkoAxios } from "./iiko.axios";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { OrganizationClass } from "src/database/models/organization.model";
 
+
 export class IikoService implements IIiko {
     constructor(
         @Inject("Product")
@@ -90,6 +91,7 @@ export class IikoService implements IIiko {
             }),
             deliveryProductObject
         ].filter(Boolean);
+        
 
         const result = {
             organization: organization.id,
@@ -99,6 +101,8 @@ export class IikoService implements IIiko {
             },
             order: {
                 phone: orderInfo.phone,
+                date: orderInfo.date,
+                
                 address: {
                     city: orderInfo.address.city,
                     street: orderInfo.address.street,
@@ -156,7 +160,8 @@ export class IikoService implements IIiko {
             prices.deliveryPrice
         );
 
-        const orderResponseInfo = await this.axios.orderCreate(orderBody);
+      const orderResponseInfo = await this.axios.orderCreate(orderBody);
+      console.log(orderResponseInfo);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
@@ -188,7 +193,7 @@ export class IikoService implements IIiko {
             cart,
             deliveryPrice
         );
-
+    
         const data = await this.axios.checkOrder(orderCheckBody);
 
         return {

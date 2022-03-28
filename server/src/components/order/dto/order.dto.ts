@@ -28,6 +28,9 @@ export class OrderDTO {
             floor: { type: "number" }
         }
     })
+    @ApiProperty()  
+    date:string
+    
     @IsObject()
     address: {
         city: string;

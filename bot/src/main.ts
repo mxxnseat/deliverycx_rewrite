@@ -9,9 +9,12 @@ import { OrganizationRepository } from "./repository/organization.repository";
 import { connection } from "./db/connection";
 const app = express();
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+const bot = new TelegramBot("1858418208:AAEYdcVa3DEScKZd63BGrEa08nj4_hRjtdc", { polling: true });
 
 app.use(bodyParser());
+
+
+
 
 app.post("/sendDuplicate/:organizationId", async (req, res) => {
     const organization = req.params.organizationId;

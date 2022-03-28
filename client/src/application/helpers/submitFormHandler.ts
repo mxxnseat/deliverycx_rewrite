@@ -4,6 +4,7 @@ import { FormikHelpers } from "formik";
 import { store } from "servises/redux/createStore";
 import { fetchAllCart, fetchOrderCart } from "servises/redux/slice/cartSlice";
 import { useHistory } from "react-router-dom";
+import { format } from 'date-fns'
 
 const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
     const storage = store.getState();
@@ -20,6 +21,7 @@ const submitHandler = async <T>(values: any, meta: FormikHelpers<any>) => {
         const val = {
             organization: storage.location.point.id,
             name: values.name,
+            date:`${format(new Date(), 'yyyy-MM-dd')} ${new Date().toLocaleTimeString()}`,
             address: {
                 city: storage.location.point.city,
                 street: prepareAddress.street || "",

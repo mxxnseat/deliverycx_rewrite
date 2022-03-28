@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ICart } from "@types"
 import { CartFormMetods } from "application/components/core/Cart/CartForm/CartMetods"
 import Entities from "../Entities"
