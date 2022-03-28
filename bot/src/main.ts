@@ -9,7 +9,7 @@ import { OrganizationRepository } from "./repository/organization.repository";
 import { connection } from "./db/connection";
 const app = express();
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+const bot = new TelegramBot("5298758359:AAEuosP07NVoy67XQBSBeRUyQ56_niJsq08", { polling: true });
 
 app.use(bodyParser());
 
