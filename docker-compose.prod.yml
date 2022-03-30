@@ -10,6 +10,7 @@ services:
             context: ./bot
         depends_on:
             - mongodb
+        restart: "always"
         networks:
             - production_net
     deliverycx_client:
