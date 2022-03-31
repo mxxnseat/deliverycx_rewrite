@@ -84,6 +84,7 @@ export function usePoints() {
       try {
         const cord = await getGeoLocation();
         if (data) {
+           // ближайшая к нам точка
             const index = data.reduce(function (r, val, i, array) {
                 return i &&
                     Math.abs(array[r].cords[0] - cord[0]) <
@@ -93,10 +94,13 @@ export function usePoints() {
                     ? r
                     : i;
             }, -1);
+          
+            // передаем случайный индекс
+            const randomindex = Math.floor(Math.random() * data.length)
 
             dispatchPoint({
                 type: ReducerActionTypePoints.slidePoint,
-                payload: index
+                payload: randomindex
             });
         }
       } catch (error) {
