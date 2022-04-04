@@ -24,7 +24,7 @@ const Stocks = () => {
     return (
         <div className="stocks">
           <Slider {...settings}>
-                <StockItem content={'stock12.png'} />
+                <StockItem content={'stock13.png'} />
                 <StockItem content={'stock6.png'} />
                 
                 <StockItem content={'stock3.png'} />
