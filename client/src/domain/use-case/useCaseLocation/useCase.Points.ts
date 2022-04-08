@@ -100,7 +100,7 @@ export function usePoints() {
 
             dispatchPoint({
                 type: ReducerActionTypePoints.slidePoint,
-                payload: randomindex
+                payload: index
             });
         }
       } catch (error) {
