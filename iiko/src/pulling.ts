@@ -102,7 +102,7 @@ class IikoRequester {
                 const objectId = await OrganizationModel.findOneAndUpdate(
                     { id: guid },
                     {
-                        $setOnInsert: {
+                        $set: {
                             id: guid,
                             city: cityId,
                             address: {
